@@ -1,0 +1,36 @@
+/* dropzone-styles.css */
+
+/* Estilo inicial para el Dropzone */
+#dropzone-documents {
+    border: 2px solid #ccc; /* Borde inicial gris */
+    border-radius: 5px;
+    background: white;
+    padding: 20px;
+    text-align: center;
+    height: 613px;
+    width: 210%;
+    transition: border-color 0.3s ease; /* Transición suave al cambiar el borde */
+}
+
+/* Cambiar el borde a azul cuando el cursor esté sobre el Dropzone */
+#dropzone-documents:hover {
+    border-color: #0087F7; /* Borde azul al hacer hover */
+}
+
+/*plan de estudios */
+
+#Plan-dropzone {
+    border: 2px solid #ccc; /* Borde inicial gris */
+    border-radius: 5px;
+    background: white;
+    padding: 20px;
+    text-align: center;
+    height: 445px;
+    width: 210%;
+    transition: border-color 0.3s ease; /* Transición suave al cambiar el borde */
+}
+
+/* Cambiar el borde a azul cuando el cursor esté sobre el Dropzone */
+#Plan-dropzone:hover {
+    border-color: #0087F7; /* Borde azul al hacer hover */
+}

@@ -1,0 +1,28 @@
+{
+    "name": "kevinxander1011/proyecto-des",
+    "description": "PROYECTO DES PHP, MYSQL, ETC",
+    "type": "project",
+    "license": "proprietary",
+    "autoload": {
+        "psr-4": {
+            "MVC\\": "./",
+            "Controllers\\": "./controllers",
+            "Model\\": "./models"
+        }
+    },
+    "authors": [
+        {
+            "name": "N"
+        }
+    ],
+    "require": {
+        "phpoffice/phpspreadsheet": "^2.1",  
+        "maennchen/zipstream-php": "^2.1",
+        "tecnickcom/tcpdf": "^6.4.4"
+
+
+    }
+
+
+    
+}

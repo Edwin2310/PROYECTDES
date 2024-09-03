@@ -1,0 +1,106 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+.contenedor-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.tarjeta-login {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 300px;
+}
+
+.encabezado .logo {
+    width: 80px; /* Ajusta el tamaÃ±o segÃºn sea necesario */
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.encabezado h2 {
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.grupo-input {
+    margin-bottom: 15px;
+    text-align: left;
+    position: relative; /* Necesario para posicionar el Ã­cono de alternar */
+}
+
+.grupo-input label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.grupo-input input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc; /* Color de borde mÃ¡s claro */
+    border-radius: 5px; /* Bordes redondeados */
+    outline: none;
+}
+
+.grupo-input input:focus {
+    border-color: #007bff; /* Color de borde en el foco */
+}
+
+.password-container {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 30px;
+    cursor: pointer;
+}
+
+.toggle-password img {
+    width: 20px; /* Ajusta el tamaÃ±o segÃºn sea necesario */
+    height: auto;
+}
+
+.olvido-contrasena {
+    text-align: right;
+    margin-bottom: 15px;
+}
+
+.olvido-contrasena a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.olvido-contrasena a:hover {
+    text-decoration: underline;
+}
+
+.grupo-input button {
+    width: 100%;
+    padding: 10px;
+    background-color: #42a5f5;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.grupo-input button:hover {
+    background-color: #0056b3;
+}
+
+.recordarme {
+    text-align: left;
+    margin-top: 10px;
+}

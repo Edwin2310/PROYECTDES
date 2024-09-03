@@ -1,0 +1,245 @@
+body {
+  background-color: #f8f8f8;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.back {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.back i {
+  font-size: 18px;
+  margin-right: 5px;
+}
+
+.filters {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filter-group label {
+  font-weight: bold;
+}
+
+.filter-group input[type="date"],
+.filter-group input[type="number"],
+.filter-group select {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.generate-btn {
+  padding: 10px 20px;
+  background-color: #002c9e;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.generate-btn:hover {
+  background-color: #45a049;
+}
+
+.report-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.report-header h2 {
+  margin: 0;
+}
+
+.report-section {
+  margin-bottom: 20px;
+}
+
+.report-section h3 {
+  background-color: #f9f9f9;
+  color: #000000;
+  padding: 10px;
+  margin: 0;
+  margin-bottom: 10px;
+  border-radius: 3px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+.export-options {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.export-options span {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.excel-btn,
+.pdf-btn {
+  padding: 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.excel-btn {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.pdf-btn {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.excel-btn i,
+.pdf-btn i {
+  font-size: 18px;
+}
+
+.excel-btn:hover {
+  background-color: #45a049;
+}
+
+.pdf-btn:hover {
+  background-color: #c0392b;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f9f9f9; /* Fondo suave */
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+  margin: 20px auto; /* Centrado horizontalmente */
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+.filter-group label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.filter-input,
+.filter-select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.filter-input:focus,
+.filter-select:focus {
+  border-color: #0056b3;
+}
+
+.to-label {
+  align-self: center;
+  margin: 0 10px;
+  font-size: 16px;
+  color: #333;
+}
+
+.generate-btn {
+  padding: 12px 20px;
+  background-color: #007bff; /* Color azul */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.generate-btn:hover {
+  background-color: #0056b3; /* Color más oscuro al pasar el ratón */
+}
+
+.generate-btn:active {
+  background-color: #004494; /* Color aún más oscuro al hacer clic */
+  transform: translateY(1px);
+}
+
+.back {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.back a {
+  text-decoration: none; /* Elimina el subrayado del enlace */
+  color: #333; /* Cambia el color del texto */
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+.back i {
+  font-size: 20px; /* Tamaño del icono */
+  margin-right: 8px; /* Espacio entre el icono y el texto */
+}
+
+.back a:hover {
+  color: #0056b3; /* Color del texto cuando se pasa el mouse */
+}
+
+.back a:active {
+  color: #003366; /* Color del texto cuando se hace clic */
+}

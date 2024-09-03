@@ -1,0 +1,45 @@
+.select2-container--default
+  .select2-selection--multiple
+  .select2-selection__choice {
+  background-color: #e4e4e4;
+  color: black;
+}
+
+.select2-container--default
+  .select2-selection--multiple
+  .select2-selection__choice__remove {
+  color: black;
+}
+
+#div-centralized {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.select2-selection--multiple {
+  height: auto !important;
+}
+
+.basic-multiple {
+  width: 100%;
+  max-width: 600px;
+  /* Ajusta esto según tus necesidades */
+  min-width: 300px;
+}
+
+.select2-container {
+  width: 100% !important;
+}
+
+.dz-progress {
+  display: none !important;
+}
+
+.nav-tabs-block .nav-link.active {
+  color: #fff;
+  /* Color del texto para la pestaña activa */
+  background-color: #007bff;
+  /* Color de fondo para la pestaña activa */
+}

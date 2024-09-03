@@ -1,0 +1,196 @@
+/* dropzone-styles.css */
+
+/* Estilo inicial para el Dropzone */
+#dropzone-documents {
+    border: 2px solid #ccc; /* Borde inicial gris */
+    border-radius: 5px;
+    background: white;
+    padding: 20px;
+    text-align: center;
+    height: 285px; /* Altura fija */
+    width: 100%; /* Ocupa el 100% del ancho disponible */
+    transition: border-color 0.3s ease; /* Transición suave al cambiar el borde */
+}
+
+/* Cambiar el borde a azul cuando el cursor esté sobre el Dropzone */
+#dropzone-documents:hover {
+    border-color: #0087F7; /* Borde azul al hacer hover */
+}
+
+
+/* Estilo personalizado para Dropzone de descarga */
+#download-dropzone {
+    border: 2px solid solid #ccc; /* Borde inicial gris */             
+    border-radius: 5px;
+    background: white; /* Fondo blanco */
+    padding: 20px;
+    text-align: center;
+    height: 200px; /* Ajusta la altura automáticamente */
+    width: 210%; /* Ocupa el 100% del ancho disponible */
+    margin: 20px auto; /* Centra el Dropzone horizontalmente */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.3s ease; /* Transición Borde sólido verde */
+}
+
+/* Cambiar el borde a verde claro cuando el cursor esté sobre el Dropzone */
+#download-dropzone:hover {
+    border-color: #28a745; /* Borde verde oscuro al hacer hover */
+}
+
+/* Estilo para cada archivo dentro de Dropzone */
+#download-dropzone .dz-preview {
+    border: 1px solid #ddd; /* Borde gris claro */
+    border-radius: 5px;
+    background: #fff;
+    padding: 10px;
+    margin: 10px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 120px; /* Ajusta el ancho del contenedor del archivo */
+    transition: background-color 0.3s ease, border-color 0.3s ease; /* Transición suave para el cambio de color */
+}
+
+/* Cambio de color al hacer hover sobre el contenedor del archivo */
+#download-dropzone .dz-preview:hover {
+    background-color: #d4edda; /* Fondo verde claro */
+    border-color: #28a745; /* Borde verde */
+}
+
+/* Estilo para el ícono del archivo */
+#download-dropzone .dz-preview .file-icon {
+    font-size: 40px; /* Tamaño del ícono */
+    margin-bottom: 10px;
+}
+
+/* Estilo para mostrar el nombre del archivo */
+#download-dropzone .dz-preview span {
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+    word-wrap: break-word;
+    max-width: 100%;
+}
+
+/* Estilo para el tamaño del archivo */
+#download-dropzone .dz-preview .file-size {
+    font-size: 10px;
+    color: #999;
+    margin-bottom: 5px;
+}
+
+/* Estilo para el enlace de descarga */
+#download-dropzone .dz-preview a {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 12px;
+    margin-top: 5px;
+    cursor: pointer; /* Mostrar puntero de mano */
+}
+
+/* Estilo para el hover del enlace de descarga */
+#download-dropzone .dz-preview a:hover {
+    text-decoration: underline;
+}
+
+
+
+/*DGCA
+/* Estilo personalizado para Dropzone de descarga */
+#RA-dropzone {
+    border: 2px solid solid #ccc;
+    /* Borde inicial gris */
+    border-radius: 5px;
+    background: white;
+    /* Fondo blanco */
+    padding: 20px;
+    text-align: center;
+    height: 588px;
+    /* Ajusta la altura automáticamente */
+    width: 100%;
+    /* Ocupa el 100% del ancho disponible */
+    margin: 20px auto;
+    /* Centra el Dropzone horizontalmente */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.3s ease;
+    /* Transición Borde sólido verde */
+}
+
+/* Cambiar el borde a verde claro cuando el cursor esté sobre el Dropzone */
+#RA-dropzone:hover {
+    border-color: #28a745;
+    /* Borde verde oscuro al hacer hover */
+}
+
+/* Estilo para cada archivo dentro de Dropzone */
+#RA-dropzone .dz-preview {
+    border: 1px solid #ddd;
+    /* Borde gris claro */
+    border-radius: 5px;
+    background: #fff;
+    padding: 10px;
+    margin: 10px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 120px;
+    /* Ajusta el ancho del contenedor del archivo */
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    /* Transición suave para el cambio de color */
+}
+
+/* Cambio de color al hacer hover sobre el contenedor del archivo */
+#RA-dropzone .dz-preview:hover {
+    background-color: #d4edda;
+    /* Fondo verde claro */
+    border-color: #28a745;
+    /* Borde verde */
+}
+
+/* Estilo para el ícono del archivo */
+#RA-dropzone .dz-preview .file-icon {
+    font-size: 40px;
+    /* Tamaño del ícono */
+    margin-bottom: 10px;
+}
+
+/* Estilo para mostrar el nombre del archivo */
+#RA-dropzone .dz-preview span {
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+    word-wrap: break-word;
+    max-width: 100%;
+}
+
+/* Estilo para el tamaño del archivo */
+#RA-dropzone .dz-preview .file-size {
+    font-size: 10px;
+    color: #999;
+    margin-bottom: 5px;
+}
+
+/* Estilo para el enlace de descarga */
+#RA-dropzone .dz-preview a {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 12px;
+    margin-top: 5px;
+    cursor: pointer;
+    /* Mostrar puntero de mano */
+}
+
+/* Estilo para el hover del enlace de descarga */
+#RA-dropzone .dz-preview a:hover {
+    text-decoration: underline;
+}
+
+

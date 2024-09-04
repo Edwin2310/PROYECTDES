@@ -28,7 +28,7 @@
                 <ul class="list-inline mt-10">
                     <li class="list-inline-item">
                         <!-- Mostrar nombre de usuario -->
-                        <a class="link-effect text-dual-primary-dark font-size-xs font-w600 text-uppercase" href="be_pages_generic_profile.html"><?php echo $_SESSION["NOMBRE_USUARIO"] ?></a>
+                        <a class="link-effect text-dual-primary-dark font-size-xs font-w600 text-uppercase" href="be_pages_generic_profile.html"><?php echo $_SESSION["NombreUsuario"] ?></a>
                     </li>
                     <li class="list-inline-item">
                         <!-- Opciones adicionales de sidebar -->

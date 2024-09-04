@@ -89,7 +89,7 @@ session_start();
             <div class="btn-group" role="group">
                 <button type="button" class="btn btn-rounded btn-dual-secondary" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <!-- llamada del usuario   -->
-                    <span><?php echo isset($_SESSION["NOMBRE_USUARIO"]) ? $_SESSION["NOMBRE_USUARIO"] : 'Usuario'; ?> </span>
+                    <span><?php echo isset($_SESSION["NombreUsuario"]) ? $_SESSION["NombreUsuario"] : 'Usuario'; ?> </span>
                     <i class="fa fa-angle-down ml-5"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right min-width-150" aria-labelledby="page-header-user-dropdown">

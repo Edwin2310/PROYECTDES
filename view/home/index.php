@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once("../../config/conexion.php");
-if (isset($_SESSION["ID_USUARIO"])) {
+if (isset($_SESSION["IdUsuario"])) {
 
 ?>
     <!doctype html>
@@ -34,9 +34,9 @@ if (isset($_SESSION["ID_USUARIO"])) {
                                     <img class="img-avatar img-avatar32" src="../../public/assets/img/avatars/avatar15.jpg" alt="">
                                 </a>
                                 <a class="align-middle link-effect text-primary-dark font-w600" href="be_pages_generic_profile.html">
-                                    <span><?php echo $_SESSION["NOMBRE_USUARIO"] ?></span>
+                                    <span><?php echo $_SESSION["NombreUsuario"] ?></span>
                                     <!-- Mostrar el ID_USUARIO -->
-                                    <span>ID Usuario: <?php echo $_SESSION["ID_USUARIO"]; ?></span>
+                                    <span>ID Usuario: <?php echo $_SESSION["IdUsuario"]; ?></span>
                                 </a>
                             </div>
                         </div>
@@ -72,7 +72,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
             <main id="main-container">
 
                 <div class="content">
-                    <h2 class="content-heading">Bienvenido, <?php echo $_SESSION["NOMBRE_USUARIO"]; ?></h2>
+                    <h2 class="content-heading">Bienvenido, <?php echo $_SESSION["NombreUsuario"]; ?></h2>
 
 
 

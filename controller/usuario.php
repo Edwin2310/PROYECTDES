@@ -17,7 +17,7 @@ switch ($_GET["op"]) {
             echo json_encode(["status" => "error", "message" => "Usuario no Registrado"]);
         } else {
             // Verificar el estado del usuario
-            if ($datos[0]["ESTADO_USUARIO"] == 2) {
+            if ($datos[0]["EstadoUsuario"] == 2) {
                 echo json_encode([
                     "status" => "error", 
                     "message" => "El usuario se encuentra inactivo por lo que no tiene derecho a recuperación de contraseña. Si considera que esto es un error, contacte con soporte."

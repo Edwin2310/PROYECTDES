@@ -24,16 +24,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conexion = $conn->Conexion();
 
         // Preparar la consulta para verificar el token y el código de validación
-        $stmt = $conexion->prepare("SELECT CORREO_ELECTRONICO, FECHA_VENCIMIENTO FROM tbl_reset_contraseña WHERE TOKEN = :token AND CODIGO_VALIDACION = :codigo");
+        $stmt = $conexion->prepare("SELECT CorreoElectronico, FechaVencimiento	 FROM `seguridad.tblresetcontraseñas` WHERE Token = :token AND CodigoValidacion = :codigo");
         $stmt->bindParam(':token', $token, PDO::PARAM_STR);
-        $stmt->bindParam(':codigo', $codigo, PDO::PARAM_STR); // Asumiendo que CODIGO_VALIDACION es un string
+        $stmt->bindParam(':codigo', $codigo, PDO::PARAM_STR); // Asumiendo que CodigoValidacion es un string
         $stmt->execute();
 
         // Verificar si se encontró una única fila coincidente
         if ($stmt->rowCount() == 1) {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            $correo = $row['CORREO_ELECTRONICO'];
-            $fechaExpiracion = $row['FECHA_VENCIMIENTO'];
+            $correo = $row['CorreoElectronico'];
+            $fechaExpiracion = $row['FechaVencimiento'];
 
             // Verificar si el código ha expirado
             $currentDateTime = new DateTime();

@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conexion = $conn->Conexion();
 
         // Preparar y ejecutar la consulta para eliminar el token
-        $stmt = $conexion->prepare("DELETE FROM tbl_reset_contraseña WHERE TOKEN = :token");
+        $stmt = $conexion->prepare("DELETE FROM `seguridad.tblresetcontraseñas` WHERE Token = :token");
         $stmt->bindParam(':token', $token, PDO::PARAM_STR);
         
         if ($stmt->execute()) {

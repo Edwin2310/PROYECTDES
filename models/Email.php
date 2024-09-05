@@ -69,7 +69,7 @@ class Email extends PHPMailer {
                 $conexion = $conn->Conexion();
 
                 // Preparar y ejecutar la inserción en la tabla tbl_reset_contraseña
-                $stmt = $conexion->prepare("INSERT INTO tbl_reset_contraseña (CORREO_ELECTRONICO, TOKEN, CODIGO_VALIDACION, FECHA_VENCIMIENTO) VALUES (:correo, :token, :codigoValidacion, :fechaVencimiento)");
+                $stmt = $conexion->prepare("INSERT INTO `seguridad.tblresetcontraseñas` (CorreoElectronico, Token, CodigoValidacion, FechaVencimiento) VALUES (:correo, :token, :codigoValidacion, :fechaVencimiento)");
                 $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
                 $stmt->bindParam(':token', $token, PDO::PARAM_STR);
                 $stmt->bindParam(':codigoValidacion', $codigoValidacion, PDO::PARAM_INT);

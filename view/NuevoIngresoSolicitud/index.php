@@ -1,7 +1,7 @@
 <?php
 require_once("../../config/conexion.php");
 require_once(__DIR__ . '/Funciones_Solicitud.php');
-if (isset($_SESSION["ID_USUARIO"])) {
+if (isset($_SESSION["IdUsuario"])) {
 
 ?>
     <?php

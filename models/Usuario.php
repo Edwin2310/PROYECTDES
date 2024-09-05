@@ -2,77 +2,79 @@
 class Usuario extends Conectar
 {
     public function login()
-    {
-        $conectar = parent::Conexion();
-        parent::set_names();
-        if (isset($_POST["enviar"])) {
-            $contrasena = $_POST["contrasena"];
-            $correo = $_POST["correo"];
+{
+    session_start(); // Asegúrate de que la sesión esté iniciada
+    $conectar = parent::Conexion();
+    parent::set_names();
 
-            if (empty($correo) or empty($contrasena)) {
-                $_SESSION["error"] = "Los campos están vacíos.";
+    if (isset($_POST["enviar"])) {
+        $contrasena = $_POST["contrasena"];
+        $correo = $_POST["correo"];
+
+        if (empty($correo) || empty($contrasena)) {
+            $_SESSION["error"] = "Los campos están vacíos.";
+            header("Location:" . Conectar::ruta() . "index.php");
+            exit();
+        } else {
+            $max_intentos = $this->obtener_parametro('Max_Login_Intentos');
+            $num_intentos = $this->obtener_num_intentos($correo);
+
+            if ($num_intentos >= $max_intentos) {
+                $this->bloquear_usuario($correo);
+                $_SESSION["error"] = "Demasiados intentos. Contacte con soporte para que su usuario sea nuevamente habilitado o restablezca su contraseña.";
                 header("Location:" . Conectar::ruta() . "index.php");
                 exit();
             } else {
-                // Obtener el parámetro Max_Login_Intentos
-                $max_intentos = $this->obtener_parametro('Max_Login_Intentos');
+                $sql = "SELECT * FROM `seguridad.tblusuarios` WHERE CorreoElectronico=? AND EstadoUsuario='1'";
+                $stmt = $conectar->prepare($sql);
+                $stmt->bindValue(1, $correo);
+                $stmt->execute();
+                $resultado = $stmt->fetch();
 
-                // Verificar número de intentos actuales
-                $num_intentos = $this->obtener_num_intentos($correo);
+                if (is_array($resultado) && count($resultado) > 0) {
+                    if (password_verify($contrasena, $resultado["Contraseña"])) {
+                        $this->reset_intentos($correo);
+                        $this->incrementar_primer_ingreso($correo);
+                        $this->actualizar_fecha_ultima_conexion($correo);
 
-                if ($num_intentos >= $max_intentos) {
-                    // Bloquear usuario (cambiar ESTADO_USUARIO a 3)
-                    $this->bloquear_usuario($correo);
-                    $_SESSION["error"] = "Demasiados intentos. Contacte con soporte para que su usuario sea nuevamente habilitado o restablezca su contraseña.";
-                    header("Location:" . Conectar::ruta() . "index.php");
-                    exit();
-                } else {
-                    $sql = "SELECT * FROM tbl_ms_usuario WHERE CORREO_ELECTRONICO=? AND ESTADO_USUARIO='1'";
-                    $stmt = $conectar->prepare($sql);
-                    $stmt->bindValue(1, $correo);
-                    $stmt->execute();
-                    $resultado = $stmt->fetch();
+                        $_SESSION["IdUsuario"] = $resultado["IdUsuario"];
+                        $_SESSION["CorreoElectronico"] = $resultado["CorreoElectronico"];
+                        $_SESSION["IdRol"] = $resultado["IdRol"];
 
-                    if (is_array($resultado) && count($resultado) > 0) {
-                        // Si usas contraseñas encriptadas
-                        if (password_verify($contrasena, $resultado["CONTRASENA"])) {
-                            // Restablecer contador de intentos
-                            $this->reset_intentos($correo);
+                        // Nueva consulta para obtener el NombreUsuario desde la tabla seguridad.tblusuariospersonal
+                        $sql_personal = "SELECT NombreUsuario FROM `seguridad.tblusuariospersonal` WHERE IdUsuario = ?";
+                        $stmt_personal = $conectar->prepare($sql_personal);
+                        $stmt_personal->bindValue(1, $resultado["IdUsuario"]);
+                        $stmt_personal->execute();
+                        $resultado_personal = $stmt_personal->fetch();
 
-                            // Incrementar PRIMER_INGRESO
-                            $this->incrementar_primer_ingreso($correo);
-
-                            // Actualizar FECHA_ULTIMA_CONEXION
-                            $this->actualizar_fecha_ultima_conexion($correo);
-
-                            $_SESSION["ID_USUARIO"] = $resultado["ID_USUARIO"];
-                            $_SESSION["NOMBRE_USUARIO"] = $resultado["NOMBRE_USUARIO"];
-                            $_SESSION["CORREO_ELECTRONICO"] = $resultado["CORREO_ELECTRONICO"];
-                            $_SESSION["ID_ROL"] = $resultado["ID_ROL"];
-                            // Redirigir a la vista principal
-                            header("Location:" . Conectar::ruta() . "view/home/");
-                            exit();
-                        } else {
-                            // Incrementar contador de intentos fallidos
-                            $this->incrementar_intentos($correo);
-                            // Obtener número de intentos actuales después de incrementar
-                            $num_intentos_actualizados = $this->obtener_num_intentos($correo);
-                            // Calcular intentos restantes
-                            $intentos_restantes = $max_intentos - $num_intentos_actualizados;
-                            $_SESSION["error"] = "El Usuario y/o Contraseña son incorrectos. Intentos restantes: $intentos_restantes de $max_intentos";
-                            header("Location:" . Conectar::ruta() . "index.php");
-                            exit();
+                        if (is_array($resultado_personal) && count($resultado_personal) > 0) {
+                            // Guardar el NombreUsuario en la sesión
+                            $_SESSION["IdUsuarioPersonal"] = $resultado["IdUsuarioPersonal"];
+                            $_SESSION["NombreUsuario"] = $resultado_personal["NombreUsuario"];
                         }
+
+                        header("Location:" . Conectar::ruta() . "view/home/");
+                        exit();
                     } else {
-                        // El correo electrónico no existe en la base de datos
-                        $_SESSION["error"] = "El Usuario y/o Contraseña son incorrectos.";
+                        $this->incrementar_intentos($correo);
+                        $num_intentos_actualizados = $this->obtener_num_intentos($correo);
+                        $intentos_restantes = $max_intentos - $num_intentos_actualizados;
+                        $_SESSION["error"] = "El Usuario y/o Contraseña son incorrectos. Intentos restantes: $intentos_restantes de $max_intentos";
                         header("Location:" . Conectar::ruta() . "index.php");
                         exit();
                     }
+                } else {
+                    $_SESSION["error"] = "El Usuario y/o Contraseña son incorrectos.";
+                    header("Location:" . Conectar::ruta() . "index.php");
+                    exit();
                 }
             }
         }
     }
+}
+
+
 
 
     public function incrementar_primer_ingreso($correo)
@@ -80,7 +82,7 @@ class Usuario extends Conectar
         $conectar = parent::Conexion();
         parent::set_names();
 
-        $sql = "UPDATE tbl_ms_usuario SET PRIMER_INGRESO = PRIMER_INGRESO + 1 WHERE CORREO_ELECTRONICO = ?";
+        $sql = "UPDATE `seguridad.tblusuarios` SET PrimerIngreso = PrimerIngreso + 1 WHERE CorreoElectronico = ?";
         $stmt = $conectar->prepare($sql);
         $stmt->bindValue(1, $correo);
         $stmt->execute();
@@ -91,7 +93,7 @@ class Usuario extends Conectar
         $conectar = parent::Conexion();
         parent::set_names();
 
-        $sql = "UPDATE tbl_ms_usuario SET FECHA_ULTIMA_CONEXION = NOW() WHERE CORREO_ELECTRONICO = ?";
+        $sql = "UPDATE `seguridad.tblusuarios` SET FechaUltimaConexion = NOW() WHERE CorreoElectronico = ?";
         $stmt = $conectar->prepare($sql);
         $stmt->bindValue(1, $correo);
         $stmt->execute();
@@ -101,7 +103,7 @@ class Usuario extends Conectar
     {
         $conectar = parent::Conexion();
         parent::set_names();
-        $sql = "SELECT NOMBRE_USUARIO, ESTADO_USUARIO FROM tbl_ms_usuario WHERE CORREO_ELECTRONICO=?";
+        $sql = "SELECT EstadoUsuario FROM `seguridad.tblusuarios` WHERE CorreoElectronico=?";
         $stmt = $conectar->prepare($sql);
         $stmt->bindValue(1, $correo);
         $stmt->execute();
@@ -118,7 +120,7 @@ class Usuario extends Conectar
             $conexion->beginTransaction();
 
             // Obtener el ID_USUARIO asociado al correo electrónico
-            $stmt_id = $conexion->prepare("SELECT ID_USUARIO FROM tbl_ms_usuario WHERE CORREO_ELECTRONICO = :correo");
+            $stmt_id = $conexion->prepare("SELECT IdUsuario FROM `seguridad.tblusuarios` WHERE CorreoElectronico = :correo");
             $stmt_id->bindParam(':correo', $correo, PDO::PARAM_STR);
             $stmt_id->execute();
             $id_usuario = $stmt_id->fetchColumn(); // Obtener el ID_USUARIO
@@ -126,14 +128,14 @@ class Usuario extends Conectar
 
             if ($id_usuario) {
                 // Actualizar la contraseña en la tabla principal de usuarios
-                $stmt_update = $conexion->prepare("UPDATE tbl_ms_usuario SET contrasena = :nueva_contrasena, ESTADO_USUARIO = 1, NUM_INTENTOS = 0 WHERE CORREO_ELECTRONICO = :correo");
+                $stmt_update = $conexion->prepare("UPDATE `seguridad.tblusuarios` SET Contraseña = :nueva_contrasena, EstadoUsuario = 1, NumIntentos = 0 WHERE CorreoElectronico = :correo");
                 $stmt_update->bindParam(':nueva_contrasena', $nueva_contrasena, PDO::PARAM_STR);
                 $stmt_update->bindParam(':correo', $correo, PDO::PARAM_STR);
                 $stmt_update->execute();
                 $stmt_update->closeCursor();
 
                 // Insertar la nueva contraseña en el historial de contraseñas
-                $stmt_hist = $conexion->prepare("INSERT INTO tbl_ms_hist_contraseña (ID_USUARIO, CONTRASEÑA, FECHA_CREACION) VALUES (:id_usuario, :nueva_contrasena, current_timestamp())");
+                $stmt_hist = $conexion->prepare("INSERT INTO `seguridad.tblhistcontraseñas` (IdUsuario, Contraseña, FechaCreacion) VALUES (:id_usuario, :nueva_contrasena, current_timestamp())");
                 $stmt_hist->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
                 $stmt_hist->bindParam(':nueva_contrasena', $nueva_contrasena, PDO::PARAM_STR);
                 $stmt_hist->execute();
@@ -163,7 +165,7 @@ class Usuario extends Conectar
         $conn = new Conectar();
         $conexion = $conn->Conexion();
 
-        $sql = "SELECT VALOR FROM tbl_ms_parametros WHERE PARAMETRO = ?";
+        $sql = "SELECT Valor FROM `seguridad.tblparametros` WHERE Parametro = ?";
         $stmt = $conexion->prepare($sql);
         $stmt->bindValue(1, $parametro);
         $stmt->execute();
@@ -179,7 +181,7 @@ class Usuario extends Conectar
         $conn = new Conectar();
         $conexion = $conn->Conexion();
 
-        $sql = "SELECT NUM_INTENTOS FROM tbl_ms_usuario WHERE CORREO_ELECTRONICO = ?";
+        $sql = "SELECT NumIntentos FROM `seguridad.tblusuarios` WHERE CorreoElectronico = ?";
         $stmt = $conexion->prepare($sql);
         $stmt->bindValue(1, $correo);
         $stmt->execute();
@@ -195,7 +197,7 @@ class Usuario extends Conectar
         $conn = new Conectar();
         $conexion = $conn->Conexion();
 
-        $sql = "UPDATE tbl_ms_usuario SET NUM_INTENTOS = NUM_INTENTOS + 1 WHERE CORREO_ELECTRONICO = ?";
+        $sql = "UPDATE `seguridad.tblusuarios` SET NumIntentos = NumIntentos + 1 WHERE CorreoElectronico = ?";
         $stmt = $conexion->prepare($sql);
         $stmt->bindValue(1, $correo);
         $stmt->execute();
@@ -208,20 +210,20 @@ class Usuario extends Conectar
         $conn = new Conectar();
         $conexion = $conn->Conexion();
 
-        $sql = "UPDATE tbl_ms_usuario SET NUM_INTENTOS = 0 WHERE CORREO_ELECTRONICO = ?";
+        $sql = "UPDATE `seguridad.tblusuarios` SET NumIntentos = 0 WHERE CorreoElectronico = ?";
         $stmt = $conexion->prepare($sql);
         $stmt->bindValue(1, $correo);
         $stmt->execute();
         $stmt->closeCursor();
     }
 
-    // Función para bloquear al usuario cambiando ESTADO_USUARIO a 3
+    // Función para bloquear al usuario cambiando EstadoUsuario a 3
     private function bloquear_usuario($correo)
     {
         $conn = new Conectar();
         $conexion = $conn->Conexion();
 
-        $sql = "UPDATE tbl_ms_usuario SET ESTADO_USUARIO = 3 WHERE CORREO_ELECTRONICO = ?";
+        $sql = "UPDATE `seguridad.tblusuarios` SET EstadoUsuario = 3 WHERE CorreoElectronico = ?";
         $stmt = $conexion->prepare($sql);
         $stmt->bindValue(1, $correo);
         $stmt->execute();

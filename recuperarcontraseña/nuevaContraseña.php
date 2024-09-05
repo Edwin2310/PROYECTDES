@@ -8,13 +8,6 @@
     <meta name="description" content="Codebase - Bootstrap 4 Admin Template & UI Framework created by pixelcave and published on Themeforest">
     <meta name="author" content="pixelcave">
     <meta name="robots" content="noindex, nofollow">
-    <!-- Open Graph Meta -->
-    <meta property="og:title" content="Codebase - Bootstrap 4 Admin Template & UI Framework">
-    <meta property="og:site_name" content="Codebase">
-    <meta property="og:description" content="Codebase - Bootstrap 4 Admin Template & UI Framework created by pixelcave and published on Themeforest">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="">
-    <meta property="og:image" content="">
     <link rel="shortcut icon" href="../public/assets/img/favicons/favicon.png">
     <link rel="icon" type="image/png" sizes="192x192" href="../public/assets/img/favicons/favicon-192x192.png">
     <link rel="apple-touch-icon" sizes="180x180" href="../public/assets/img/favicons/apple-touch-icon-180x180.png">
@@ -51,7 +44,6 @@
                                             <div class="form-material floating">
                                                 <input type="password" class="form-control" id="nueva_contrasena" name="nueva_contrasena" required onpaste="return false;" onkeypress="return event.charCode != 60 && event.charCode != 62 && event.charCode != 32 && event.charCode != 34;">
                                                 <label for="nueva_contrasena">Nueva Contraseña</label>
-                                                <i class="fas fa-eye toggle-password" id="toggle-nueva-contrasena"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -60,8 +52,12 @@
                                             <div class="form-material floating">
                                                 <input type="password" class="form-control" id="confirmar_contrasena" name="confirmar_contrasena" required onpaste="return false;" onkeypress="return event.charCode != 60 && event.charCode != 62 && event.charCode != 32 && event.charCode != 34;">
                                                 <label for="confirmar_contrasena">Confirmar Contraseña</label>
-                                                <i class="fas fa-eye toggle-password" id="toggle-confirmar-contrasena"></i>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-12">
+                                            <input type="checkbox" id="show_passwords"> Mostrar contraseñas
                                         </div>
                                     </div>
                                     <input type="hidden" name="token" value="<?php echo htmlspecialchars($_GET['token']); ?>">
@@ -95,18 +91,9 @@
     <script src="resetBack/nueva_Contraseña.js"></script>
     <script>
         $(document).ready(function() {
-            $('#toggle-nueva-contrasena').click(function() {
-                var nuevaContrasenaInput = $('#nueva_contrasena');
-                var type = nuevaContrasenaInput.attr('type') === 'password' ? 'text' : 'password';
-                nuevaContrasenaInput.attr('type', type);
-                $(this).toggleClass('fa-eye fa-eye-slash');
-            });
-
-            $('#toggle-confirmar-contrasena').click(function() {
-                var confirmarContrasenaInput = $('#confirmar_contrasena');
-                var type = confirmarContrasenaInput.attr('type') === 'password' ? 'text' : 'password';
-                confirmarContrasenaInput.attr('type', type);
-                $(this).toggleClass('fa-eye fa-eye-slash');
+            $('#show_passwords').click(function() {
+                var type = $(this).is(':checked') ? 'text' : 'password';
+                $('#nueva_contrasena, #confirmar_contrasena').attr('type', type);
             });
         });
     </script>

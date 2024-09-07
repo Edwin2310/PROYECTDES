@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pdo = $conexion->Conexion();
 
             // Consulta para insertar en la bitácora
-            $sql = 'INSERT INTO tbl_ms_bitacora (IdUsuario, IdObjeto, ACCION, DESCRIPCION) VALUES (:id_usuario, :id_objeto, :accion, :descripcion)';
+            $sql = 'INSERT INTO `seguridad.tblbitacora` (IdUsuario, IdObjeto, Accion, Descripcion) VALUES (:id_usuario, :id_objeto, :accion, :descripcion)';
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
                 ':id_usuario' => $id_usuario,

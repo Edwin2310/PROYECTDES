@@ -70,13 +70,13 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 if (isset($_SESSION["IdUsuario"])) {
     $conexion = new Conectar();
     $conn = $conexion->Conexion();
-    $sql = "SELECT b.ID_BITACORA, b.FECHA_HORA, 
-                   b.IdUsuario, u.USUARIO AS NOMBRE_USUARIO, o.IdObjeto, 
-                   b.ACCION, b.DESCRIPCION
-            FROM tbl_ms_bitacora b
-            INNER JOIN tbl_ms_usuario u ON b.IdUsuario = u.IdUsuario
-            INNER JOIN tbl_ms_objetos o ON b.IdObjeto = o.IdObjeto
-            ORDER BY b.ID_BITACORA ASC;";
+    $sql = "SELECT b.IdBitacora, b.FechaHora, 
+            b.IdUsuario,/*  U.NOMBRE_USUARIO AS NOMBRE_USUARIO, */ o.IdObjeto, 
+            b.Accion, b.Descripcion
+            FROM `seguridad.tblbitacora` b
+            INNER JOIN `seguridad.tblusuarios` u ON b.IdUsuario = u.IdUsuario
+            INNER JOIN `seguridad.tblobjetos` o ON b.IdObjeto = o.IdObjeto
+            ORDER BY b.IdBitacora ASC;";
     $result = $conn->query($sql);
 
     if ($result !== false && $result->rowCount() > 0) {
@@ -112,13 +112,13 @@ if (isset($_SESSION["IdUsuario"])) {
         // Agregar datos
         $rowNum = 2;
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            $sheet->setCellValue('A' . $rowNum, $row['ID_BITACORA']);
-            $sheet->setCellValue('B' . $rowNum, $row['FECHA_HORA']);
+            $sheet->setCellValue('A' . $rowNum, $row['IdBitacora']);
+            $sheet->setCellValue('B' . $rowNum, $row['FechaHora']);
             $sheet->setCellValue('C' . $rowNum, $row['IdUsuario']);
-            $sheet->setCellValue('D' . $rowNum, $row['NOMBRE_USUARIO']);
+  /*           $sheet->setCellValue('D' . $rowNum, $row['NOMBRE_USUARIO']); */
             $sheet->setCellValue('E' . $rowNum, $row['IdObjeto']);
-            $sheet->setCellValue('F' . $rowNum, $row['ACCION']);
-            $sheet->setCellValue('G' . $rowNum, $row['DESCRIPCION']);
+            $sheet->setCellValue('F' . $rowNum, $row['Accion']);
+            $sheet->setCellValue('G' . $rowNum, $row['Descripcion']);
             
             // Aplicar alineación centrada a todas las celdas de datos
             $sheet->getStyle('A' . $rowNum . ':G' . $rowNum)->applyFromArray($centerAlignment);

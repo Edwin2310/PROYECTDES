@@ -4,33 +4,33 @@ require_once("../../config/conexion.php");
 
 if (isset($_SESSION["IdUsuario"])) {
 
-    ?>
+?>
     <?php
-        $id_rol = $_SESSION['IdRol'] ?? null;
-        $id_objeto = 21; // ID del objeto o módulo correspondiente a esta página
-    
-        if (!$id_rol) {
-            header("Location: ../Seguridad/Permisos/denegado.php");
-            exit();
-        }
-    
-        // Conectar a la base de datos
-        $conexion = new Conectar();
-        $conn = $conexion->Conexion();
-    
-        // Verificar permiso en la base de datos
-        $sql = "SELECT * FROM `seguridad.tblpermisos` WHERE IdRol = :idRol AND IdObjeto = :idObjeto";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':idRol', $id_rol);
-        $stmt->bindParam(':idObjeto', $id_objeto);
-    
-        if ($stmt->execute() && $stmt->rowCount() > 0) {
-            // Usuario tiene permiso, continuar con el contenido de la página
-        } else {
-            header("Location: ../Seguridad/Permisos/denegado.php");
-            exit();
-        }
-        ?>
+    $id_rol = $_SESSION['IdRol'] ?? null;
+    $id_objeto = 21; // ID del objeto o módulo correspondiente a esta página
+
+    if (!$id_rol) {
+        header("Location: ../Seguridad/Permisos/denegado.php");
+        exit();
+    }
+
+    // Conectar a la base de datos
+    $conexion = new Conectar();
+    $conn = $conexion->Conexion();
+
+    // Verificar permiso en la base de datos
+    $sql = "SELECT * FROM `seguridad.tblpermisos` WHERE IdRol = :idRol AND IdObjeto = :idObjeto";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':idRol', $id_rol);
+    $stmt->bindParam(':idObjeto', $id_objeto);
+
+    if ($stmt->execute() && $stmt->rowCount() > 0) {
+        // Usuario tiene permiso, continuar con el contenido de la página
+    } else {
+        header("Location: ../Seguridad/Permisos/denegado.php");
+        exit();
+    }
+    ?>
 
 
     <!doctype html>
@@ -110,7 +110,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                         <th class="text-center">Id Bitacora</th>
                                         <th class="d-none d-sm-table-cell">Fecha y Hora</th>
                                         <th class="d-none d-sm-table-cell">Id Usuario</th>
-                                        <th class="d-none d-sm-table-cell">Usuario</th>
+                                     <!--    <th class="d-none d-sm-table-cell">Usuario</th> -->
                                         <th class="d-none d-sm-table-cell">Id Objeto</th>
                                         <th class="d-none d-sm-table-cell">Acción</th>
                                         <th class="d-none d-sm-table-cell">Descripción</th>
@@ -119,7 +119,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                         <th class="text-center"><input type="text" placeholder="Buscar por Id Bitacora" /></th>
                                         <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por Fecha y Hora" /></th>
                                         <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por ID Usuario" /></th>
-                                        <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por Usuario" /></th>
+                                 <!--        <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por Usuario" /></th> -->
                                         <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por ID Objeto" /></th>
                                         <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por Acción" /></th>
                                         <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por Descripción" /></th>
@@ -129,24 +129,24 @@ if (isset($_SESSION["IdUsuario"])) {
                                     <?php
                                     $conexion = new Conectar();
                                     $conn = $conexion->Conexion();
-                                    $sql = "SELECT b.ID_BITACORA, b.FECHA_HORA, 
-                                        b.IdUsuario, U.NOMBRE_USUARIO AS NOMBRE_USUARIO, o.IdObjeto, 
-                                        b.ACCION, b.DESCRIPCION
-                                    FROM tbl_ms_bitacora b
-                                    INNER JOIN tbl_ms_usuario u ON b.IdUsuario = u.IdUsuario
-                                    INNER JOIN tbl_ms_objetos o ON b.IdObjeto = o.IdObjeto
-                                    ORDER BY b.ID_BITACORA ASC;";
+                                    $sql = "SELECT b.IdBitacora, b.FechaHora, 
+                                        b.IdUsuario,/*  U.NOMBRE_USUARIO AS NOMBRE_USUARIO, */ o.IdObjeto, 
+                                        b.Accion, b.Descripcion
+                                    FROM `seguridad.tblbitacora` b
+                                    INNER JOIN `seguridad.tblusuarios` u ON b.IdUsuario = u.IdUsuario
+                                    INNER JOIN `seguridad.tblobjetos` o ON b.IdObjeto = o.IdObjeto
+                                    ORDER BY b.IdBitacora ASC;";
                                     $result = $conn->query($sql);
                                     if ($result !== false && $result->rowCount() > 0) {
                                         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                                             echo "<tr>";
-                                            echo "<td class='text-center'>{$row['ID_BITACORA']}</td>";
-                                            echo "<td>{$row['FECHA_HORA']}</td>";
+                                            echo "<td class='text-center'>{$row['IdBitacora']}</td>";
+                                            echo "<td>{$row['FechaHora']}</td>";
                                             echo "<td>{$row['IdUsuario']}</td>";
-                                            echo "<td>{$row['NOMBRE_USUARIO']}</td>";
+                                        /*     echo "<td>{$row['NOMBRE_USUARIO']}</td>"; */
                                             echo "<td>{$row['IdObjeto']}</td>";
-                                            echo "<td>{$row['ACCION']}</td>";
-                                            echo "<td>{$row['DESCRIPCION']}</td>";
+                                            echo "<td>{$row['Accion']}</td>";
+                                            echo "<td>{$row['Descripcion']}</td>";
                                             echo "</tr>";
                                         }
                                     } else {

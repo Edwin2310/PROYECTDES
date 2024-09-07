@@ -4,7 +4,7 @@ require_once("../../config/conexion.php");
 
 
 
-$id_rol = $_SESSION['ID_ROL'] ?? null;
+$id_rol = $_SESSION['IdRol'] ?? null;
 $id_objeto = 9; // ID del objeto o módulo correspondiente a esta página
 
 if (!$id_rol) {
@@ -17,7 +17,7 @@ $conexion = new Conectar();
 $conn = $conexion->Conexion();
 
 // Verificar permiso en la base de datos
-$sql = "SELECT * FROM tbl_permisos WHERE ID_ROL = :idRol AND ID_OBJETO = :idObjeto";
+$sql = "SELECT * FROM `seguridad.tblpermisos` WHERE IdRol = :idRol AND IdObjeto = :idObjeto";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':idRol', $id_rol);
 $stmt->bindParam(':idObjeto', $id_objeto);
@@ -30,7 +30,7 @@ if ($stmt->execute() && $stmt->rowCount() > 0) {
 }
 
 
-if (isset($_SESSION["ID_USUARIO"])) {
+if (isset($_SESSION["IdUsuario"])) {
     $idUniversidad = isset($_GET['id_universidad']) ? $_GET['id_universidad'] : '';
     $idCarrera = isset($_GET['id_carrera']) ? $_GET['id_carrera'] : '';
     $fechaInicio = isset($_GET['fecha_inicio']) ? $_GET['fecha_inicio'] : '';

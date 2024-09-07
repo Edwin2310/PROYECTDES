@@ -6,12 +6,12 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-if (isset($_SESSION["ID_USUARIO"])) {
+if (isset($_SESSION["IdUsuario"])) {
 ?>
 
 
 <?php
-    $id_rol = $_SESSION['ID_ROL'] ?? null;
+    $id_rol = $_SESSION['IdRol'] ?? null;
     $id_objeto = 39; // ID del objeto o módulo correspondiente a esta página
 
     if (!$id_rol) {
@@ -24,7 +24,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
     $conn = $conexion->Conexion();
 
     // Verificar permiso en la base de datos
-    $sql = "SELECT * FROM tbl_permisos WHERE ID_ROL = :idRol AND ID_OBJETO = :idObjeto";
+    $sql = "SELECT * FROM `seguridad.tblpermisos` WHERE IdRol = :idRol AND IdObjeto = :idObjeto";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':idRol', $id_rol);
     $stmt->bindParam(':idObjeto', $id_objeto);
@@ -163,7 +163,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
                                         LEFT JOIN tbl_universidad_centro uc ON s.ID_UNIVERSIDAD = uc.ID_UNIVERSIDAD
                                         LEFT JOIN tbl_deptos d ON s.ID_DEPARTAMENTO = d.ID_DEPARTAMENTO
                                         LEFT JOIN tbl_municipios mu ON s.ID_MUNICIPIO = mu.ID_MUNICIPIO
-                                        LEFT JOIN tbl_ms_usuario u ON s.ID_USUARIO = u.ID_USUARIO
+                                        LEFT JOIN tbl_ms_usuario u ON s.IdUsuario = u.IdUsuario
                                         LEFT JOIN tbl_estado_solicitud e ON s.ID_ESTADO = e.ID_ESTADO
                                         WHERE e.ID_ESTADO IN (6)
                                         ORDER BY e.ID_ESTADO";

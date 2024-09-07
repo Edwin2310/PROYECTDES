@@ -6,7 +6,7 @@ $conexion = new Conectar();
 $conn = $conexion->Conexion();
 
 
-    $id_rol = $_SESSION['ID_ROL'] ?? null;
+    $id_rol = $_SESSION['IdRol'] ?? null;
     $id_objeto = 53; // ID del objeto o módulo correspondiente a esta página
 
     if (!$id_rol) {
@@ -19,7 +19,7 @@ $conn = $conexion->Conexion();
     $conn = $conexion->Conexion();
 
     // Verificar permiso en la base de datos
-    $sql = "SELECT * FROM tbl_permisos WHERE ID_ROL = :idRol AND ID_OBJETO = :idObjeto";
+    $sql = "SELECT * FROM `seguridad.tblpermisos` WHERE IdRol = :idRol AND IdObjeto = :idObjeto";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':idRol', $id_rol);
     $stmt->bindParam(':idObjeto', $id_objeto);

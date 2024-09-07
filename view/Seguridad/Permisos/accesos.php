@@ -19,7 +19,7 @@ $idRol = $data['idRol'];
 $idObjeto = $data['idObjeto'];
 
 // Consulta para verificar permisos
-$sql = "SELECT * FROM tbl_permisos WHERE ID_ROL = :idRol AND ID_OBJETO = :idObjeto";
+$sql = "SELECT * FROM `seguridad.tblpermisos` WHERE IdRol = :idRol AND IdObjeto = :idObjeto";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':idRol', $idRol);
 $stmt->bindParam(':idObjeto', $idObjeto);

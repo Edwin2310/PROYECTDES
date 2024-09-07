@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Obtener el ID de usuario y nombre de usuario de la sesión
     session_start();
-    $idUsuario = isset($_SESSION["ID_USUARIO"]) ? $_SESSION["ID_USUARIO"] : null;
+    $idUsuario = isset($_SESSION["IdUsuario"]) ? $_SESSION["IdUsuario"] : null;
     $nombreUsuario = isset($_SESSION["NOMBRE_USUARIO"]) ? $_SESSION["NOMBRE_USUARIO"] : null;
 
     // Sanear las observaciones para eliminar caracteres '<' y '>'
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $conn->beginTransaction();
 
             // Insertar en la base de datos
-            $sql = "INSERT INTO tbl_opinion_razonada (ADJUNTO_OBSERVACIONES, OBSERVACIONES, EMAIL, ID_SOLICITUD, ID_USUARIO, CREADO_POR) 
+            $sql = "INSERT INTO tbl_opinion_razonada (ADJUNTO_OBSERVACIONES, OBSERVACIONES, EMAIL, ID_SOLICITUD, IdUsuario, CREADO_POR) 
                     VALUES (:filePath, :observaciones, NULL, :idSolicitud, :idUsuario, :nombreUsuario)";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':filePath', $filePath, PDO::PARAM_STR);

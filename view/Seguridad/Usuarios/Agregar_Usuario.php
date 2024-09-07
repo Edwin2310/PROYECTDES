@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $empleado_des = $_POST['empleado_des'];
     $id_rol = $_POST['id_rol'];
     $id_universidad = $_POST['id_universidad'] ?? '1'; // Valor predeterminado
-    $creado_por = $_SESSION['ID_USUARIO'];
+    $creado_por = $_SESSION['IdUsuario'];
 
     // Validación
     if (strlen($num_identidad) !== 13) {

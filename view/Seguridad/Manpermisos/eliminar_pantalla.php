@@ -13,7 +13,7 @@ if (isset($_POST['id_rol']) && isset($_POST['id_objeto'])) {
     $conexion = new Conectar();
     $conn = $conexion->Conexion();
 
-    $sql = "DELETE FROM tbl_permisos WHERE ID_ROL = :id_rol AND ID_OBJETO = :id_objeto";
+    $sql = "DELETE FROM `seguridad.tblpermisos` WHERE IdRol = :id_rol AND IdObjeto = :id_objeto";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':id_rol', $id_rol, PDO::PARAM_INT);
     $stmt->bindParam(':id_objeto', $id_objeto, PDO::PARAM_INT);
@@ -44,7 +44,7 @@ if (isset($_POST['id_rol']) && isset($_POST['id_objeto'])) {
     $conexion = new Conectar();
     $conn = $conexion->Conexion();
 
-    $sql = "DELETE FROM tbl_permisos WHERE ID_ROL = :id_rol AND ID_OBJETO = :id_objeto";
+    $sql = "DELETE FROM `seguridad.tblpermisos` WHERE IdRol = :id_rol AND IdObjeto = :id_objeto";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':id_rol', $id_rol, PDO::PARAM_INT);
     $stmt->bindParam(':id_objeto', $id_objeto, PDO::PARAM_INT);

@@ -1,7 +1,7 @@
 <?php
 require_once("../../config/conexion.php");
 
-if (isset($_SESSION["ID_USUARIO"])) {
+if (isset($_SESSION["IdUsuario"])) {
 ?>
     <?php
     $id = isset($_GET['solicitud_id']) ? htmlspecialchars($_GET['solicitud_id']) : '';
@@ -20,7 +20,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
                     LEFT JOIN tbl_universidad_centro uc ON s.ID_UNIVERSIDAD = uc.ID_UNIVERSIDAD
                     LEFT JOIN tbl_deptos d ON s.ID_DEPARTAMENTO = d.ID_DEPARTAMENTO
                     LEFT JOIN tbl_municipios mu ON s.ID_MUNICIPIO = mu.ID_MUNICIPIO
-                    LEFT JOIN tbl_ms_usuario u ON s.ID_USUARIO = u.ID_USUARIO
+                    LEFT JOIN tbl_ms_usuario u ON s.IdUsuario = u.IdUsuario
                     LEFT JOIN tbl_estado_solicitud e ON s.ID_ESTADO = e.ID_ESTADO
                     WHERE s.ID_SOLICITUD = :solicitud_id";
         $stmt = $conn->prepare($sql);
@@ -141,7 +141,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
                                 <form id="solicitudForm" action="" method="post">
                                     <input type="hidden" name="solicitud_id" value="<?php echo htmlspecialchars($id, ENT_QUOTES, 'UTF-8'); ?>">
                                     <input type="hidden" name="estado_id" value="4"> <!-- Estado que deseas actualizar -->
-                                    <input type="hidden" id="id_usuario" name="id_usuario" value="<?php echo $_SESSION['ID_USUARIO']; ?>">
+                                    <input type="hidden" id="id_usuario" name="id_usuario" value="<?php echo $_SESSION['IdUsuario']; ?>">
 
                                     <div class="block-content block-content-full tab-content" style="min-height: 265px;">
                                         <div class="tab-pane active" id="wizard-simple-step2" role="tabpanel">

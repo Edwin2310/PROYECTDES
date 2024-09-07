@@ -85,7 +85,7 @@ session_start();
                     </a>
                 </div>
             </div>
-            <input type="hidden" id="user_idx" value="<?php echo isset($_SESSION["ID_USUARIO"]) ? $_SESSION["ID_USUARIO"] : ''; ?>"> <!-- ID del Usuario -->
+            <input type="hidden" id="user_idx" value="<?php echo isset($_SESSION["IdUsuario"]) ? $_SESSION["IdUsuario"] : ''; ?>"> <!-- ID del Usuario -->
             <div class="btn-group" role="group">
                 <button type="button" class="btn btn-rounded btn-dual-secondary" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <!-- llamada del usuario   -->

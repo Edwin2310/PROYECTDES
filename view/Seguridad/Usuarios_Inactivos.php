@@ -2,7 +2,7 @@
 session_start();
 require_once("../../config/conexion.php");
 require_once(__DIR__ . '/Script/Funciones.php');
-if (isset($_SESSION["ID_USUARIO"])) {
+if (isset($_SESSION["IdUsuario"])) {
 
 ?>
     <!doctype html>
@@ -111,14 +111,14 @@ if (isset($_SESSION["ID_USUARIO"])) {
 
                                         // Llamada al procedimiento almacenado
                                         $stmt = $conn->prepare("CALL splUsuariosMostrarInactivos(:usuario)");
-                                        $stmt->bindValue(':usuario', $_SESSION["ID_USUARIO"], PDO::PARAM_STR);
+                                        $stmt->bindValue(':usuario', $_SESSION["IdUsuario"], PDO::PARAM_STR);
                                         $stmt->execute();
                                         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                         if ($result !== false && count($result) > 0) {
                                             foreach ($result as $row) {
                                                 echo "<tr>";
-                                                echo "<td class='text-center'>{$row['ID_USUARIO']}</td>";
+                                                echo "<td class='text-center'>{$row['IdUsuario']}</td>";
                                                 echo "<td>{$row['NUM_IDENTIDAD']}</td>";
                                                 echo "<td>{$row['DIRECCION_1']}</td>";
                                                 echo "<td>{$row['USUARIO']}</td>";
@@ -126,7 +126,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
                                                 echo "<td>{$row['NOMBRE_USUARIO']}</td>";
                                                 echo "<td>{$row['NUM_EMPLEADO']}</td>";
                                                 echo "<td>{$row['ESTADO_USUARIO']}</td>";
-                                                echo "<td>{$row['ID_ROL']}</td>";
+                                                echo "<td>{$row['IdRol']}</td>";
                                                 echo "<td>{$row['FECHA_CREACION']}</td>";
                                                 echo "<td>{$row['CREADO_POR']}</td>";
                                                 echo "<td class='text-center hidden-column'>{$row['ID_UNIVERSIDAD']}</td>";
@@ -134,7 +134,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
                                                 echo "<td class='text-center hidden-column'>{$row['MODIFICADO_POR']}</td>";
                                                 echo "<td class='text-center'> 
                                             <button type='button' class='btn btn-sm btn-secondary' data-toggle='modal' data-target='#editUserModal' 
-                                                    data-id='{$row["ID_USUARIO"]}' 
+                                                    data-id='{$row["IdUsuario"]}' 
                                                     data-num_identidad='{$row["NUM_IDENTIDAD"]}' 
                                                     data-direccion_1='{$row["DIRECCION_1"]}' 
                                                     data-usuario='{$row["USUARIO"]}' 
@@ -142,7 +142,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
                                                     data-nombre_usuario='{$row["NOMBRE_USUARIO"]}' 
                                                     data-num_empleado='" . $row["NUM_EMPLEADO"] . "'
                                                     data-estado_usuario='{$row["ESTADO_USUARIO"]}' 
-                                                    data-id_rol='{$row["ID_ROL"]}' 
+                                                    data-id_rol='{$row["IdRol"]}' 
                                                     data-creado_por='{$row["CREADO_POR"]}' 
                                                     data-id_universidad='{$row["ID_UNIVERSIDAD"]}' 
                                                     data-fecha_modificacion='{$row["FECHA_MODIFICACION"]}' 

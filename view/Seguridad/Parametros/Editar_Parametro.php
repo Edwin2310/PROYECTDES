@@ -19,8 +19,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $parametro = filter_input(INPUT_POST, 'parametro', FILTER_SANITIZE_STRING);
     $valor = filter_input(INPUT_POST, 'valor', FILTER_SANITIZE_STRING);
 
-    // Obtener el ID_USUARIO y CREADO_POR del parámetro antes de la actualización
-    $sql_datos_parametro = "SELECT ID_USUARIO, CREADO_POR FROM tbl_ms_parametros WHERE ID_PARAMETRO = :id_parametro";
+    // Obtener el IdUsuario y CREADO_POR del parámetro antes de la actualización
+    $sql_datos_parametro = "SELECT IdUsuario, CREADO_POR FROM tbl_ms_parametros WHERE ID_PARAMETRO = :id_parametro";
     $stmt_datos_parametro = $conn->prepare($sql_datos_parametro);
     $stmt_datos_parametro->bindParam(':id_parametro', $id_parametro, PDO::PARAM_INT);
     $stmt_datos_parametro->execute();
@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    $id_usuario = $datos_parametro['ID_USUARIO'];
+    $id_usuario = $datos_parametro['IdUsuario'];
     $creado_por = $datos_parametro['CREADO_POR'];
 
     // Obtener el nombre de usuario actual (simulado para ejemplo)
@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "UPDATE tbl_ms_parametros SET 
             PARAMETRO = :parametro, 
             VALOR = :valor, 
-            ID_USUARIO = :id_usuario,
+            IdUsuario = :id_usuario,
             MODIFICADO_POR = :modificado_por
             WHERE ID_PARAMETRO = :id_parametro";
 

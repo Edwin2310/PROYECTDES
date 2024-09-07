@@ -5,15 +5,15 @@ require_once ("../../../vendor/autoload.php"); // Asegúrate de que la ruta sea 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-if (isset($_SESSION["ID_USUARIO"])) {
+if (isset($_SESSION["IdUsuario"])) {
     $conexion = new Conectar();
     $conn = $conexion->Conexion();
     $sql = "SELECT b.ID_BITACORA, b.FECHA_HORA, 
-                   b.ID_USUARIO, u.USUARIO AS NOMBRE_USUARIO, o.ID_OBJETO, 
+                   b.IdUsuario, u.USUARIO AS NOMBRE_USUARIO, o.IdObjeto, 
                    b.ACCION, b.DESCRIPCION
             FROM tbl_ms_bitacora b
-            INNER JOIN tbl_ms_usuario u ON b.ID_USUARIO = u.ID_USUARIO
-            INNER JOIN tbl_ms_objetos o ON b.ID_OBJETO = o.ID_OBJETO
+            INNER JOIN tbl_ms_usuario u ON b.IdUsuario = u.IdUsuario
+            INNER JOIN tbl_ms_objetos o ON b.IdObjeto = o.IdObjeto
             ORDER BY b.ID_BITACORA ASC;";
     $result = $conn->query($sql);
 
@@ -35,9 +35,9 @@ if (isset($_SESSION["ID_USUARIO"])) {
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $sheet->setCellValue('A' . $rowNum, $row['ID_BITACORA']);
             $sheet->setCellValue('B' . $rowNum, $row['FECHA_HORA']);
-            $sheet->setCellValue('C' . $rowNum, $row['ID_USUARIO']);
+            $sheet->setCellValue('C' . $rowNum, $row['IdUsuario']);
             $sheet->setCellValue('D' . $rowNum, $row['NOMBRE_USUARIO']);
-            $sheet->setCellValue('E' . $rowNum, $row['ID_OBJETO']);
+            $sheet->setCellValue('E' . $rowNum, $row['IdObjeto']);
             $sheet->setCellValue('F' . $rowNum, $row['ACCION']);
             $sheet->setCellValue('G' . $rowNum, $row['DESCRIPCION']);
             $rowNum++;
@@ -67,15 +67,15 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
-if (isset($_SESSION["ID_USUARIO"])) {
+if (isset($_SESSION["IdUsuario"])) {
     $conexion = new Conectar();
     $conn = $conexion->Conexion();
     $sql = "SELECT b.ID_BITACORA, b.FECHA_HORA, 
-                   b.ID_USUARIO, u.USUARIO AS NOMBRE_USUARIO, o.ID_OBJETO, 
+                   b.IdUsuario, u.USUARIO AS NOMBRE_USUARIO, o.IdObjeto, 
                    b.ACCION, b.DESCRIPCION
             FROM tbl_ms_bitacora b
-            INNER JOIN tbl_ms_usuario u ON b.ID_USUARIO = u.ID_USUARIO
-            INNER JOIN tbl_ms_objetos o ON b.ID_OBJETO = o.ID_OBJETO
+            INNER JOIN tbl_ms_usuario u ON b.IdUsuario = u.IdUsuario
+            INNER JOIN tbl_ms_objetos o ON b.IdObjeto = o.IdObjeto
             ORDER BY b.ID_BITACORA ASC;";
     $result = $conn->query($sql);
 
@@ -114,9 +114,9 @@ if (isset($_SESSION["ID_USUARIO"])) {
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $sheet->setCellValue('A' . $rowNum, $row['ID_BITACORA']);
             $sheet->setCellValue('B' . $rowNum, $row['FECHA_HORA']);
-            $sheet->setCellValue('C' . $rowNum, $row['ID_USUARIO']);
+            $sheet->setCellValue('C' . $rowNum, $row['IdUsuario']);
             $sheet->setCellValue('D' . $rowNum, $row['NOMBRE_USUARIO']);
-            $sheet->setCellValue('E' . $rowNum, $row['ID_OBJETO']);
+            $sheet->setCellValue('E' . $rowNum, $row['IdObjeto']);
             $sheet->setCellValue('F' . $rowNum, $row['ACCION']);
             $sheet->setCellValue('G' . $rowNum, $row['DESCRIPCION']);
             

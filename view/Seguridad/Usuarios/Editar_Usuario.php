@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_rol = filter_input(INPUT_POST, 'rol', FILTER_SANITIZE_NUMBER_INT);
     $num_empleado = filter_input(INPUT_POST, 'num_empleado', FILTER_SANITIZE_NUMBER_INT);
     $id_universidad = filter_input(INPUT_POST, 'id_universidad', FILTER_SANITIZE_NUMBER_INT);
-    $modificado_por = $_SESSION['ID_USUARIO'];  // Usar el ID_USUARIO de la sesión
+    $modificado_por = $_SESSION['IdUsuario'];  // Usar el IdUsuario de la sesión
 
     // Preparar la consulta SQL para actualizar el usuario
     $sql = "UPDATE tbl_ms_usuario SET 
@@ -64,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sql_update_estado = "UPDATE tbl_ms_usuario SET 
                                   ESTADO_USUARIO = :estado_usuario, 
                                   NUM_INTENTOS = 0
-                                  WHERE ID_USUARIO = :id_usuario";
+                                  WHERE IdUsuario = :id_usuario";
 
             // Preparar la declaración para actualizar el estado
             $stmt_update_estado = $conn->prepare($sql_update_estado);

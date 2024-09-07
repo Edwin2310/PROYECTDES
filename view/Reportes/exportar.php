@@ -8,7 +8,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
-if (!isset($_SESSION["ID_USUARIO"])) {
+if (!isset($_SESSION["IdUsuario"])) {
     header("Location:" . Conectar::ruta() . "index.php");
     exit();
 }
@@ -58,7 +58,7 @@ try {
             LEFT JOIN tbl_categoria ct ON s.ID_CATEGORIA = ct.ID_CATEGORIA
             LEFT JOIN tbl_deptos dt ON s.ID_DEPARTAMENTO = dt.ID_DEPARTAMENTO
             LEFT JOIN tbl_municipios mc ON s.ID_MUNICIPIO = mc.ID_MUNICIPIO
-            LEFT JOIN tbl_ms_usuario ur ON s.ID_USUARIO = ur.ID_USUARIO
+            LEFT JOIN tbl_ms_usuario ur ON s.IdUsuario = ur.IdUsuario
             WHERE s.ID_UNIVERSIDAD = :idUniversidad 
             AND c.ID_CARRERA = :idCarrera";
 

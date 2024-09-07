@@ -53,7 +53,7 @@ if ($step === 'step1') {
     $departamentos = isset($_POST['Departamento']) ? implode(',', $_POST['Departamento']) : null;
     $municipios = isset($_POST['Municipio']) ? implode(',', $_POST['Municipio']) : null;
     $descripcionSolicitud = isset($_POST['Descripcion_solicitud']) ? $_POST['Descripcion_solicitud'] : null;
-    $idUsuario = $_SESSION['ID_USUARIO']; // Obtener el ID del usuario de la sesión
+    $idUsuario = $_SESSION['IdUsuario']; // Obtener el ID del usuario de la sesión
     $idEstado = 1; // Valor fijo para ID_ESTADO
 
     try {

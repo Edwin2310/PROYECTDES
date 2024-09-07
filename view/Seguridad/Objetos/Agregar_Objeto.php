@@ -16,7 +16,7 @@ if (!$conn) {
 $objeto = $_POST['objeto'];
 $tipo_objeto = $_POST['tipo_objeto'];
 $descripcion = $_POST['descripcion'];
-$creado_por = $_SESSION['ID_USUARIO']; // Obtener el ID del usuario de la sesión
+$creado_por = $_SESSION['IdUsuario']; // Obtener el ID del usuario de la sesión
 $fecha_creacion = date('Y-m-d H:i:s'); // Fecha y hora actual
 
 // Insertar los datos en la base de datos

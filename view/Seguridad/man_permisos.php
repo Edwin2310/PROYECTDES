@@ -2,36 +2,36 @@
 session_start();
 
 require_once("../../config/conexion.php");
-if (isset($_SESSION["ID_USUARIO"])) {
+if (isset($_SESSION["IdUsuario"])) {
 
-?>
-
-    <?php
-    $id_rol = $_SESSION['ID_ROL'] ?? null;
-    $id_objeto = 17; // ID del objeto o módulo correspondiente a esta página
-
-    if (!$id_rol) {
-        header("Location: ../Seguridad/Permisos/denegado.php");
-        exit();
-    }
-
-    // Conectar a la base de datos
-    $conexion = new Conectar();
-    $conn = $conexion->Conexion();
-
-    // Verificar permiso en la base de datos
-    $sql = "SELECT * FROM tbl_permisos WHERE ID_ROL = :idRol AND ID_OBJETO = :idObjeto";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':idRol', $id_rol);
-    $stmt->bindParam(':idObjeto', $id_objeto);
-
-    if ($stmt->execute() && $stmt->rowCount() > 0) {
-        // Usuario tiene permiso, continuar con el contenido de la página
-    } else {
-        header("Location: ../Seguridad/Permisos/denegado.php");
-        exit();
-    }
     ?>
+    
+    <?php
+        $id_rol = $_SESSION['IdRol'] ?? null;
+        $id_objeto = 17; // ID del objeto o módulo correspondiente a esta página
+    
+        if (!$id_rol) {
+            header("Location: ../Seguridad/Permisos/denegado.php");
+            exit();
+        }
+    
+        // Conectar a la base de datos
+        $conexion = new Conectar();
+        $conn = $conexion->Conexion();
+    
+        // Verificar permiso en la base de datos
+        $sql = "SELECT * FROM `seguridad.tblpermisos` WHERE IdRol = :idRol AND IdObjeto = :idObjeto";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':idRol', $id_rol);
+        $stmt->bindParam(':idObjeto', $id_objeto);
+    
+        if ($stmt->execute() && $stmt->rowCount() > 0) {
+            // Usuario tiene permiso, continuar con el contenido de la página
+        } else {
+            header("Location: ../Seguridad/Permisos/denegado.php");
+            exit();
+        }
+        ?>
 
     <!doctype html>
     <html lang="en" class="no-focus">
@@ -109,7 +109,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
                     </div>
                     <br>
                     <form id="permisoForm" class="d-flex justify-content-center" method="POST" action="../Seguridad/Manpermisos/guardar_pantallas.php">
-                        <!-- Elemento oculto para almacenar el ID_ROL del usuario -->
+                        <!-- Elemento oculto para almacenar el IdRol del usuario -->
                         <input type="hidden" id="usuario-id-rol" value="<?php echo $id_rol; ?>">
                         <div class="row justify-content-center">
                             <!-- Listbox para nombres de roles -->
@@ -174,7 +174,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
 
                                         // Poblar el elemento select
                                         foreach ($objetos as $objeto) {
-                                            $idObjeto = htmlspecialchars($objeto['ID_OBJETO'], ENT_QUOTES, 'UTF-8');
+                                            $idObjeto = htmlspecialchars($objeto['IdObjeto'], ENT_QUOTES, 'UTF-8');
                                             $nombreObjeto = htmlspecialchars($objeto['OBJETO'], ENT_QUOTES, 'UTF-8');
                                             echo "<option value='$idObjeto'>$nombreObjeto</option>";
                                         }
@@ -220,7 +220,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
 
                     <!-- Filtros arriba de la tabla -->
                     <div class="block-content block-content-full">
-                        <!-- Elemento oculto para almacenar el ID_ROL del usuario -->
+                        <!-- Elemento oculto para almacenar el IdRol del usuario -->
                         <input type="hidden" id="usuario-id-rol" value="<?php echo $id_rol; ?>">
                         <div class="block-content block-content-full">
                             <form method="GET" action="">
@@ -258,7 +258,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
                                                 $stmt->execute();
                                                 $pantallas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 foreach ($pantallas as $pantalla) {
-                                                    $idPantalla = htmlspecialchars($pantalla['ID_OBJETO'], ENT_QUOTES, 'UTF-8');
+                                                    $idPantalla = htmlspecialchars($pantalla['IdObjeto'], ENT_QUOTES, 'UTF-8');
                                                     $nombrePantalla = htmlspecialchars($pantalla['OBJETO'], ENT_QUOTES, 'UTF-8');
                                                     echo "<option value='$idPantalla'" . ($idPantalla == $_GET['filterScreen'] ? ' selected' : '') . ">$nombrePantalla</option>";
                                                 }
@@ -310,7 +310,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
 
                                         if ($result) {
                                             foreach ($result as $row) {
-                                                echo "<tr data-id-rol='{$row['ID_ROL']}' data-id-objeto='{$row['ID_OBJETO']}'>";
+                                                echo "<tr data-id-rol='{$row['IdRol']}' data-id-objeto='{$row['IdObjeto']}'>";
                                                 echo "<td>{$row['nombre_rol']}</td>";
                                                 echo "<td>{$row['OBJETO']}</td>";
                                                 echo "<td class='text-center'><input type='checkbox' disabled " . ($row['PERMISO_INSERCION'] ? 'checked' : '') . "></td>";
@@ -318,7 +318,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
                                                 echo "<td class='text-center'><input type='checkbox' disabled " . ($row['PERMISO_ACTUALIZACION'] ? 'checked' : '') . "></td>";
                                                 echo "<td class='text-center'><input type='checkbox' disabled " . ($row['PERMISO_CONSULTAR'] ? 'checked' : '') . "></td>";
                                                 echo "<td class='text-center'>
-                                               <button type='button' class='btn btn-sm btn-danger delete-row accion-permiso' data-id-a-objeto='17' data-permiso='2'  data-id-rol='{$row['ID_ROL']}' data-id-objeto='{$row['ID_OBJETO']}'>
+                                               <button type='button' class='btn btn-sm btn-danger delete-row accion-permiso' data-id-a-objeto='17' data-permiso='2'  data-id-rol='{$row['IdRol']}' data-id-objeto='{$row['IdObjeto']}'>
                                                   <i class='si si-trash'></i>
                                                </button>
                                                </td>";
@@ -393,7 +393,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
 
 
 <?php
-if (isset($_SESSION["ID_USUARIO"])) {
+if (isset($_SESSION["IdUsuario"])) {
 ?>
 
 
@@ -402,7 +402,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
         $(document).ready(function() {
             // Función para registrar acciones en la bitácora
             function registrarEnBitacora(id_objeto, accion, descripcion) {
-                const id_usuario = <?php echo $_SESSION["ID_USUARIO"]; ?>;
+                const id_usuario = <?php echo $_SESSION["IdUsuario"]; ?>;
 
                 // Enviar datos a Insertar_Bitacora.php
                 $.ajax({

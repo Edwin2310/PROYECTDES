@@ -21,7 +21,7 @@ function obtenerRoles($usuario)
         // Generar opciones HTML para el <select>
         $opciones = "";
         foreach ($roles as $rol) {
-            $idRol = htmlspecialchars($rol['ID_ROL'], ENT_QUOTES, 'UTF-8');
+            $idRol = htmlspecialchars($rol['IdRol'], ENT_QUOTES, 'UTF-8');
             $nombreRol = htmlspecialchars($rol['NOMBRE_ROL'], ENT_QUOTES, 'UTF-8');
             $opciones .= "<option value='$idRol'>$nombreRol</option>";
         }

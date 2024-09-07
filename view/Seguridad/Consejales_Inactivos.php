@@ -2,7 +2,7 @@
 session_start();
 require_once("../../config/conexion.php");
 require_once(__DIR__ . '/Script/Funciones.php');
-if (isset($_SESSION["ID_USUARIO"])) {
+if (isset($_SESSION["IdUsuario"])) {
 
 ?>
 
@@ -93,7 +93,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
 
                                 // Llamada al procedimiento almacenado
                                 $stmt = $conn->prepare("CALL splConsejalesMostrarInactivos(:usuario)");
-                                $stmt->bindValue(':usuario', $_SESSION["ID_USUARIO"], PDO::PARAM_STR);
+                                $stmt->bindValue(':usuario', $_SESSION["IdUsuario"], PDO::PARAM_STR);
                                 $stmt->execute();
                                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

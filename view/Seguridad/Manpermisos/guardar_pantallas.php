@@ -2,7 +2,7 @@
 /* session_start();
 require_once("../../../config/conexion.php");
 
-if (isset($_SESSION["ID_USUARIO"])) {
+if (isset($_SESSION["IdUsuario"])) {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $id_rol = $_POST['roleList'];
         $id_objetos = $_POST['objectSelect'];
@@ -11,7 +11,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
         $conn = $conexion->Conexion();
 
         foreach ($id_objetos as $id_objeto) {
-            $sql = "INSERT INTO tbl_permisos (ID_ROL, ID_OBJETO, PERMISO_INSERCION, PERMISO_ELIMINACION, PERMISO_ACTUALIZACION, PERMISO_CONSULTAR) 
+            $sql = "INSERT INTO `seguridad.tblpermisos` (IdRol, IdObjeto, PERMISO_INSERCION, PERMISO_ELIMINACION, PERMISO_ACTUALIZACION, PERMISO_CONSULTAR) 
                     VALUES (:id_rol, :id_objeto, 0, 0, 0, 0)"; // Puedes ajustar los permisos según sea necesario
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':id_rol', $id_rol);
@@ -32,7 +32,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
 session_start();
 require_once("../../../config/conexion.php");
 
-if (isset($_SESSION["ID_USUARIO"])) {
+if (isset($_SESSION["IdUsuario"])) {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $id_rol = $_POST['roleList'];
         $id_objetos = $_POST['objectSelect'];
@@ -44,8 +44,8 @@ if (isset($_SESSION["ID_USUARIO"])) {
         $objetos_insertados = [];
 
         foreach ($id_objetos as $id_objeto) {
-            // Verificar si la combinación de ID_ROL y ID_OBJETO ya existe
-            $sql = "SELECT COUNT(*) FROM tbl_permisos WHERE ID_ROL = :id_rol AND ID_OBJETO = :id_objeto";
+            // Verificar si la combinación de IdRol y IdObjeto ya existe
+            $sql = "SELECT COUNT(*) FROM `seguridad.tblpermisos` WHERE IdRol = :id_rol AND IdObjeto = :id_objeto";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':id_rol', $id_rol);
             $stmt->bindParam(':id_objeto', $id_objeto);
@@ -54,7 +54,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
 
             if ($count == 0) {
                 // Insertar el nuevo registro si no existe
-                $sql = "INSERT INTO tbl_permisos (ID_ROL, ID_OBJETO, PERMISO_INSERCION, PERMISO_ELIMINACION, PERMISO_ACTUALIZACION, PERMISO_CONSULTAR) 
+                $sql = "INSERT INTO `seguridad.tblpermisos` (IdRol, IdObjeto, PERMISO_INSERCION, PERMISO_ELIMINACION, PERMISO_ACTUALIZACION, PERMISO_CONSULTAR) 
                         VALUES (:id_rol, :id_objeto, 0, 0, 0, 0)"; // Ajusta los permisos según sea necesario
                 $stmt = $conn->prepare($sql);
                 $stmt->bindParam(':id_rol', $id_rol);
@@ -91,7 +91,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
  session_start();
  require_once("../../../config/conexion.php");
  
- if (isset($_SESSION["ID_USUARIO"])) {
+ if (isset($_SESSION["IdUsuario"])) {
      if ($_SERVER["REQUEST_METHOD"] == "POST") {
          $id_rol = $_POST['roleList'];
          $id_objetos = isset($_POST['objectSelect']) ? $_POST['objectSelect'] : [];
@@ -109,17 +109,17 @@ if (isset($_SESSION["ID_USUARIO"])) {
  
              // Obtener nombres de objetos para mensajes
              $nombres_objetos = [];
-             $sql = "SELECT ID_OBJETO, OBJETO FROM tbl_ms_objetos";
+             $sql = "SELECT IdObjeto, OBJETO FROM tbl_ms_objetos";
              $stmt = $conn->prepare($sql);
              $stmt->execute();
              $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
              foreach ($result as $row) {
-                 $nombres_objetos[$row['ID_OBJETO']] = $row['OBJETO'];
+                 $nombres_objetos[$row['IdObjeto']] = $row['OBJETO'];
              }
  
              foreach ($id_objetos as $id_objeto) {
-                 // Verificar si la combinación de ID_ROL y ID_OBJETO ya existe
-                 $sql = "SELECT COUNT(*) FROM tbl_permisos WHERE ID_ROL = :id_rol AND ID_OBJETO = :id_objeto";
+                 // Verificar si la combinación de IdRol y IdObjeto ya existe
+                 $sql = "SELECT COUNT(*) FROM `seguridad.tblpermisos` WHERE IdRol = :id_rol AND IdObjeto = :id_objeto";
                  $stmt = $conn->prepare($sql);
                  $stmt->bindParam(':id_rol', $id_rol);
                  $stmt->bindParam(':id_objeto', $id_objeto);
@@ -128,7 +128,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
  
                  if ($count == 0) {
                      // Insertar el nuevo registro si no existe
-                     $sql = "INSERT INTO tbl_permisos (ID_ROL, ID_OBJETO, PERMISO_INSERCION, PERMISO_ELIMINACION, PERMISO_ACTUALIZACION, PERMISO_CONSULTAR) 
+                     $sql = "INSERT INTO `seguridad.tblpermisos` (IdRol, IdObjeto, PERMISO_INSERCION, PERMISO_ELIMINACION, PERMISO_ACTUALIZACION, PERMISO_CONSULTAR) 
                              VALUES (:id_rol, :id_objeto, 0, 0, 0, 0)"; // Ajusta los permisos según sea necesario
                      $stmt = $conn->prepare($sql);
                      $stmt->bindParam(':id_rol', $id_rol);

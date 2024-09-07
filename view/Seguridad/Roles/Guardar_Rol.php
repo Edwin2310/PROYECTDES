@@ -14,7 +14,7 @@ if (!$conn) {
 
 $rol = $_POST["rol"];
 $descripcion = $_POST["descripcion"];
-$creado_por = $_SESSION['ID_USUARIO']; // Obtener el ID_USUARIO de la sesión
+$creado_por = $_SESSION['IdUsuario']; // Obtener el IdUsuario de la sesión
 
 // Consulta SQL para insertar el nuevo rol
 $sql = "INSERT INTO tbl_ms_roles (ROL, DESCRIPCION, CREADO_POR) VALUES (?, ?, ?)";

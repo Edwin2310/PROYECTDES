@@ -1,7 +1,7 @@
 <?php
 
-// Supongamos que el ID_ROL está en $_SESSION["ID_ROL"]
-$id_rol = isset($_SESSION["ID_ROL"]) ? $_SESSION["ID_ROL"] : null;
+// Supongamos que el IdRol está en $_SESSION["IdRol"]
+$id_rol = isset($_SESSION["IdRol"]) ? $_SESSION["IdRol"] : null;
 ?>
 <!DOCTYPE html>
 <html lang="en">

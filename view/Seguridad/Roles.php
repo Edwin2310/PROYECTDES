@@ -2,36 +2,36 @@
 session_start();
 require_once("../../config/conexion.php");
 require_once(__DIR__ . '/Script/Funciones.php');
-if (isset($_SESSION["ID_USUARIO"])) {
+if (isset($_SESSION["IdUsuario"])) {
 
-?>
-
-<?php
-    $id_rol = $_SESSION['ID_ROL'] ?? null;
-    $id_objeto = 19; // ID del objeto o módulo correspondiente a esta página
-
-    if (!$id_rol) {
-        header("Location: ../Seguridad/Permisos/denegado.php");
-        exit();
-    }
-
-    // Conectar a la base de datos
-    $conexion = new Conectar();
-    $conn = $conexion->Conexion();
-
-    // Verificar permiso en la base de datos
-    $sql = "SELECT * FROM tbl_permisos WHERE ID_ROL = :idRol AND ID_OBJETO = :idObjeto";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':idRol', $id_rol);
-    $stmt->bindParam(':idObjeto', $id_objeto);
-
-    if ($stmt->execute() && $stmt->rowCount() > 0) {
-        // Usuario tiene permiso, continuar con el contenido de la página
-    } else {
-        header("Location: ../Seguridad/Permisos/denegado.php");
-        exit();
-    }
     ?>
+    
+    <?php
+        $id_rol = $_SESSION['IdRol'] ?? null;
+        $id_objeto = 19; // ID del objeto o módulo correspondiente a esta página
+    
+        if (!$id_rol) {
+            header("Location: ../Seguridad/Permisos/denegado.php");
+            exit();
+        }
+    
+        // Conectar a la base de datos
+        $conexion = new Conectar();
+        $conn = $conexion->Conexion();
+    
+        // Verificar permiso en la base de datos
+        $sql = "SELECT * FROM `seguridad.tblpermisos` WHERE IdRol = :idRol AND IdObjeto = :idObjeto";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':idRol', $id_rol);
+        $stmt->bindParam(':idObjeto', $id_objeto);
+    
+        if ($stmt->execute() && $stmt->rowCount() > 0) {
+            // Usuario tiene permiso, continuar con el contenido de la página
+        } else {
+            header("Location: ../Seguridad/Permisos/denegado.php");
+            exit();
+        }
+        ?>
 
     <!DOCTYPE html>
     <html lang="en" class="no-focus">
@@ -115,14 +115,14 @@ if (isset($_SESSION["ID_USUARIO"])) {
 
                                 // Llamada al procedimiento almacenado
                                 $stmt = $conn->prepare("CALL splRolesMostrarCreador(:usuario)");
-                                $stmt->bindValue(':usuario', $_SESSION["ID_USUARIO"], PDO::PARAM_STR);
+                                $stmt->bindValue(':usuario', $_SESSION["IdUsuario"], PDO::PARAM_STR);
                                 $stmt->execute();
                                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                 if ($result !== false && count($result) > 0) {
                                     foreach ($result as $row) {
                                         echo "<tr>";
-                                        echo "<td class='text-center'>{$row['ID_ROL']}</td>";
+                                        echo "<td class='text-center'>{$row['IdRol']}</td>";
                                         echo "<td>{$row['ROL']}</td>";
                                         echo "<td>{$row['DESCRIPCION']}</td>";
                                         echo "<td>{$row['FECHA_CREACION']}</td>";
@@ -131,7 +131,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
                                         echo "<td>{$row['MODIFICADO_POR']}</td>";
                                         echo "<td class='text-center'>
                                                 <button type='button' class='btn btn-sm btn-secondary' data-toggle='modal' data-target='#editRoleModal' 
-                                                        data-id='" . $row["ID_ROL"] . "' 
+                                                        data-id='" . $row["IdRol"] . "' 
                                                         data-rol='" . $row["ROL"] . "' 
                                                         data-descripcion='" . $row["DESCRIPCION"] . "'>
                                                     <i class='si si-note'></i>
@@ -139,12 +139,12 @@ if (isset($_SESSION["ID_USUARIO"])) {
                                             </td>";
                                         echo "<td class='text-center'>
                                                 <button type='button' class='btn btn-sm btn-danger' data-toggle='modal' data-target='#confirmDeleteModal' 
-                                                        data-id='" . $row["ID_ROL"] . "'>
+                                                        data-id='" . $row["IdRol"] . "'>
                                                     <i class='si si-trash'></i>
                                                 </button>
                                             </td>";
                                         echo "<td class='text-center'>
-                                            <a href='../Seguridad/Permisos.php?id_rol=" . $row["ID_ROL"] . "'>
+                                            <a href='../Seguridad/Permisos.php?id_rol=" . $row["IdRol"] . "'>
                                             <button type='button' class='btn btn-sm btn-success'>
                                                 <i class='si si-settings'></i>
                                             </button>
@@ -202,8 +202,8 @@ if (isset($_SESSION["ID_USUARIO"])) {
                         </div>
                         <div class="modal-body">
                             <form id="addRoleForm" method="POST" action="../Seguridad/Roles/Guardar_Rol.php">
-                                <!-- Campo oculto para almacenar el ID_USUARIO de la sesión -->
-                                <input type="hidden" id="creado_por" name="creado_por" value="<?php echo $_SESSION['ID_USUARIO']; ?>">
+                                <!-- Campo oculto para almacenar el IdUsuario de la sesión -->
+                                <input type="hidden" id="creado_por" name="creado_por" value="<?php echo $_SESSION['IdUsuario']; ?>">
 
                                 <div class="form-group">
                                     <label for="rol">Seleccionar Rol</label>

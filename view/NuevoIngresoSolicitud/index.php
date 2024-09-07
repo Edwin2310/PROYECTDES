@@ -5,7 +5,7 @@ if (isset($_SESSION["IdUsuario"])) {
 
 ?>
     <?php
-    $id_rol = $_SESSION['ID_ROL'] ?? null;
+    $id_rol = $_SESSION['IdRol'] ?? null;
     $id_objeto = 3; // ID del objeto o módulo correspondiente a esta página
 
     if (!$id_rol) {
@@ -18,7 +18,7 @@ if (isset($_SESSION["IdUsuario"])) {
     $conn = $conexion->Conexion();
 
     // Verificar permiso en la base de datos
-    $sql = "SELECT * FROM tbl_permisos WHERE ID_ROL = :idRol AND ID_OBJETO = :idObjeto";
+    $sql = "SELECT * FROM `seguridad.tblpermisos` WHERE IdRol = :idRol AND IdObjeto = :idObjeto";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':idRol', $id_rol);
     $stmt->bindParam(':idObjeto', $id_objeto);
@@ -117,7 +117,7 @@ if (isset($_SESSION["IdUsuario"])) {
 
                                 <!-- Form -->
                                 <form id="wizard-form" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" id="id_usuario" name="id_usuario" value="<?php echo $_SESSION['ID_USUARIO']; ?>">
+                                    <input type="hidden" id="id_usuario" name="id_usuario" value="<?php echo $_SESSION['IdUsuario']; ?>">
 
                                     <!-- Steps Content -->
                                     <div class="block-content block-content-full tab-content" style="min-height: 265px;">
@@ -256,7 +256,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                             <div class="form-group">
 
                                                 <!-- Campo oculto para el ID del usuario -->
-                                                <input type="hidden" id="id_usuario" name="id_usuario" value="<?php echo $_SESSION['ID_USUARIO']; ?>">
+                                                <input type="hidden" id="id_usuario" name="id_usuario" value="<?php echo $_SESSION['IdUsuario']; ?>">
                                                 <!-- Área de Dropzone para subir documentos -->
                                                 <div class="form-group">
                                                     <b>

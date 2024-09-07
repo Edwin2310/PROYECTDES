@@ -2,11 +2,11 @@
 session_start();
 require_once("../../config/conexion.php");
 
-if (isset($_SESSION["ID_USUARIO"])) {
+if (isset($_SESSION["IdUsuario"])) {
 ?>
 
 <?php
-    $id_rol = $_SESSION['ID_ROL'] ?? null;
+    $id_rol = $_SESSION['IdRol'] ?? null;
     $id_objeto = 21; // ID del objeto o módulo correspondiente a esta página
 
     if (!$id_rol) {
@@ -19,7 +19,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
     $conn = $conexion->Conexion();
 
     // Verificar permiso en la base de datos
-    $sql = "SELECT * FROM tbl_permisos WHERE ID_ROL = :idRol AND ID_OBJETO = :idObjeto";
+    $sql = "SELECT * FROM `seguridad.tblpermisos` WHERE IdRol = :idRol AND IdObjeto = :idObjeto";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':idRol', $id_rol);
     $stmt->bindParam(':idObjeto', $id_objeto);
@@ -130,11 +130,11 @@ if (isset($_SESSION["ID_USUARIO"])) {
                                     $conexion = new Conectar();
                                     $conn = $conexion->Conexion();
                                     $sql = "SELECT b.ID_BITACORA, b.FECHA_HORA, 
-                                        b.ID_USUARIO, U.NOMBRE_USUARIO AS NOMBRE_USUARIO, o.ID_OBJETO, 
+                                        b.IdUsuario, U.NOMBRE_USUARIO AS NOMBRE_USUARIO, o.IdObjeto, 
                                         b.ACCION, b.DESCRIPCION
                                     FROM tbl_ms_bitacora b
-                                    INNER JOIN tbl_ms_usuario u ON b.ID_USUARIO = u.ID_USUARIO
-                                    INNER JOIN tbl_ms_objetos o ON b.ID_OBJETO = o.ID_OBJETO
+                                    INNER JOIN tbl_ms_usuario u ON b.IdUsuario = u.IdUsuario
+                                    INNER JOIN tbl_ms_objetos o ON b.IdObjeto = o.IdObjeto
                                     ORDER BY b.ID_BITACORA ASC;";
                                     $result = $conn->query($sql);
                                     if ($result !== false && $result->rowCount() > 0) {
@@ -142,9 +142,9 @@ if (isset($_SESSION["ID_USUARIO"])) {
                                             echo "<tr>";
                                             echo "<td class='text-center'>{$row['ID_BITACORA']}</td>";
                                             echo "<td>{$row['FECHA_HORA']}</td>";
-                                            echo "<td>{$row['ID_USUARIO']}</td>";
+                                            echo "<td>{$row['IdUsuario']}</td>";
                                             echo "<td>{$row['NOMBRE_USUARIO']}</td>";
-                                            echo "<td>{$row['ID_OBJETO']}</td>";
+                                            echo "<td>{$row['IdObjeto']}</td>";
                                             echo "<td>{$row['ACCION']}</td>";
                                             echo "<td>{$row['DESCRIPCION']}</td>";
                                             echo "</tr>";

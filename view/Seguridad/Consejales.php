@@ -2,12 +2,11 @@
 session_start();
 require_once("../../config/conexion.php");
 require_once(__DIR__ . '/Script/Funciones.php');
-if (isset($_SESSION["ID_USUARIO"])) {
+if (isset($_SESSION["IdUsuario"])) {
 
 ?>
-
-<?php
-    $id_rol = $_SESSION['ID_ROL'] ?? null;
+    <?php
+    $id_rol = $_SESSION['IdRol'] ?? null;
     $id_objeto = 16; // ID del objeto o módulo correspondiente a esta página
 
     if (!$id_rol) {
@@ -20,7 +19,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
     $conn = $conexion->Conexion();
 
     // Verificar permiso en la base de datos
-    $sql = "SELECT * FROM tbl_permisos WHERE ID_ROL = :idRol AND ID_OBJETO = :idObjeto";
+    $sql = "SELECT * FROM `seguridad.tblpermisos` WHERE IdRol = :idRol AND IdObjeto = :idObjeto";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':idRol', $id_rol);
     $stmt->bindParam(':idObjeto', $id_objeto);
@@ -32,6 +31,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
         exit();
     }
     ?>
+
 
     <!doctype html>
     <html lang="en" class="no-focus">
@@ -126,7 +126,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
 
                                 // Llamada al procedimiento almacenado
                                 $stmt = $conn->prepare("CALL splConsejalesMostrar(:usuario)");
-                                $stmt->bindValue(':usuario', $_SESSION["ID_USUARIO"], PDO::PARAM_STR);
+                                $stmt->bindValue(':usuario', $_SESSION["IdUsuario"], PDO::PARAM_STR);
                                 $stmt->execute();
                                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

@@ -146,7 +146,7 @@
 </script>
 
 <?php
-if (isset($_SESSION["ID_USUARIO"])) {
+if (isset($_SESSION["IdUsuario"])) {
 ?>
     <!-- SCRIPT PARA VALIDACIONES EN FORMULARIO -->
     <script>

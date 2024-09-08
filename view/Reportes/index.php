@@ -1,11 +1,12 @@
 <?php
 session_start();
 require_once("../../config/conexion.php");
-
-
-
-$id_rol = $_SESSION['IdRol'] ?? null;
-$id_objeto = 9; // ID del objeto o módulo correspondiente a esta página
+require_once(__DIR__ . '/../Seguridad/Permisos/Funciones_Permisos.php');
+    // Obtener los valores necesarios para la verificación
+    $id_rol = $_SESSION['IdRol'] ?? null;
+    $id_objeto = 9; // ID del objeto o módulo correspondiente a esta página
+    // Llama a la función para verificar los permisos
+    verificarPermiso($id_rol, $id_objeto);
 
 if (!$id_rol) {
     header("Location: ../Seguridad/Permisos/denegado.php");

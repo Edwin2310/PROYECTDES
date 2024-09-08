@@ -109,12 +109,12 @@ if (isset($_SESSION["IdUsuario"])) {
  
              // Obtener nombres de objetos para mensajes
              $nombres_objetos = [];
-             $sql = "SELECT IdObjeto, OBJETO FROM tbl_ms_objetos";
+             $sql = "SELECT IdObjeto, Objeto FROM `seguridad.tblobjetos`";
              $stmt = $conn->prepare($sql);
              $stmt->execute();
              $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
              foreach ($result as $row) {
-                 $nombres_objetos[$row['IdObjeto']] = $row['OBJETO'];
+                 $nombres_objetos[$row['IdObjeto']] = $row['Objeto'];
              }
  
              foreach ($id_objetos as $id_objeto) {
@@ -128,7 +128,7 @@ if (isset($_SESSION["IdUsuario"])) {
  
                  if ($count == 0) {
                      // Insertar el nuevo registro si no existe
-                     $sql = "INSERT INTO `seguridad.tblpermisos` (IdRol, IdObjeto, PERMISO_INSERCION, PERMISO_ELIMINACION, PERMISO_ACTUALIZACION, PERMISO_CONSULTAR) 
+                     $sql = "INSERT INTO `seguridad.tblpermisos` (IdRol, IdObjeto, PermisoInsercion, PermisoEliminacion, PermisoActualizacion, PermisoConsultar) 
                              VALUES (:id_rol, :id_objeto, 0, 0, 0, 0)"; // Ajusta los permisos según sea necesario
                      $stmt = $conn->prepare($sql);
                      $stmt->bindParam(':id_rol', $id_rol);

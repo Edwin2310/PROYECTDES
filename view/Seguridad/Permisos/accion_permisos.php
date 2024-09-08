@@ -15,16 +15,16 @@ if (isset($_POST['id_rol']) && isset($_POST['id_objeto']) && isset($_POST['permi
     $columna_permiso = '';
     switch ($permiso) {
         case 1:
-            $columna_permiso = 'PERMISO_INSERCION';
+            $columna_permiso = 'PermisoInsercion';
             break;
         case 2:
-            $columna_permiso = 'PERMISO_ELIMINACION';
+            $columna_permiso = 'PermisoEliminacion';
             break;
         case 3:
-            $columna_permiso = 'PERMISO_ACTUALIZACION';
+            $columna_permiso = 'PermisoActualizacion';
             break;
         case 4:
-            $columna_permiso = 'PERMISO_CONSULTAR';
+            $columna_permiso = 'PermisoConsultar';
             break;
         default:
             echo json_encode(['tiene_permiso' => false]);

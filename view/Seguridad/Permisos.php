@@ -2,8 +2,8 @@
 session_start();
 
 require_once("../../config/conexion.php");
-if (isset($_SESSION["ID_USUARIO"])) {
-
+if (isset($_SESSION["IdUsuario"])) {
+  
 ?>
     <!doctype html>
     <html lang="en" class="no-focus">
@@ -60,7 +60,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
                         $conexion = new Conectar();
                         $conn = $conexion->Conexion();
 
-                        // Obtener el ID_ROL de la URL
+                        // Obtener el IdRol de la URL
                         $id_rol = isset($_GET['id_rol']) ? intval($_GET['id_rol']) : 0;
 
                         // Inicializar la variable $nombre_rol
@@ -104,21 +104,21 @@ if (isset($_SESSION["ID_USUARIO"])) {
                                 $conexion = new Conectar();
                                 $conn = $conexion->Conexion();
 
-                                // Obtener el ID_ROL de la URL
+                                // Obtener el IdRol de la URL
                                 $id_rol = isset($_GET['id_rol']) ? intval($_GET['id_rol']) : 0;
 
-                                // Depuración: Verificar que se captura el ID_ROL correctamente
+                                // Depuración: Verificar que se captura el IdRol correctamente
                                 // echo "ID Rol: " . $id_rol;
 
-                                $sql = "SELECT r.id_rol, r.nombre_rol, o.ID_OBJETO, o.OBJETO, 
+                                $sql = "SELECT r.id_rol, r.nombre_rol, o.IdObjeto, o.OBJETO, 
                                               p.PERMISO_INSERCION,
                                               p.PERMISO_ELIMINACION,
                                               p.PERMISO_ACTUALIZACION,
                                               p.PERMISO_CONSULTAR
-                                              FROM tbl_permisos p
-                                              INNER JOIN tbl_rol r ON p.ID_ROL = r.id_rol
-                                              INNER JOIN tbl_ms_objetos o ON o.ID_OBJETO = p.ID_OBJETO
-                                              WHERE p.ID_ROL = :id_rol";
+                                              FROM `seguridad.tblpermisos` p
+                                              INNER JOIN tbl_rol r ON p.IdRol = r.id_rol
+                                              INNER JOIN tbl_ms_objetos o ON o.IdObjeto = p.IdObjeto
+                                              WHERE p.IdRol = :id_rol";
 
                                 $stmt = $conn->prepare($sql);
                                 $stmt->bindParam(':id_rol', $id_rol, PDO::PARAM_INT);
@@ -133,7 +133,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
 
                                 if ($result) {
                                     foreach ($result as $row) {
-                                        echo "<tr data-id-rol='{$row['id_rol']}' data-id-objeto='{$row['ID_OBJETO']}'>";
+                                        echo "<tr data-id-rol='{$row['id_rol']}' data-id-objeto='{$row['IdObjeto']}'>";
                                         echo "<td>{$row['OBJETO']}</td>";
                                         echo "<td class='text-center'><input type='checkbox' disabled " . ($row['PERMISO_INSERCION'] ? 'checked' : '') . "></td>";
                                         echo "<td class='text-center'><input type='checkbox' disabled " . ($row['PERMISO_ELIMINACION'] ? 'checked' : '') . "></td>";
@@ -183,7 +183,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
 
 
 <?php
-if (isset($_SESSION["ID_USUARIO"])) {
+if (isset($_SESSION["IdUsuario"])) {
 ?>
 
 
@@ -192,7 +192,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
         $(document).ready(function() {
             // Función para registrar acciones en la bitácora
             function registrarEnBitacora(id_objeto, accion, descripcion) {
-                const id_usuario = <?php echo $_SESSION["ID_USUARIO"]; ?>;
+                const id_usuario = <?php echo $_SESSION["IdUsuario"]; ?>;
 
                 // Enviar datos a Insertar_Bitacora.php
                 $.ajax({

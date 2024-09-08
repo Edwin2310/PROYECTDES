@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Obtener el ID de usuario y nombre de usuario de la sesión
     session_start();
-    $idUsuario = isset($_SESSION["ID_USUARIO"]) ? $_SESSION["ID_USUARIO"] : null;
+    $idUsuario = isset($_SESSION["IdUsuario"]) ? $_SESSION["IdUsuario"] : null;
     $nombreUsuario = isset($_SESSION["NOMBRE_USUARIO"]) ? $_SESSION["NOMBRE_USUARIO"] : null;
 
     if ($idSolicitud && $fileName && $filePath) {
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             // Definir el campo para actualizar basado en el tipo de archivo
             $sql = "UPDATE tbl_observaciones 
-                    SET ID_USUARIO = :idUsuario, CREADO_POR = :nombreUsuario, ";
+                    SET IdUsuario = :idUsuario, CREADO_POR = :nombreUsuario, ";
 
             switch ($fileType) {
                 case 'SUBSOLI':

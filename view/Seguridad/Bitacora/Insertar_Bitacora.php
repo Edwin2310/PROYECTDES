@@ -3,8 +3,8 @@ session_start();
 require_once("../../../config/conexion.php");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_SESSION["ID_USUARIO"]) && isset($_POST['id_objeto']) && isset($_POST['accion']) && isset($_POST['descripcion'])) {
-        $id_usuario = $_SESSION["ID_USUARIO"];
+    if (isset($_SESSION["IdUsuario"]) && isset($_POST['id_objeto']) && isset($_POST['accion']) && isset($_POST['descripcion'])) {
+        $id_usuario = $_SESSION["IdUsuario"];
         $id_objeto = $_POST['id_objeto'];
         $accion = $_POST['accion'];
         $descripcion = $_POST['descripcion'];
@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pdo = $conexion->Conexion();
 
             // Consulta para insertar en la bitácora
-            $sql = 'INSERT INTO tbl_ms_bitacora (ID_USUARIO, ID_OBJETO, ACCION, DESCRIPCION) VALUES (:id_usuario, :id_objeto, :accion, :descripcion)';
+            $sql = 'INSERT INTO `seguridad.tblbitacora` (IdUsuario, IdObjeto, Accion, Descripcion) VALUES (:id_usuario, :id_objeto, :accion, :descripcion)';
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
                 ':id_usuario' => $id_usuario,

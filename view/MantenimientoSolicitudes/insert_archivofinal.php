@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Obtener el ID de usuario y nombre de usuario de la sesión
     session_start();
-    $idUsuario = isset($_SESSION["ID_USUARIO"]) ? $_SESSION["ID_USUARIO"] : null;
+    $idUsuario = isset($_SESSION["IdUsuario"]) ? $_SESSION["IdUsuario"] : null;
     $nombreUsuario = isset($_SESSION["NOMBRE_USUARIO"]) ? $_SESSION["NOMBRE_USUARIO"] : null;
 
     if ($idSolicitud && $filePath && $idUsuario && $nombreUsuario) {
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $updateOrDesStmt->execute();
                 } else {
                     // Si ADJUNTO_OR_DES está vacío, hacer un INSERT
-                    $insertSql = "INSERT INTO tbl_opinion_razonada (ADJUNTO_OR_DES, ID_SOLICITUD, ID_USUARIO, CREADO_POR) 
+                    $insertSql = "INSERT INTO tbl_opinion_razonada (ADJUNTO_OR_DES, ID_SOLICITUD, IdUsuario, CREADO_POR) 
                                   VALUES (:filePath, :idSolicitud, :idUsuario, :nombreUsuario)";
                     $insertStmt = $conn->prepare($insertSql);
                     $insertStmt->bindParam(':filePath', $filePath, PDO::PARAM_STR);

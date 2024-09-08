@@ -28,7 +28,7 @@ $_SESSION['file_errors'] = [];
 // Comprobar si la solicitud es POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Sanitización de datos: obtener el ID del usuario desde la sesión
-    $creado_por = intval($_SESSION['ID_USUARIO']);
+    $creado_por = intval($_SESSION['IdUsuario']);
 
     // Obtener el ID_SOLICITUD de la sesión
     if (!isset($_SESSION['ID_SOLICITUD'])) {
@@ -160,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $uploaded_files = uploadFile('file', $allowed_extensions);
 
     // **PASO 2: Insertar datos en tbl_archivos_adjuntos**
-    $sql_adjuntos = "INSERT INTO tbl_archivos_adjuntos (FECHA_ADJUNTOS, ID_USUARIO, SOLICITUD, PLAN_ESTUDIOS, PLANTA_DOCENTE, DIAGNOSTICO, ID_SOLICITUD)
+    $sql_adjuntos = "INSERT INTO tbl_archivos_adjuntos (FECHA_ADJUNTOS, IdUsuario, SOLICITUD, PLAN_ESTUDIOS, PLANTA_DOCENTE, DIAGNOSTICO, ID_SOLICITUD)
                      VALUES (NOW(), :id_usuario, :solicitud, :plan_estudios, :planta_docente, :diagnostico, :id_solicitud)";
     $stmt_adjuntos = $conn->prepare($sql_adjuntos);
 

@@ -20,12 +20,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $conn = $conexion->Conexion();
 
             // Consulta para actualizar los permisos
-            $sql = "UPDATE tbl_permisos p
+            $sql = "UPDATE `seguridad.tblpermisos` p
                     SET p.PERMISO_INSERCION = :permisoInsercion,
                         p.PERMISO_ELIMINACION = :permisoEliminacion,
                         p.PERMISO_ACTUALIZACION = :permisoActualizacion,
                         p.PERMISO_CONSULTAR = :permisoConsultar
-                    WHERE ID_ROL = :idRol AND ID_OBJETO = :idObjeto";
+                    WHERE IdRol = :idRol AND IdObjeto = :idObjeto";
 
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':idRol', $idRol, PDO::PARAM_INT);

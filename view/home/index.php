@@ -35,7 +35,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                 </a>
                                 <a class="align-middle link-effect text-primary-dark font-w600" href="be_pages_generic_profile.html">
                                     <span><?php echo $_SESSION["NombreUsuario"] ?></span>
-                                    <!-- Mostrar el ID_USUARIO -->
+                                    <!-- Mostrar el IdUsuario -->
                                     <span>ID Usuario: <?php echo $_SESSION["IdUsuario"]; ?></span>
                                 </a>
                             </div>

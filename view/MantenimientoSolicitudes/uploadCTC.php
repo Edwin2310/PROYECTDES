@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Insertar en la base de datos
                 $conexion = new Conectar();
                 $conn = $conexion->Conexion();
-                $query = "INSERT INTO tbl_adjuntoctc (ID_USUARIO, FECHA_ADJUNTOCTC, DICTAMENADJU, ID_SOLICITUD) VALUES (:id_usuario, NOW(), :dictamen, :id_solicitud)";
+                $query = "INSERT INTO tbl_adjuntoctc (IdUsuario, FECHA_ADJUNTOCTC, DICTAMENADJU, ID_SOLICITUD) VALUES (:id_usuario, NOW(), :dictamen, :id_solicitud)";
                 $stmt = $conn->prepare($query);
                 $stmt->bindParam(':id_usuario', $id_usuario);
                 $stmt->bindParam(':dictamen', $fileNameNew);
@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 try {
                     // Insertar en tbl_adjuntoctc
-                    $query = "INSERT INTO tbl_adjuntoctc (ID_USUARIO, FECHA_ADJUNTOCTC, DICTAMENADJU, ID_SOLICITUD) VALUES (:id_usuario, NOW(), :dictamen, :id_solicitud)";
+                    $query = "INSERT INTO tbl_adjuntoctc (IdUsuario, FECHA_ADJUNTOCTC, DICTAMENADJU, ID_SOLICITUD) VALUES (:id_usuario, NOW(), :dictamen, :id_solicitud)";
                     $stmt = $conn->prepare($query);
                     $stmt->bindParam(':id_usuario', $id_usuario);
                     $stmt->bindParam(':dictamen', $fileNameNew);

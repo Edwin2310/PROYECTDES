@@ -1,7 +1,7 @@
 <?php
 require_once("../../config/conexion.php");
 
-if (isset($_SESSION["ID_USUARIO"])) {
+if (isset($_SESSION["IdUsuario"])) {
     $conexion = new Conectar();
     $conexion = $conexion->Conexion();
 
@@ -378,7 +378,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
                                                             <div class="form-group ">
 
                                                                 <!-- Campo oculto para el ID del usuario -->
-                                                                <input type="hidden" id="id_usuario" name="id_usuario" value="<?php echo $_SESSION['ID_USUARIO']; ?>">
+                                                                <input type="hidden" id="id_usuario" name="id_usuario" value="<?php echo $_SESSION['IdUsuario']; ?>">
                                                                 <!-- Área de Dropzone para subir documentos -->
                                                                 <div class="form-group">
                                                                     <b>
@@ -467,7 +467,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
             var id_usuario = document.getElementById('id_usuario').value;
             var id_solicitud = "<?php echo htmlspecialchars($solicitud_id, ENT_QUOTES, 'UTF-8'); ?>"; // Valor del ID de solicitud desde PHP
 
-            // Añade el ID_USUARIO y el ID_SOLICITUD a los archivos que se están enviando
+            // Añade el IdUsuario y el ID_SOLICITUD a los archivos que se están enviando
             myDropzone.getAcceptedFiles().forEach(function(file) {
                 var formData = new FormData();
                 formData.append("dictamen", file);

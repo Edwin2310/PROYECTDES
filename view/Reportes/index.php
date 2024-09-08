@@ -1,11 +1,12 @@
 <?php
 session_start();
 require_once("../../config/conexion.php");
-
-
-
-$id_rol = $_SESSION['ID_ROL'] ?? null;
-$id_objeto = 9; // ID del objeto o módulo correspondiente a esta página
+require_once(__DIR__ . '/../Seguridad/Permisos/Funciones_Permisos.php');
+    // Obtener los valores necesarios para la verificación
+    $id_rol = $_SESSION['IdRol'] ?? null;
+    $id_objeto = 9; // ID del objeto o módulo correspondiente a esta página
+    // Llama a la función para verificar los permisos
+    verificarPermiso($id_rol, $id_objeto);
 
 if (!$id_rol) {
     header("Location: ../Seguridad/Permisos/denegado.php");
@@ -17,7 +18,7 @@ $conexion = new Conectar();
 $conn = $conexion->Conexion();
 
 // Verificar permiso en la base de datos
-$sql = "SELECT * FROM tbl_permisos WHERE ID_ROL = :idRol AND ID_OBJETO = :idObjeto";
+$sql = "SELECT * FROM `seguridad.tblpermisos` WHERE IdRol = :idRol AND IdObjeto = :idObjeto";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':idRol', $id_rol);
 $stmt->bindParam(':idObjeto', $id_objeto);
@@ -30,7 +31,7 @@ if ($stmt->execute() && $stmt->rowCount() > 0) {
 }
 
 
-if (isset($_SESSION["ID_USUARIO"])) {
+if (isset($_SESSION["IdUsuario"])) {
     $idUniversidad = isset($_GET['id_universidad']) ? $_GET['id_universidad'] : '';
     $idCarrera = isset($_GET['id_carrera']) ? $_GET['id_carrera'] : '';
     $fechaInicio = isset($_GET['fecha_inicio']) ? $_GET['fecha_inicio'] : '';

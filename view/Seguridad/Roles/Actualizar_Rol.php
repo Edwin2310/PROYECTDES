@@ -19,8 +19,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $descripcion = $_POST["descripcion"];
 
     // Obtener el ID del usuario que está realizando la modificación
-    if (isset($_SESSION["ID_USUARIO"])) {
-        $id_usuario_modificador = $_SESSION["ID_USUARIO"];
+    if (isset($_SESSION["IdUsuario"])) {
+        $id_usuario_modificador = $_SESSION["IdUsuario"];
     } else {
         // Manejar el caso en que no se ha iniciado sesión o no se tiene el ID de usuario
         echo "No se ha iniciado sesión o no se encontró el ID del usuario.";
@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Preparar la consulta SQL
-    $sql = "UPDATE tbl_ms_roles SET ROL = ?, DESCRIPCION = ?, FECHA_MODIFICACION = NOW(), MODIFICADO_POR = ? WHERE ID_ROL = ?";
+    $sql = "UPDATE tbl_ms_roles SET ROL = ?, DESCRIPCION = ?, FECHA_MODIFICACION = NOW(), MODIFICADO_POR = ? WHERE IdRol = ?";
 
     // Preparar la declaración
     $stmt = $conn->prepare($sql);

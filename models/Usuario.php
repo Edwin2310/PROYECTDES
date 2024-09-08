@@ -119,11 +119,11 @@ class Usuario extends Conectar
             // Iniciar la transacción
             $conexion->beginTransaction();
 
-            // Obtener el ID_USUARIO asociado al correo electrónico
+            // Obtener el IdUsuario asociado al correo electrónico
             $stmt_id = $conexion->prepare("SELECT IdUsuario FROM `seguridad.tblusuarios` WHERE CorreoElectronico = :correo");
             $stmt_id->bindParam(':correo', $correo, PDO::PARAM_STR);
             $stmt_id->execute();
-            $id_usuario = $stmt_id->fetchColumn(); // Obtener el ID_USUARIO
+            $id_usuario = $stmt_id->fetchColumn(); // Obtener el IdUsuario
             $stmt_id->closeCursor();
 
             if ($id_usuario) {
@@ -146,7 +146,7 @@ class Usuario extends Conectar
 
                 return true; // Indicar éxito
             } else {
-                // ID_USUARIO no encontrado
+                // IdUsuario no encontrado
                 $conexion->rollBack();
                 return false;
             }

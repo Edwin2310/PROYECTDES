@@ -1,37 +1,15 @@
 <?php
 require_once("../../config/conexion.php");
+require_once(__DIR__ . '/../Seguridad/Permisos/Funciones_Permisos.php');
 if (isset($_SESSION["IdUsuario"])) {
 
-?>
-
-
-
-    <?php
-    $id_rol = $_SESSION['ID_ROL'] ?? null;
+    // Obtener los valores necesarios para la verificación
+    $id_rol = $_SESSION['IdRol'] ?? null;
     $id_objeto = 10; // ID del objeto o módulo correspondiente a esta página
+    // Llama a la función para verificar los permisos
+    verificarPermiso($id_rol, $id_objeto);
 
-    if (!$id_rol) {
-        header("Location: ../Seguridad/Permisos/denegado.php");
-        exit();
-    }
-
-    // Conectar a la base de datos
-    $conexion = new Conectar();
-    $conn = $conexion->Conexion();
-
-    // Verificar permiso en la base de datos
-    $sql = "SELECT * FROM tbl_permisos WHERE ID_ROL = :idRol AND ID_OBJETO = :idObjeto";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':idRol', $id_rol);
-    $stmt->bindParam(':idObjeto', $id_objeto);
-
-    if ($stmt->execute() && $stmt->rowCount() > 0) {
-        // Usuario tiene permiso, continuar con el contenido de la página
-    } else {
-        header("Location: ../Seguridad/Permisos/denegado.php");
-        exit();
-    }
-    ?>
+?>
 
 
     <!doctype html>

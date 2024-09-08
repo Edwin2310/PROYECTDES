@@ -1,7 +1,7 @@
 <?php
 require_once("../../config/conexion.php");
 
-if (isset($_SESSION["ID_USUARIO"])) {
+if (isset($_SESSION["IdUsuario"])) {
     $id = isset($_GET['solicitud_id']) ? htmlspecialchars($_GET['solicitud_id']) : '';
     if ($id) {
         $conexion = new Conectar();
@@ -18,7 +18,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
                     LEFT JOIN tbl_universidad_centro uc ON s.ID_UNIVERSIDAD = uc.ID_UNIVERSIDAD
                     LEFT JOIN tbl_deptos d ON s.ID_DEPARTAMENTO = d.ID_DEPARTAMENTO
                     LEFT JOIN tbl_municipios mu ON s.ID_MUNICIPIO = mu.ID_MUNICIPIO
-                    LEFT JOIN tbl_ms_usuario u ON s.ID_USUARIO = u.ID_USUARIO
+                    LEFT JOIN tbl_ms_usuario u ON s.IdUsuario = u.IdUsuario
                     LEFT JOIN tbl_estado_solicitud e ON s.ID_ESTADO = e.ID_ESTADO
                     WHERE s.ID_SOLICITUD = :solicitud_id";
         $stmt = $conn->prepare($sql);

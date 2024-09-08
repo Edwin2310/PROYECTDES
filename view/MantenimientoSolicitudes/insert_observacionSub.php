@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Obtener el ID de usuario y nombre de usuario de la sesión
     session_start();
-    $idUsuario = isset($_SESSION["ID_USUARIO"]) ? $_SESSION["ID_USUARIO"] : null;
+    $idUsuario = isset($_SESSION["IdUsuario"]) ? $_SESSION["IdUsuario"] : null;
     $nombreUsuario = isset($_SESSION["NOMBRE_USUARIO"]) ? $_SESSION["NOMBRE_USUARIO"] : null;
 
     // Sanear las observaciones para eliminar caracteres '<' y '>'
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $conn->beginTransaction();
 
             // Insertar en la base de datos
-            $sqlInsert = "INSERT INTO tbl_observaciones (OBSERVACION, DOC_OBSERVACION, ID_SOLICITUD, ID_USUARIO, CREADO_POR, FECHA_OBSERVACION) 
+            $sqlInsert = "INSERT INTO tbl_observaciones (OBSERVACION, DOC_OBSERVACION, ID_SOLICITUD, IdUsuario, CREADO_POR, FECHA_OBSERVACION) 
                           VALUES (:observacion, :doc_observacion, :id_solicitud, :id_usuario, :creado_por, NOW())";
             $stmtInsert = $conn->prepare($sqlInsert);
 

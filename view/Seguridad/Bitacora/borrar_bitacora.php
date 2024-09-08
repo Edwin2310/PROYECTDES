@@ -6,7 +6,7 @@ try {
     $conn = $conexion->Conexion();
 
     // Consulta para borrar todos los registros
-    $sql = "DELETE FROM tbl_ms_bitacora";
+    $sql = "DELETE FROM `seguridad.tblbitacora`";
     $stmt = $conn->prepare($sql);
 
     if ($stmt->execute()) {

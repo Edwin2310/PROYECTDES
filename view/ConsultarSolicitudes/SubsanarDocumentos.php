@@ -1,7 +1,7 @@
 <?php
 require_once("../../config/conexion.php");
 
-if (isset($_SESSION["ID_USUARIO"])) {
+if (isset($_SESSION["IdUsuario"])) {
 
     $id = isset($_GET['id']) ? htmlspecialchars($_GET['id']) : '';
 

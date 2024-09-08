@@ -31,7 +31,7 @@ if ($id_usuario && isset($_SESSION['id_solicitud'])) {
         // Preparar la consulta para obtener los archivos del usuario y solicitud
         $sql = "SELECT SOLICITUD, PLAN_ESTUDIOS, PLANTA_DOCENTE, DIAGNOSTICO 
                 FROM tbl_archivos_adjuntos 
-                WHERE ID_USUARIO = :id_usuario AND ID_SOLICITUD = :id_solicitud";
+                WHERE IdUsuario = :id_usuario AND ID_SOLICITUD = :id_solicitud";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(":id_usuario", $id_usuario, PDO::PARAM_INT);
         $stmt->bindParam(":id_solicitud", $id_solicitud, PDO::PARAM_INT);

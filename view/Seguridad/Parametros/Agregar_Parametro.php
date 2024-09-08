@@ -15,8 +15,8 @@ $parametro = $_POST['parametro'];
 $valor = $_POST['valor'];
 $id_usuario = $_POST['id_usuario'];
 
-// Obtener el nombre del usuario según el ID_USUARIO
-$sql_nombre_usuario = "SELECT NOMBRE_USUARIO FROM tbl_ms_usuario WHERE ID_USUARIO = :id_usuario";
+// Obtener el nombre del usuario según el IdUsuario
+$sql_nombre_usuario = "SELECT NOMBRE_USUARIO FROM tbl_ms_usuario WHERE IdUsuario = :id_usuario";
 $stmt_nombre_usuario = $conn->prepare($sql_nombre_usuario);
 $stmt_nombre_usuario->bindParam(':id_usuario', $id_usuario);
 $stmt_nombre_usuario->execute();
@@ -29,7 +29,7 @@ if (!$nombre_usuario) {
 }
 
 // Insertar el parámetro junto con el nombre del usuario como CREADO_POR
-$sql_insert = "INSERT INTO tbl_ms_parametros (PARAMETRO, VALOR, ID_USUARIO, CREADO_POR) 
+$sql_insert = "INSERT INTO tbl_ms_parametros (PARAMETRO, VALOR, IdUsuario, CREADO_POR) 
                VALUES (:parametro, :valor, :id_usuario, :nombre_usuario)";
 $stmt_insert = $conn->prepare($sql_insert);
 $stmt_insert->bindParam(':parametro', $parametro);

@@ -16,7 +16,7 @@ if (!$conn) {
 $id_rol = $_POST['id_rol'];
 
 // Preparar la consulta SQL para eliminar el rol
-$sql = "DELETE FROM tbl_ms_roles WHERE ID_ROL = ?";
+$sql = "DELETE FROM tbl_ms_roles WHERE IdRol = ?";
 
 $stmt = $conn->prepare($sql);
 

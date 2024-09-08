@@ -21,8 +21,8 @@ function obtenerRoles($usuario)
         // Generar opciones HTML para el <select>
         $opciones = "";
         foreach ($roles as $rol) {
-            $idRol = htmlspecialchars($rol['ID_ROL'], ENT_QUOTES, 'UTF-8');
-            $nombreRol = htmlspecialchars($rol['NOMBRE_ROL'], ENT_QUOTES, 'UTF-8');
+            $idRol = htmlspecialchars($rol['IdRol'], ENT_QUOTES, 'UTF-8');
+            $nombreRol = htmlspecialchars($rol['Rol'], ENT_QUOTES, 'UTF-8');
             $opciones .= "<option value='$idRol'>$nombreRol</option>";
         }
         return $opciones;
@@ -50,8 +50,8 @@ function obtenerUniversidades($usuario)
         // Generar opciones HTML para el <select>
         $opciones = "";
         foreach ($universidades as $universidad) {
-            $idUniversidad = htmlspecialchars($universidad['ID_UNIVERSIDAD'], ENT_QUOTES, 'UTF-8');
-            $nombreUniversidad = htmlspecialchars($universidad['NOM_UNIVERSIDAD'], ENT_QUOTES, 'UTF-8');
+            $idUniversidad = htmlspecialchars($universidad['IdUniversidad'], ENT_QUOTES, 'UTF-8');
+            $nombreUniversidad = htmlspecialchars($universidad['NomUniversidad'], ENT_QUOTES, 'UTF-8');
             $opciones .= "<option value='$idUniversidad'>$nombreUniversidad</option>";
         }
         return $opciones;
@@ -80,8 +80,8 @@ function editarEstados($usuario)
         // Generar opciones HTML para el <select>
         $opciones = "";
         foreach ($estados as $estado) {
-            $idEstado = htmlspecialchars($estado['id_estado'], ENT_QUOTES, 'UTF-8');
-            $nombreEstado = htmlspecialchars($estado['nom_estado'], ENT_QUOTES, 'UTF-8');
+            $idEstado = htmlspecialchars($estado['IdEstado'], ENT_QUOTES, 'UTF-8');
+            $nombreEstado = htmlspecialchars($estado['EstadoUsuario'], ENT_QUOTES, 'UTF-8');
             $opciones .= "<option value='$idEstado'>$nombreEstado</option>";
         }
         return $opciones;
@@ -111,8 +111,8 @@ function editarEstadosInactivos($usuario)
         // Generar opciones HTML para el <select>
         $opciones = "";
         foreach ($estados as $estado) {
-            $idEstado = htmlspecialchars($estado['id_estado'], ENT_QUOTES, 'UTF-8');
-            $nombreEstado = htmlspecialchars($estado['nom_estado'], ENT_QUOTES, 'UTF-8');
+            $idEstado = htmlspecialchars($estado['IdEstado'], ENT_QUOTES, 'UTF-8');
+            $nombreEstado = htmlspecialchars($estado['EstadoUsuario'], ENT_QUOTES, 'UTF-8');
             $opciones .= "<option value='$idEstado'>$nombreEstado</option>";
         }
         return $opciones;

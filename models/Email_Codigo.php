@@ -26,7 +26,7 @@ function sendEmail($correo, $nombre_usuario, $codigo_validacion)
         $mail->WordWrap = 50;
         $mail->isHTML(true);
         $mail->Subject = "Confirme Su Código";
-        
+
 
         // Adjuntar imágenes
         $mail->addEmbeddedImage(__DIR__ . '/template/images/image-1.gif', 'image_gif'); // ruta 
@@ -45,7 +45,7 @@ function sendEmail($correo, $nombre_usuario, $codigo_validacion)
         $template = file_get_contents($templatePath); //  ruta 
 
         // Reemplazar placeholders en la plantilla
-        $template = str_replace("{{nombre_usuario}}", $nombre_usuario, $template);
+        $template = str_replace("{{NombreUsuario}}", $nombre_usuario, $template);
         $template = str_replace("{{contrasena}}", $codigo_validacion, $template);
         $template = str_replace("{{link}}", "http://localhost/PROYECTDES/habilitarUsuario/verificarClave.php", $template);
 

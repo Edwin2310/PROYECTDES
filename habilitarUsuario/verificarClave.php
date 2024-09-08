@@ -30,19 +30,18 @@
                                 <div class="subtitle-container">
                                     <br>
                                     <h1 class="h3 font-w700 reduce-margin">Verificación de Código</h1>
-                                    <h2 class="h5 font-w400 text-muted mb-0 reduce-margin">Ingrese su código de
-                                        validación</h2>
+                                    <h2 class="h5 font-w400 text-muted mb-0 reduce-margin">Ingrese su código de validación</h2>
                                 </div>
                             </div>
                             <div class="px-30">
                                 <form id="form-verificar-codigo" action="./autenticarClave.php" method="post">
-                                    <input type="hidden" id="nombre_usuario" name="nombre_usuario" value="<?php echo $_SESSION['NOMBRE_USUARIO']; ?>">
+                                    <input type="hidden" id="NombreUsuario" name="NombreUsuario" value="<?php echo $_SESSION['NombreUsuario']; ?>">
 
                                     <div class="form-group row">
                                         <div class="col-12">
                                             <div class="form-material floating">
-                                                <input type="text" class="form-control" id="codigo_validacion" name="codigo_validacion" required pattern="[0-9]+" maxlength="6">
-                                                <label for="codigo_validacion">Código de Validación</label>
+                                                <input type="text" class="form-control" id="CodigoValidacion" name="CodigoValidacion" required pattern="[0-9]+" maxlength="6">
+                                                <label for="CodigoValidacion">Código de Validación</label>
                                             </div>
                                         </div>
                                     </div>
@@ -73,7 +72,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Obtener referencia al campo de código de validación
-            const codigoValidacionInput = document.getElementById('codigo_validacion');
+            const codigoValidacionInput = document.getElementById('CodigoValidacion');
 
             // Función para validar en tiempo real y evitar copiar y pegar
             codigoValidacionInput.addEventListener('input', function() {
@@ -91,9 +90,9 @@
             document.getElementById('form-verificar-codigo').addEventListener('submit', function(e) {
                 e.preventDefault();
 
-                var codigo_validacion = codigoValidacionInput.value;
+                var CodigoValidacion = codigoValidacionInput.value;
                 var form = new FormData();
-                form.append('codigo_validacion', codigo_validacion);
+                form.append('CodigoValidacion', CodigoValidacion);
 
                 Swal.fire({
                     title: 'Procesando...',

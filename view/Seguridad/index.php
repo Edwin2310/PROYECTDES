@@ -6,35 +6,6 @@ if (isset($_SESSION["IdUsuario"])) {
 
 ?>
 
-
-
-    <?php
-    $id_rol = $_SESSION['ID_ROL'] ?? null;
-    $id_objeto = 11; // ID del objeto o módulo correspondiente a esta página
-
-    if (!$id_rol) {
-        header("Location: ../Seguridad/Permisos/denegado.php");
-        exit();
-    }
-
-    // Conectar a la base de datos
-    $conexion = new Conectar();
-    $conn = $conexion->Conexion();
-
-    // Verificar permiso en la base de datos
-    $sql = "SELECT * FROM tbl_permisos WHERE ID_ROL = :idRol AND ID_OBJETO = :idObjeto";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':idRol', $id_rol);
-    $stmt->bindParam(':idObjeto', $id_objeto);
-
-    if ($stmt->execute() && $stmt->rowCount() > 0) {
-        // Usuario tiene permiso, continuar con el contenido de la página
-    } else {
-        header("Location: ../Seguridad/Permisos/denegado.php");
-        exit();
-    }
-    ?>
-
     <!doctype html>
     <html lang="en" class="no-focus">
 
@@ -65,7 +36,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                     <img class="img-avatar img-avatar32" src="../../public/assets/img/avatars/avatar15.jpg" alt="">
                                 </a>
                                 <a class="align-middle link-effect text-primary-dark font-w600" href="be_pages_generic_profile.html"><!-- llamada del usuario   -->
-                                    <span><?php echo $_SESSION["NOMBRE_USUARIO"] ?></span>
+                                    <span><?php echo $_SESSION["NombreUsuario"] ?></span>
                                 </a>
                             </div>
                         </div>
@@ -101,9 +72,9 @@ if (isset($_SESSION["IdUsuario"])) {
             <!-- Inicio de la entrada de la universidad -->
             <main id="main-container">
                 <div class="content">
-                    <h2 class="content-heading">Bienvenido, <?php echo $_SESSION["NOMBRE_USUARIO"]; ?></h2>
-                    <div class="row row-deck">
-                        <div class="col-md-6 col-xl-3" data-toggle="appear">
+                    <h2 class="content-heading">Bienvenido, <?php echo $_SESSION["NombreUsuario"]; ?></h2>
+                    <div class="row gutters-tiny">
+                        <div class="col-md-4 col-lg-4 mr-auto" data-toggle="appear">
                             <a href="../Seguridad/Usuarios.php" data-id-objeto="15" data-accion="accedio al modulo" class=" modulo-link block block-link-shadow text-center">
                                 <div class="block-content block-content-full">
                                     <div class="py-30 text-center">
@@ -118,22 +89,7 @@ if (isset($_SESSION["IdUsuario"])) {
                             </a>
                         </div>
 
-                        <div class="col-md-6 col-xl-3" data-toggle="appear">
-                            <a href="../Seguridad/Consejales.php" data-id-objeto="16" data-accion="accedio al modulo" class=" modulo-link block block-link-shadow text-center">
-                                <div class="block-content block-content-full">
-                                    <div class="py-30 text-center">
-                                        <div class="item item-2x item-circle bg-default text-white mx-auto">
-                                            <i class="fa fa-graduation-cap"></i>
-                                        </div>
-                                    </div>
-                                    <div class="block-content bg-body-light">
-                                        <p class="h5 font-w600">Consejales</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="col-md-6 col-xl-3" data-toggle="appear">
+                        <div class="col-md-4 col-lg-4 mr-auto" data-toggle="appear">
                             <a href="../Seguridad/man_permisos.php" data-id-objeto="17" data-accion="accedio al modulo" class="  modulo-link block block-link-shadow text-center">
                                 <div class="block-content block-content-full">
                                     <div class="py-30 text-center">
@@ -148,7 +104,7 @@ if (isset($_SESSION["IdUsuario"])) {
                             </a>
                         </div>
 
-                        <div class="col-md-6 col-xl-3" data-toggle="appear">
+                        <div class="col-md-4 col-lg-4 mr-auto" data-toggle="appear">
                             <a href="../Seguridad/Parametros.php" data-id-objeto="18" data-accion="accedio al modulo" class=" modulo-link block block-link-shadow text-center">
                                 <div class="block-content block-content-full">
                                     <div class="py-30 text-center">

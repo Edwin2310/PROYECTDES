@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conn->set_names();
 
         // Verificar que la contraseña temporal sea correcta
-        $stmt = $conexion->prepare("SELECT correo_electronico FROM tbl_reset_contraseña WHERE contrasena_temp = ?");
+        $stmt = $conexion->prepare("SELECT CorreoElectronico FROM `seguridad.tblresetcontraseñas` WHERE ContraseñaTemp = ?");
         $stmt->execute([$contrasena]);
         $temp_password_row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -41,10 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conexion->beginTransaction();
 
         try {
-            $correo_electronico = $temp_password_row['correo_electronico'];
+            $correo_electronico = $temp_password_row['CorreoElectronico'];
 
             // Preparar y ejecutar la actualización de contraseña y estado_usuario
-            $stmt_update = $conexion->prepare("UPDATE tbl_ms_usuario SET contrasena = ?, estado_usuario = 1 WHERE correo_electronico = ?");
+            $stmt_update = $conexion->prepare("UPDATE `seguridad.tblusuarios` SET Contraseña = ?, EstadoUsuario = 1 WHERE CorreoElectronico = ?");
             if (!$stmt_update) {
                 throw new Exception('Error al preparar la consulta de actualización.');
             }
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             // Eliminar la entrada de la tabla temporal
-            $stmt_delete = $conexion->prepare("DELETE FROM tbl_reset_contraseña WHERE correo_electronico = ?");
+            $stmt_delete = $conexion->prepare("DELETE FROM `seguridad.tblresetcontraseñas` WHERE CorreoElectronico = ?");
             $stmt_delete->execute([$correo_electronico]);
 
             // Confirmar transacción

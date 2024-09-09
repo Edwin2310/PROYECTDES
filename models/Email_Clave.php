@@ -37,14 +37,14 @@ function enviarCorreo($correo, $nombre_usuario, $contrasena)
         $mail->addEmbeddedImage(__DIR__ . '/template/images/image-7.png', 'image_7');
         $mail->addEmbeddedImage(__DIR__ . '/template/images/image-8.png', 'image_8'); // ruta 
 
-        
+
 
         // Leer la plantilla HTML del correo
         $templatePath = __DIR__ . '/template/ConTemporal.html';
         $template = file_get_contents($templatePath); //  ruta 
 
         // Reemplazar placeholders en la plantilla
-        $template = str_replace("{{nombre_usuario}}", $nombre_usuario, $template);
+        $template = str_replace("{{NombreUsuario}}", $nombre_usuario, $template);
         $template = str_replace("{{contrasena}}", $contrasena, $template);
         $template = str_replace("{{link}}", "http://localhost/PROYECTDES/habilitarUsuario/nuevaClave.php", $template);
 

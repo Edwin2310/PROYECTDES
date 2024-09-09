@@ -11,27 +11,27 @@ if (!$conn) {
     die("Conexión fallida: " . $conexion->Conexion()->errorInfo());
 }
 
-if (isset($_POST['id_objeto'])) {
-    $id_objeto = $_POST['id_objeto'];
-    $objeto = $_POST['objeto'];
-    $tipo_objeto = $_POST['tipo_objeto'];
-    $descripcion = $_POST['descripcion'];
-    $id_usuario = $_POST['id_usuario']; // ID del usuario que está editando
+if (isset($_POST['IdObjeto'])) {
+    $IdObjeto = $_POST['IdObjeto'];
+    $Objeto = $_POST['Objeto'];
+    $TipoObjeto = $_POST['TipoObjeto'];
+    $Descripcion = $_POST['Descripcion'];
+    $IdUsuario = $_POST['IdUsuario']; // ID del usuario que está editando
 
     $conexion = new Conectar();
     $conn = $conexion->Conexion();
 
-    // Consulta SQL para actualizar el objeto
-    $sql = "UPDATE tbl_ms_objetos 
-            SET objeto = :objeto, tipo_objeto = :tipo_objeto, descripcion = :descripcion, modificado_por = :modificado_por, fecha_modificacion = NOW() 
-            WHERE id_objeto = :id_objeto";
+    // Consulta SQL para actualizar el Objeto
+    $sql = "UPDATE `seguridad.tblobjetos` 
+            SET Objeto = :Objeto, TipoObjeto = :TipoObjeto, Descripcion = :Descripcion, ModificadoPor = :ModificadoPor, FechaModificacion = NOW() 
+            WHERE IdObjeto = :IdObjeto";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':objeto', $objeto);
-    $stmt->bindParam(':tipo_objeto', $tipo_objeto);
-    $stmt->bindParam(':descripcion', $descripcion);
-    $stmt->bindParam(':modificado_por', $id_usuario); // Actualizar con el ID del usuario
-    $stmt->bindParam(':id_objeto', $id_objeto);
+    $stmt->bindParam(':Objeto', $Objeto);
+    $stmt->bindParam(':TipoObjeto', $TipoObjeto);
+    $stmt->bindParam(':Descripcion', $Descripcion);
+    $stmt->bindParam(':ModificadoPor', $IdUsuario); // Actualizar con el ID del usuario
+    $stmt->bindParam(':IdObjeto', $IdObjeto);
 
     if ($stmt->execute()) {
         header("Location: ../../Seguridad/Objetos.php");
@@ -42,4 +42,3 @@ if (isset($_POST['id_objeto'])) {
 
     $conn = null;
 }
-?>

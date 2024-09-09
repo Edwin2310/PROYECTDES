@@ -13,6 +13,7 @@ if (isset($_SESSION["IdUsuario"])) {
 
 ?>
 
+
     <!doctype html>
     <html lang="en" class="no-focus">
 
@@ -106,7 +107,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                                 <th class="d-none d-sm-table-cell">Nombre Usuario</th>
                                                 <th class="d-none d-sm-table-cell">Número Empleado</th>
                                                 <th class="d-none d-sm-table-cell">Estado Usuario</th>
-                                                <th class="d-none d-sm-table-cell">Nombre NombreRol</th>
+                                                <th class="d-none d-sm-table-cell">Nombre Rol</th>
                                                 <th class="text-center hidden-column">Fecha Creación</th>
                                                 <th class="text-center hidden-column">Creado Por</th>
                                                 <th class="text-center hidden-column">Universidad</th>
@@ -121,7 +122,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                             $conn = $conexion->Conexion();
 
                                             // Llamada al procedimiento almacenado
-                                            $stmt = $conn->prepare("CALL splUsuariosMostrar(:usuario)");
+                                            $stmt = $conn->prepare("CALL `seguridad.splUsuariosMostrar`(:usuario)");
                                             $stmt->bindValue(':usuario', $_SESSION["IdUsuario"], PDO::PARAM_STR);
                                             $stmt->execute();
                                             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -130,29 +131,29 @@ if (isset($_SESSION["IdUsuario"])) {
                                                 foreach ($result as $row) {
                                                     echo "<tr>";
                                                     echo "<td class='text-center'>{$row['IdUsuario']}</td>";
-                                                    echo "<td>{$row['NUM_IDENTIDAD']}</td>";
-                                                    echo "<td>{$row['DIRECCION_1']}</td>";
-                                                    echo "<td>{$row['USUARIO']}</td>";
-                                                    echo "<td>{$row['CORREO_ELECTRONICO']}</td>";
-                                                    echo "<td>{$row['NOMBRE_USUARIO']}</td>";
-                                                    echo "<td>{$row['NUM_EMPLEADO']}</td>";
-                                                    echo "<td>{$row['ESTADO_USUARIO']}</td>";
+                                                    echo "<td>{$row['NumIdentidad']}</td>";
+                                                    echo "<td>{$row['Direccion']}</td>";
+                                                    echo "<td>{$row['Usuario']}</td>";
+                                                    echo "<td>{$row['CorreoElectronico']}</td>";
+                                                    echo "<td>{$row['NombreUsuario']}</td>";
+                                                    echo "<td>{$row['NumEmpleado']}</td>";
+                                                    echo "<td>{$row['EstadoUsuario']}</td>";
                                                     echo "<td>{$row['IdRol']}</td>";
-                                                    echo "<td class='text-center hidden-column'>{$row['FECHA_CREACION']}</td>";
-                                                    echo "<td class='text-center hidden-column'>{$row['CREADO_POR']}</td>";
-                                                    echo "<td class='text-center hidden-column'>{$row['ID_UNIVERSIDAD']}</td>";
+                                                    echo "<td class='text-center hidden-column'>{$row['FechaCreacion']}</td>";
+                                                    echo "<td class='text-center hidden-column'>{$row['CreadoPor']}</td>";
+                                                    echo "<td class='text-center hidden-column'>{$row['IdUniversidad']}</td>";
                                                     echo "<td class='text-center'> 
                                                         <button type='button' class='btn btn-sm btn-secondary' data-toggle='modal' data-target='#editUserModal' 
-                                                                data-id='" . $row["IdUsuario"] . "' 
-                                                                data-num_identidad='" . $row["NUM_IDENTIDAD"] . "' 
-                                                                data-direccion_1='" . $row["DIRECCION_1"] . "' 
-                                                                data-usuario='" . $row["USUARIO"] . "' 
-                                                                data-correo_electronico='" . $row["CORREO_ELECTRONICO"] . "' 
-                                                                data-nombre_usuario='" . $row["NOMBRE_USUARIO"] . "' 
-                                                                data-num_empleado='" . $row["NUM_EMPLEADO"] . "'
-                                                                data-estado_usuario='" . $row["ESTADO_USUARIO"] . "' 
-                                                                data-id_rol='" . $row["IdRol"] . "' 
-                                                                data-creado_por='" . $row["CREADO_POR"] . "'>
+                                                                data-IdUsuario='" . $row["IdUsuario"] . "' 
+                                                                data-NumIdentidad='" . $row["NumIdentidad"] . "' 
+                                                                data-Direccion='" . $row["Direccion"] . "' 
+                                                                data-Usuario='" . $row["Usuario"] . "' 
+                                                                data-CorreoElectronico='" . $row["CorreoElectronico"] . "' 
+                                                                data-NombreUsuario='" . $row["NombreUsuario"] . "' 
+                                                                data-NumEmpleado='" . $row["NumEmpleado"] . "'
+                                                                data-EstadoUsuario='" . $row["EstadoUsuario"] . "' 
+                                                                data-IdRol='" . $row["IdRol"] . "' 
+                                                                data-CreadoPor='" . $row["CreadoPor"] . "'>
                                                                 <i class='si si-note'></i>
                                                            </button>
                                                         </td>";
@@ -194,53 +195,53 @@ if (isset($_SESSION["IdUsuario"])) {
                     <div class="modal-body">
                         <form id="addUserForm" method="POST">
                             <div class="form-group">
-                                <label for="num_identidad">Número de Identidad</label>
-                                <input type="text" class="form-control" id="num_identidad" name="num_identidad" placeholder="0801199923672" required>
+                                <label for="NumIdentidad">Número de Identidad</label>
+                                <input type="text" class="form-control" id="NumIdentidad" name="NumIdentidad" placeholder="0801199923672" required>
                             </div>
                             <div class="form-group">
-                                <label for="direccion_1">Dirección</label>
-                                <input type="text" class="form-control" id="direccion_1" name="direccion_1" required>
+                                <label for="Direccion">Dirección</label>
+                                <input type="text" class="form-control" id="Direccion" name="Direccion" required>
                             </div>
                             <div class="form-group">
-                                <label for="usuario">Usuario</label>
-                                <input type="text" class="form-control" id="usuario" name="usuario" required>
+                                <label for="Usuario">Usuario</label>
+                                <input type="text" class="form-control" id="Usuario" name="Usuario" required>
                             </div>
                             <div class="form-group">
-                                <label for="correo_electronico">Correo Electrónico</label>
-                                <input type="email" class="form-control" id="correo_electronico" name="correo_electronico" required>
+                                <label for="CorreoElectronico">Correo Electrónico</label>
+                                <input type="email" class="form-control" id="CorreoElectronico" name="CorreoElectronico" required>
                             </div>
                             <div class="form-group">
-                                <label for="nombre_usuario">Nombre de Usuario</label>
-                                <input type="text" class="form-control" id="nombre_usuario" name="nombre_usuario" required>
+                                <label for="NombreUsuario">Nombre de Usuario</label>
+                                <input type="text" class="form-control" id="NombreUsuario" name="NombreUsuario" required>
                             </div>
                             <div class="form-group">
-                                <label for="num_empleado">Número de Empleado</label>
-                                <input type="number" class="form-control" id="num_empleado" name="num_empleado" required>
+                                <label for="NumEmpleado">Número de Empleado</label>
+                                <input type="number" class="form-control" id="NumEmpleado" name="NumEmpleado" required>
                             </div>
-                            <div class="form-group" id="empleado_des">
-                                <label for="empleado_des">Empleado DES</label>
-                                <select class="form-control" id="empleado_des_select" name="empleado_des" required>
+                            <div class="form-group" id="EmpleadoDes">
+                                <label for="EmpleadoDes">Empleado DES</label>
+                                <select class="form-control" id="EmpleadoDes_select" name="EmpleadoDes" required>
                                     <option value="" disabled selected style="display:none;">Seleccionar Opción</option>
                                     <option value="1">Sí</option>
                                     <option value="2">No</option>
                                 </select>
                             </div>
-                            <input type="hidden" id="estado_usuario" name="estado_usuario" value="1">
+                            <input type="hidden" id="EstadoUsuario" name="EstadoUsuario" value="1">
                             <div class="form-group">
-                                <label for="id_rol">NombreRol</label>
-                                <select class="form-control" id="id_rol" name="id_rol" required>
-                                    <option value="" disabled selected style="display:none;">Seleccionar NombreRol</option>
+                                <label for="IdRol">Rol</label>
+                                <select class="form-control" id="IdRol" name="IdRol" required>
+                                    <option value="" disabled selected style="display:none;">Seleccionar Rol</option>
                                     <?php echo obtenerRoles($usuario); ?>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="id_universidad">Universidad</label>
-                                <select class="form-control" id="id_universidad" name="id_universidad" required>
+                                <label for="IdUniversidad">Universidad</label>
+                                <select class="form-control" id="IdUniversidad" name="IdUniversidad" required>
                                     <option value="" disabled selected style="display:none;">Seleccionar Universidad</option>
                                     <?php echo obtenerUniversidades($usuario); ?>
                                 </select>
                             </div>
-                            <input type="hidden" id="id_usuario" name="id_usuario" value="<?php echo $_SESSION['IdUsuario']; ?>">
+                            <input type="hidden" id="IdUsuario" name="IdUsuario" value="<?php echo $_SESSION['IdUsuario']; ?>">
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary" id="guardarBtn">Guardar</button>
                             </div>
@@ -262,57 +263,57 @@ if (isset($_SESSION["IdUsuario"])) {
                     </div>
                     <div class="modal-body">
                         <form id="editUserForm" method="POST" action="../Seguridad/Usuarios/Editar_Usuario.php">
-                            <input type="hidden" id="edit_id_usuario" name="id_usuario">
+                            <input type="hidden" id="edit_IdUsuario" name="IdUsuario">
                             <!-- Otros campos del formulario -->
                             <div class="form-group">
-                                <label for="edit_num_identidad">Número de Identidad</label>
-                                <input type="text" class="form-control" id="edit_num_identidad" name="num_identidad" required>
+                                <label for="edit_NumIdentidad">Número de Identidad</label>
+                                <input type="text" class="form-control" id="edit_NumIdentidad" name="NumIdentidad" required>
                             </div>
                             <div class="form-group">
-                                <label for="edit_direccion_1">Dirección</label>
-                                <input type="text" class="form-control" id="edit_direccion_1" name="direccion_1" required>
+                                <label for="edit_Direccion">Dirección</label>
+                                <input type="text" class="form-control" id="edit_Direccion" name="Direccion" required>
                             </div>
                             <div class="form-group">
-                                <label for="edit_usuario">Usuario</label>
-                                <input type="text" class="form-control" id="edit_usuario" name="usuario" required>
+                                <label for="edit_Usuario">Usuario</label>
+                                <input type="text" class="form-control" id="edit_Usuario" name="Usuario" required>
                             </div>
                             <div class="form-group">
-                                <label for="edit_correo_electronico">Correo Electrónico</label>
-                                <input type="email" class="form-control" id="edit_correo_electronico" name="correo_electronico" required>
+                                <label for="edit_CorreoElectronico">Correo Electrónico</label>
+                                <input type="email" class="form-control" id="edit_CorreoElectronico" name="CorreoElectronico" required>
                             </div>
                             <div class="form-group">
-                                <label for="edit_nombre_usuario">Nombre de Usuario</label>
-                                <input type="text" class="form-control" id="edit_nombre_usuario" name="nombre_usuario" required>
+                                <label for="edit_NombreUsuario">Nombre de Usuario</label>
+                                <input type="text" class="form-control" id="edit_NombreUsuario" name="NombreUsuario" required>
                             </div>
                             <div class="form-group">
-                                <label for="edit_num_empleado">Número de Empleado</label>
-                                <input type="text" class="form-control" id="edit_num_empleado" name="num_empleado">
+                                <label for="edit_NumEmpleado">Número de Empleado</label>
+                                <input type="text" class="form-control" id="edit_NumEmpleado" name="NumEmpleado">
                             </div>
                             <div class="form-group">
-                                <label for="edit_estado_usuario">Estado Usuario</label>
-                                <input type="text" class="form-control" id="edit_estado_usuario" name="estado_usuario" readonly>
+                                <label for="edit_EstadoUsuario">Estado Usuario</label>
+                                <input type="text" class="form-control" id="edit_EstadoUsuario" name="EstadoUsuario" readonly>
                             </div>
                             <div class="form-group">
-                                <label for="edit_estado_usuario_nuevo">Seleccionar Nuevo Estado</label>
-                                <select class="form-control" id="edit_estado_usuario_nuevo" name="estado_usuario" required>
+                                <label for="edit_EstadoUsuario_nuevo">Seleccionar Nuevo Estado</label>
+                                <select class="form-control" id="edit_EstadoUsuario_nuevo" name="EstadoUsuario" required>
                                     <option value="" disabled selected style="display:none;">Seleccionar Estado</option>
                                     <?php echo editarEstados($usuario); ?>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="edit_id_rol">NombreRol</label>
-                                <input type="text" class="form-control" id="edit_id_rol" name="id_rol" readonly>
+                                <label for="edit_IdRol">Rol</label>
+                                <input type="text" class="form-control" id="edit_IdRol" name="IdRol" readonly>
                             </div>
                             <div class="form-group">
-                                <label for="edit_rol">Seleccionar Nuevo NombreRol</label>
+                                <label for="edit_rol">Seleccionar Nuevo Rol</label>
                                 <select class="form-control" id="edit_rol" name="rol" required>
-                                    <option value="" disabled selected style="display:none;">Seleccionar NombreRol</option>
+                                    <option value="" disabled selected style="display:none;">Seleccionar Rol</option>
                                     <?php echo obtenerRoles($usuario); ?>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="edit_universidad_nueva">Seleccionar Nueva Universidad</label>
-                                <select class="form-control" id="edit_universidad_nueva" name="id_universidad" required>
+                                <select class="form-control" id="edit_universidad_nueva" name="IdUniversidad" required>
                                     <option value="" disabled selected style="display:none;">Seleccionar Universidad</option>
                                     <?php echo obtenerUniversidades($usuario); ?>
                                 </select>
@@ -342,7 +343,7 @@ if (isset($_SESSION["IdUsuario"])) {
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                         <form id="deleteUserForm" method="POST" action="../Seguridad/Usuarios/Eliminar_Usuario.php">
-                            <input type="hidden" id="delete_id_usuario" name="id_usuario">
+                            <input type="hidden" id="delete_IdUsuario" name="IdUsuario">
                             <button type="submit" class="btn btn-danger">Eliminar</button>
                         </form>
                     </div>

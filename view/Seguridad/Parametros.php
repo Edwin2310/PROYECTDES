@@ -12,8 +12,6 @@ if (isset($_SESSION["IdUsuario"])) {
     verificarPermiso($id_rol, $id_objeto);
 
 ?>
-
-
     <!doctype html>
     <html lang="en" class="no-focus">
 
@@ -36,7 +34,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                     <img class="img-avatar img-avatar32" src="../../public/assets/img/avatars/avatar15.jpg" alt="">
                                 </a>
                                 <a class="align-middle link-effect text-primary-dark font-w600" href="be_pages_generic_profile.html">
-                                    <span><?php echo $_SESSION["NOMBRE_USUARIO"] ?></span>
+                                    <span><?php echo $_SESSION["NombreUsuario"] ?></span>
                                 </a>
                             </div>
                         </div>
@@ -89,7 +87,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                 $conn = $conexion->Conexion();
 
                                 // Llamada al procedimiento almacenado
-                                $stmt = $conn->prepare("CALL splParametrosMostrar(:usuario)");
+                                $stmt = $conn->prepare("CALL `seguridad.splParametrosMostrar`(:usuario)");
                                 $stmt->bindValue(':usuario', $_SESSION["IdUsuario"], PDO::PARAM_STR);
                                 $stmt->execute();
                                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -97,24 +95,24 @@ if (isset($_SESSION["IdUsuario"])) {
                                 if ($result !== false && count($result) > 0) {
                                     foreach ($result as $row) {
                                         echo "<tr>";
-                                        echo "<td class='text-center'>{$row['ID_PARAMETRO']}</td>";
-                                        echo "<td>{$row['PARAMETRO']}</td>";
-                                        echo "<td>{$row['VALOR']}</td>";
-                                        echo "<td>{$row['FECHA_CREACION']}</td>";
-                                        echo "<td>{$row['CREADO_POR']}</td>";
-                                        echo "<td>{$row['FECHA_MODIFICACION']}</td>";
-                                        echo "<td>{$row['MODIFICADO_POR']}</td>";
+                                        echo "<td class='text-center'>{$row['IdParametro']}</td>";
+                                        echo "<td>{$row['Parametro']}</td>";
+                                        echo "<td>{$row['Valor']}</td>";
+                                        echo "<td>{$row['FechaCreacion']}</td>";
+                                        echo "<td>{$row['CreadoPor']}</td>";
+                                        echo "<td>{$row['FechaModificacion']}</td>";
+                                        echo "<td>{$row['ModificadoPor']}</td>";
                                         echo "<td class='text-center'> 
                                             <button type='button' class='btn btn-sm btn-secondary' data-toggle='modal' data-target='#editParamModal' 
-                                                    data-id='" . $row["ID_PARAMETRO"] . "' 
-                                                    data-parametro='" . $row["PARAMETRO"] . "' 
-                                                    data-valor='" . $row["VALOR"] . "'>
+                                                    data-id='" . $row["IdParametro"] . "' 
+                                                    data-parametro='" . $row["Parametro"] . "' 
+                                                    data-valor='" . $row["Valor"] . "'>
                                                 <i class='si si-note'></i>
                                             </button>
                                         </td>";
                                         echo "<td class='text-center'> 
                                             <button type='button' class='btn btn-sm btn-danger' data-toggle='modal' data-target='#confirmDeleteParamModal' 
-                                                    data-id='" . $row["ID_PARAMETRO"] . "'>
+                                                    data-id='" . $row["IdParametro"] . "'>
                                                 <i class='si si-trash'></i>
                                             </button>
                                         </td>";
@@ -148,15 +146,15 @@ if (isset($_SESSION["IdUsuario"])) {
                         </div>
                         <div class="modal-body">
                             <form id="addUserForm" method="POST" action="../Seguridad/Parametros/Agregar_Parametro.php">
-                                <input type="hidden" id="id_usuario" name="id_usuario" value="<?php echo $_SESSION['IdUsuario']; ?>">
+                                <input type="hidden" id="IdUsuario" name="IdUsuario" value="<?php echo $_SESSION['IdUsuario']; ?>">
 
                                 <div class="form-group">
-                                    <label for="parametro">Parámetro</label>
-                                    <input type="text" class="form-control" id="parametro" name="parametro" required>
+                                    <label for="Parametro">Parámetro</label>
+                                    <input type="text" class="form-control" id="Parametro" name="Parametro" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="valor">Valor</label>
-                                    <input type="text" class="form-control" id="valor" name="valor" required>
+                                    <label for="Valor">Valor</label>
+                                    <input type="text" class="form-control" id="Valor" name="Valor" required>
                                 </div>
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-primary">Guardar</button>
@@ -181,17 +179,17 @@ if (isset($_SESSION["IdUsuario"])) {
                         </div>
                         <div class="modal-body">
                             <form id="editParamForm" method="POST" action="../Seguridad/Parametros/Editar_Parametro.php">
-                                <input type="hidden" id="edit_id_parametro" name="id_parametro">
+                                <input type="hidden" id="edit_IdParametro" name="IdParametro">
                                 <div class="form-group">
                                     <label for="edit_parametro">Parámetro</label>
-                                    <input type="text" class="form-control" id="edit_parametro" name="parametro" required>
+                                    <input type="text" class="form-control" id="edit_parametro" name="Parametro" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="edit_valor">Valor</label>
-                                    <input type="text" class="form-control" id="edit_valor" name="valor" required>
+                                    <input type="text" class="form-control" id="edit_valor" name="Valor" required>
                                 </div>
-                                <input type="hidden" id="edit_id_usuario" name="id_usuario">
-                                <input type="hidden" id="edit_creado_por" name="creado_por">
+                                <input type="hidden" id="edit_IdUsuario" name="IdUsuario">
+                                <input type="hidden" id="edit_creado_por" name="CreadoPor">
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                                 </div>
@@ -217,7 +215,7 @@ if (isset($_SESSION["IdUsuario"])) {
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                             <form id="deleteParamForm" method="POST" action="../Seguridad/Parametros/Eliminar_Parametro.php">
-                                <input type="hidden" id="delete_id_parametro" name="id_parametro">
+                                <input type="hidden" id="delete_IdParametro" name="IdParametro">
                                 <button type="submit" class="btn btn-danger">Eliminar</button>
                             </form>
                         </div>
@@ -235,7 +233,7 @@ if (isset($_SESSION["IdUsuario"])) {
                 var valor = button.data('valor');
 
                 var modal = $(this);
-                modal.find('.modal-body #edit_id_parametro').val(id);
+                modal.find('.modal-body #edit_IdParametro').val(id);
                 modal.find('.modal-body #edit_parametro').val(parametro);
                 modal.find('.modal-body #edit_valor').val(valor);
             });
@@ -245,7 +243,7 @@ if (isset($_SESSION["IdUsuario"])) {
                 var id = button.data('id');
 
                 var modal = $(this);
-                modal.find('.modal-footer #delete_id_parametro').val(id);
+                modal.find('.modal-footer #delete_IdParametro').val(id);
             });
         </script>
         <script>

@@ -9,7 +9,7 @@ function obtenerRoles($usuario)
         $conn = $conexion->Conexion();
 
         // Llamada al procedimiento almacenado con parámetro
-        $sql = "CALL splRolesMostrar(:usuario)";
+        $sql = "CALL `seguridad.splRolesMostrar`(:usuario)";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':usuario', $usuario, PDO::PARAM_STR);
         $stmt->execute();
@@ -22,7 +22,7 @@ function obtenerRoles($usuario)
         $opciones = "";
         foreach ($roles as $rol) {
             $idRol = htmlspecialchars($rol['IdRol'], ENT_QUOTES, 'UTF-8');
-            $nombreRol = htmlspecialchars($rol['NOMBRE_ROL'], ENT_QUOTES, 'UTF-8');
+            $nombreRol = htmlspecialchars($rol['NombreRol'], ENT_QUOTES, 'UTF-8');
             $opciones .= "<option value='$idRol'>$nombreRol</option>";
         }
         return $opciones;
@@ -38,7 +38,7 @@ function obtenerUniversidades($usuario)
         $conn = $conexion->Conexion();
 
         // Llamada al procedimiento almacenado con parámetro
-        $sql = "CALL splUniversidadesMostrar(:usuario)";
+        $sql = "CALL `proceso.splUniversidadesMostrar`(:usuario)";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':usuario', $usuario, PDO::PARAM_STR);
         $stmt->execute();
@@ -50,8 +50,8 @@ function obtenerUniversidades($usuario)
         // Generar opciones HTML para el <select>
         $opciones = "";
         foreach ($universidades as $universidad) {
-            $idUniversidad = htmlspecialchars($universidad['ID_UNIVERSIDAD'], ENT_QUOTES, 'UTF-8');
-            $nombreUniversidad = htmlspecialchars($universidad['NOM_UNIVERSIDAD'], ENT_QUOTES, 'UTF-8');
+            $idUniversidad = htmlspecialchars($universidad['IdUniversidad'], ENT_QUOTES, 'UTF-8');
+            $nombreUniversidad = htmlspecialchars($universidad['NomUniversidad'], ENT_QUOTES, 'UTF-8');
             $opciones .= "<option value='$idUniversidad'>$nombreUniversidad</option>";
         }
         return $opciones;
@@ -68,7 +68,7 @@ function editarEstados($usuario)
         $conn = $conexion->Conexion();
 
         // Llamada al procedimiento almacenado con parámetro
-        $sql = "CALL splEstadosEditar(:usuario)";
+        $sql = "CALL `seguridad.splEstadosEditar`(:usuario)";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':usuario', $usuario, PDO::PARAM_STR);
         $stmt->execute();
@@ -80,8 +80,8 @@ function editarEstados($usuario)
         // Generar opciones HTML para el <select>
         $opciones = "";
         foreach ($estados as $estado) {
-            $idEstado = htmlspecialchars($estado['id_estado'], ENT_QUOTES, 'UTF-8');
-            $nombreEstado = htmlspecialchars($estado['nom_estado'], ENT_QUOTES, 'UTF-8');
+            $idEstado = htmlspecialchars($estado['IdEstado'], ENT_QUOTES, 'UTF-8');
+            $nombreEstado = htmlspecialchars($estado['EstadoUsuario'], ENT_QUOTES, 'UTF-8');
             $opciones .= "<option value='$idEstado'>$nombreEstado</option>";
         }
         return $opciones;
@@ -99,7 +99,7 @@ function editarEstadosInactivos($usuario)
         $conn = $conexion->Conexion();
 
         // Llamada al procedimiento almacenado con parámetro
-        $sql = "CALL splEstadosEditarInactivos(:usuario)";
+        $sql = "CALL `seguridad.splEstadosEditarInactivos`(:usuario)";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':usuario', $usuario, PDO::PARAM_STR);
         $stmt->execute();
@@ -111,8 +111,8 @@ function editarEstadosInactivos($usuario)
         // Generar opciones HTML para el <select>
         $opciones = "";
         foreach ($estados as $estado) {
-            $idEstado = htmlspecialchars($estado['id_estado'], ENT_QUOTES, 'UTF-8');
-            $nombreEstado = htmlspecialchars($estado['nom_estado'], ENT_QUOTES, 'UTF-8');
+            $idEstado = htmlspecialchars($estado['IdEstado'], ENT_QUOTES, 'UTF-8');
+            $nombreEstado = htmlspecialchars($estado['EstadoUsuario'], ENT_QUOTES, 'UTF-8');
             $opciones .= "<option value='$idEstado'>$nombreEstado</option>";
         }
         return $opciones;

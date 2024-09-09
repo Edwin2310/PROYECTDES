@@ -49,8 +49,8 @@
 
 <!-- Script JavaScript para actualizar la selección de Universidad -->
 <script>
-    document.getElementById('empleado_des_select').addEventListener('change', function() {
-        const universidadSelect = document.getElementById('id_universidad');
+    document.getElementById('EmpleadoDes_select').addEventListener('change', function() {
+        const universidadSelect = document.getElementById('IdUniversidad'); // Corrección aquí
 
         if (this.value === '1') {
             // Si selecciona "Sí", se selecciona automáticamente "UNAH" y se deshabilita el select
@@ -65,34 +65,31 @@
 </script>
 
 
-<!-- SCRIPT PARA CREAR EDITAR USUARIO -->
 <script>
     $('#editUserModal').on('show.bs.modal', function(event) {
         var button = $(event.relatedTarget);
-        var id = button.data('id');
-        var num_identidad = button.data('num_identidad');
-        var direccion_1 = button.data('direccion_1');
-        var usuario = button.data('usuario');
-        var correo_electronico = button.data('correo_electronico');
-        var nombre_usuario = button.data('nombre_usuario');
-        var num_empleado = button.data('num_empleado');
-        var estado_usuario = button.data('estado_usuario');
-        var id_rol = button.data('id_rol');
-        var creado_por = button.data('creado_por');
-        var id_universidad = button.data('id_universidad');
+        var id = button.data('idusuario');
+        var NumIdentidad = button.data('numidentidad');
+        var Direccion = button.data('direccion');
+        var Usuario = button.data('usuario');
+        var CorreoElectronico = button.data('correoelectronico');
+        var NombreUsuario = button.data('nombreusuario');
+        var NumEmpleado = button.data('numempleado');
+        var EstadoUsuario = button.data('estadousuario');
+        var IdRol = button.data('idrol');
+        var CreadoPor = button.data('creadopor');
 
         var modal = $(this);
-        modal.find('.modal-body #edit_id_usuario').val(id);
-        modal.find('.modal-body #edit_num_identidad').val(num_identidad);
-        modal.find('.modal-body #edit_direccion_1').val(direccion_1);
-        modal.find('.modal-body #edit_usuario').val(usuario);
-        modal.find('.modal-body #edit_correo_electronico').val(correo_electronico);
-        modal.find('.modal-body #edit_nombre_usuario').val(nombre_usuario);
-        modal.find('.modal-body #edit_num_empleado').val(num_empleado);
-        modal.find('.modal-body #edit_estado_usuario').val(estado_usuario);
-        modal.find('.modal-body #edit_id_rol').val(id_rol);
-        modal.find('.modal-body #edit_creado_por').val(creado_por);
-        modal.find('.modal-body #edit_universidad_nueva').val(id_universidad);
+        modal.find('.modal-body #edit_IdUsuario').val(id);
+        modal.find('.modal-body #edit_NumIdentidad').val(NumIdentidad);
+        modal.find('.modal-body #edit_Direccion').val(Direccion);
+        modal.find('.modal-body #edit_Usuario').val(Usuario);
+        modal.find('.modal-body #edit_CorreoElectronico').val(CorreoElectronico);
+        modal.find('.modal-body #edit_NombreUsuario').val(NombreUsuario);
+        modal.find('.modal-body #edit_NumEmpleado').val(NumEmpleado);
+        modal.find('.modal-body #edit_EstadoUsuario').val(EstadoUsuario);
+        modal.find('.modal-body #edit_IdRol').val(IdRol);
+        modal.find('.modal-body #edit_universidad_nueva').val(IdUniversidad);
     });
 
     $('#confirmDeleteModal').on('show.bs.modal', function(event) {
@@ -100,10 +97,9 @@
         var id = button.data('id');
 
         var modal = $(this);
-        modal.find('.modal-footer #delete_id_usuario').val(id);
+        modal.find('.modal-footer #delete_IdUsuario').val(id);
     });
 </script>
-
 
 <script>
     $(document).ready(function() {
@@ -116,14 +112,14 @@
 
 
 <script>
-    document.getElementById('correo_electronico').addEventListener('blur', function() {
+    document.getElementById('CorreoElectronico').addEventListener('blur', function() {
         const email = this.value;
         const xhr = new XMLHttpRequest();
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.onload = function() {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
-                const emailField = document.getElementById('correo_electronico');
+                const emailField = document.getElementById('CorreoElectronico');
                 if (response.exists) {
                     emailField.setCustomValidity('El correo electrónico ya está en uso.');
                     emailField.classList.add('is-invalid');
@@ -133,7 +129,7 @@
                 }
             }
         };
-        xhr.send('correo_electronico=' + encodeURIComponent(email));
+        xhr.send('CorreoElectronico=' + encodeURIComponent(email));
     });
 
     document.getElementById('addUserForm').addEventListener('submit', function(event) {
@@ -152,11 +148,11 @@ if (isset($_SESSION["IdUsuario"])) {
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Obtener referencias a los campos del formulario
-            const numIdentidad = document.getElementById('num_identidad');
-            const direccion = document.getElementById('direccion_1');
+            const numIdentidad = document.getElementById('NumIdentidad');
+            const direccion = document.getElementById('Direccion');
             const usuario = document.getElementById('usuario');
-            const correoElectronico = document.getElementById('correo_electronico');
-            const nombreUsuario = document.getElementById('nombre_usuario');
+            const correoElectronico = document.getElementById('CorreoElectronico');
+            const nombreUsuario = document.getElementById('NombreUsuario');
 
             // Agregar evento de entrada para validar en tiempo real
             numIdentidad.addEventListener('input', function() {
@@ -213,7 +209,7 @@ if (isset($_SESSION["IdUsuario"])) {
                 event.preventDefault(); // Prevenir el envío del formulario para validar primero
 
                 // Obtener los valores del formulario
-                var numIdentidad = document.getElementById('num_identidad').value.trim();
+                var numIdentidad = document.getElementById('NumIdentidad').value.trim();
                 var usuario = document.getElementById('usuario').value.trim();
 
                 // Verificar si el número de identidad tiene exactamente 13 caracteres
@@ -233,7 +229,7 @@ if (isset($_SESSION["IdUsuario"])) {
                 xhr.onload = function() {
                     if (xhr.status === 200) {
                         var response = JSON.parse(xhr.responseText);
-                        if (response.num_identidad_existe) {
+                        if (response.NumIdentidad_existe) {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
@@ -252,13 +248,13 @@ if (isset($_SESSION["IdUsuario"])) {
                     }
                 };
 
-                xhr.send('num_identidad=' + encodeURIComponent(numIdentidad) + '&usuario=' + encodeURIComponent(usuario));
+                xhr.send('NumIdentidad=' + encodeURIComponent(numIdentidad) + '&usuario=' + encodeURIComponent(usuario));
             });
         });
     </script>
 
     <script>
-        document.getElementById('num_identidad').addEventListener('input', function() {
+        document.getElementById('NumIdentidad').addEventListener('input', function() {
             var numIdentidad = this.value.trim();
             var countZeros = (numIdentidad.match(/0/g) || []).length;
 
@@ -275,11 +271,11 @@ if (isset($_SESSION["IdUsuario"])) {
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Obtener referencias a los campos del formulario
-            const numIdentidad = document.getElementById('edit_num_identidad');
-            const direccion = document.getElementById('edit_direccion_1');
-            const usuario = document.getElementById('edit_usuario');
-            const correoElectronico = document.getElementById('edit_correo_electronico');
-            const nombreUsuario = document.getElementById('edit_nombre_usuario');
+            const numIdentidad = document.getElementById('edit_NumIdentidad');
+            const direccion = document.getElementById('edit_Direccion');
+            const usuario = document.getElementById('edit_Usuario');
+            const correoElectronico = document.getElementById('edit_CorreoElectronico');
+            const nombreUsuario = document.getElementById('edit_NombreUsuario');
 
             // Agregar evento de entrada para validar en tiempo real
             numIdentidad.addEventListener('input', function() {

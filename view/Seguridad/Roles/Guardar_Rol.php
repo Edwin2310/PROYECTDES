@@ -12,17 +12,18 @@ if (!$conn) {
     die("Conexión fallida: " . $conexion->Conexion()->errorInfo()[2]);
 }
 
-$rol = $_POST["rol"];
-$descripcion = $_POST["descripcion"];
-$creado_por = $_SESSION['IdUsuario']; // Obtener el IdUsuario de la sesión
+$Rol = $_POST["Rol"];
+$NombreRol = $_POST["NombreRol"];
+$CreadoPor = $_SESSION['IdUsuario']; // Obtener el IdUsuario de la sesión
 
-// Consulta SQL para insertar el nuevo rol
-$sql = "INSERT INTO tbl_ms_roles (ROL, DESCRIPCION, CREADO_POR) VALUES (?, ?, ?)";
+// Consulta SQL para insertar el nuevo Rol
+$sql = "INSERT INTO `seguridad.tblmsRoles` (Rol, NombreRol, IdUsuario) VALUES (?, ?, ?)";
+
 
 $stmt = $conn->prepare($sql);
 
 if ($stmt) {
-    if ($stmt->execute([$rol, $descripcion, $creado_por])) {
+    if ($stmt->execute([$Rol, $NombreRol, $CreadoPor])) {
         echo "Usuario agregado exitosamente";
     } else {
         echo "Error: " . $stmt->errorInfo()[2];
@@ -38,4 +39,3 @@ $conn = null;
 // Redirigir de vuelta a la página principal
 header("Location: ../../Seguridad/Roles.php");
 exit();
-?>

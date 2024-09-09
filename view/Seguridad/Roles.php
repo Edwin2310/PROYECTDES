@@ -13,7 +13,6 @@ if (isset($_SESSION["IdUsuario"])) {
 
 ?>
 
-
     <!DOCTYPE html>
     <html lang="en" class="no-focus">
 
@@ -37,7 +36,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                     <img class="img-avatar img-avatar32" src="../../public/assets/img/avatars/avatar15.jpg" alt="">
                                 </a>
                                 <a class="align-middle link-effect text-primary-dark font-w600" href="be_pages_generic_profile.html">
-                                    <span><?php echo $_SESSION["NOMBRE_USUARIO"] ?></span>
+                                    <span><?php echo $_SESSION["NombreUsuario"] ?></span>
                                 </a>
                             </div>
                         </div>
@@ -68,7 +67,7 @@ if (isset($_SESSION["IdUsuario"])) {
                     </div>
                     <div class="block-content block-content-full">
                         <div class="text-center mb-2">
-                            <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#addRoleModal">Añadir NombreRol</button>
+                            <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#addRoleModal">Añadir Rol</button>
                         </div>
 
                         <br>
@@ -76,8 +75,8 @@ if (isset($_SESSION["IdUsuario"])) {
                         <table class="table table-bordered table-striped table-vcenter js-dataTable-full">
                             <thead>
                                 <tr>
-                                    <th class="text-center">Id NombreRol</th>
-                                    <th>NombreRol</th>
+                                    <th class="text-center">Id Rol</th>
+                                    <th>Rol</th>
                                     <th>Descripción</th>
                                     <th>Fecha Creación</th>
                                     <th>Creado Por</th>
@@ -95,7 +94,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                 $conn = $conexion->Conexion();
 
                                 // Llamada al procedimiento almacenado
-                                $stmt = $conn->prepare("CALL splRolesMostrarCreador(:usuario)");
+                                $stmt = $conn->prepare("CALL `seguridad.splRolesMostrarCreador`(:usuario)");
                                 $stmt->bindValue(':usuario', $_SESSION["IdUsuario"], PDO::PARAM_STR);
                                 $stmt->execute();
                                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -104,17 +103,17 @@ if (isset($_SESSION["IdUsuario"])) {
                                     foreach ($result as $row) {
                                         echo "<tr>";
                                         echo "<td class='text-center'>{$row['IdRol']}</td>";
-                                        echo "<td>{$row['ROL']}</td>";
-                                        echo "<td>{$row['DESCRIPCION']}</td>";
-                                        echo "<td>{$row['FECHA_CREACION']}</td>";
-                                        echo "<td>{$row['CREADO_POR']}</td>";
-                                        echo "<td>{$row['FECHA_MODIFICACION']}</td>";
-                                        echo "<td>{$row['MODIFICADO_POR']}</td>";
+                                        echo "<td>{$row['Rol']}</td>";
+                                        echo "<td>{$row['NombreRol']}</td>";
+                                        echo "<td>{$row['FechaCreacion']}</td>";
+                                        echo "<td>{$row['CreadoPor']}</td>";
+                                        echo "<td>{$row['FechaModificacion']}</td>";
+                                        echo "<td>{$row['ModificadoPor']}</td>";
                                         echo "<td class='text-center'>
                                                 <button type='button' class='btn btn-sm btn-secondary' data-toggle='modal' data-target='#editRoleModal' 
                                                         data-id='" . $row["IdRol"] . "' 
-                                                        data-rol='" . $row["ROL"] . "' 
-                                                        data-descripcion='" . $row["DESCRIPCION"] . "'>
+                                                        data-rol='" . $row["Rol"] . "' 
+                                                        data-descripcion='" . $row["NombreRol"] . "'>
                                                     <i class='si si-note'></i>
                                                 </button>
                                             </td>";
@@ -125,7 +124,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                                 </button>
                                             </td>";
                                         echo "<td class='text-center'>
-                                            <a href='../Seguridad/Permisos.php?id_rol=" . $row["IdRol"] . "'>
+                                            <a href='../Seguridad/Permisos.php?IdRol=" . $row["IdRol"] . "'>
                                             <button type='button' class='btn btn-sm btn-success'>
                                                 <i class='si si-settings'></i>
                                             </button>
@@ -163,7 +162,7 @@ if (isset($_SESSION["IdUsuario"])) {
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                             <form action="../Seguridad/Roles/Eliminar_Rol.php" method="POST">
-                                <input type="hidden" name="id_rol" id="delete-rol-id" value="">
+                                <input type="hidden" name="IdRol" id="delete-rol-id" value="">
                                 <button type="submit" class="btn btn-danger">Eliminar</button>
                             </form>
                         </div>
@@ -176,7 +175,7 @@ if (isset($_SESSION["IdUsuario"])) {
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="addRoleModalLabel">Añadir NombreRol</h5>
+                            <h5 class="modal-title" id="addRoleModalLabel">Añadir Rol</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -184,21 +183,21 @@ if (isset($_SESSION["IdUsuario"])) {
                         <div class="modal-body">
                             <form id="addRoleForm" method="POST" action="../Seguridad/Roles/Guardar_Rol.php">
                                 <!-- Campo oculto para almacenar el IdUsuario de la sesión -->
-                                <input type="hidden" id="creado_por" name="creado_por" value="<?php echo $_SESSION['IdUsuario']; ?>">
+                                <input type="hidden" id="CreadoPor" name="CreadoPor" value="<?php echo $_SESSION['IdUsuario']; ?>">
 
                                 <div class="form-group">
-                                    <label for="rol">Seleccionar NombreRol</label>
-                                    <select class="form-control" id="rol" name="rol">
-                                        <option value="" disabled selected style="display:none;">Seleccionar NombreRol</option>
+                                    <label for="Rol">Seleccionar Rol</label>
+                                    <select class="form-control" id="Rol" name="Rol">
+                                        <option value="" disabled selected style="display:none;">Seleccionar Rol</option>
                                         <?php echo obtenerRoles($usuario); ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="descripcion">Descripción</label>
-                                    <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Descripción del NombreRol" required>
+                                    <label for="NombreRol">Nombre Rol</label>
+                                    <input type="text" class="form-control" id="NombreRol" name="NombreRol" placeholder="Descripción del Rol" required>
                                 </div>
                                 <div class="text-center">
-                                    <button type="submit" class="btn btn-primary" id="btnAddRole">Guardar NombreRol</button>
+                                    <button type="submit" class="btn btn-primary" id="btnAddRole">Guardar Rol</button>
                                 </div>
                             </form>
                         </div>
@@ -211,31 +210,27 @@ if (isset($_SESSION["IdUsuario"])) {
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="editRoleModalLabel">Editar NombreRol</h5>
+                            <h5 class="modal-title" id="editRoleModalLabel">Editar Rol</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
                             <form id="editRoleForm" method="POST" action="../Seguridad/Roles/Actualizar_Rol.php">
-                                <input type="hidden" id="edit-id_rol" name="id_rol">
+                                <input type="hidden" id="edit-id_rol" name="IdRol">
                                 <div class="form-group">
-                                    <label for="edit-rol">NombreRol </label>
-                                    <input type="text" class="form-control" id="edit-rol" name="rol" readonly>
-                                </div>
-                                <div class="form-group">
-                                    <label for="edit-rol">Seleccionar Nuevo NombreRol</label>
-                                    <select class="form-control" id="edit-rol" name="rol" required>
-                                        <option value="" disabled selected style="display:none;">Seleccionar NombreRol</option>
+                                    <label for="edit-rol">Seleccionar Nuevo Rol</label>
+                                    <select class="form-control" id="edit-rol" name="Rol" required>
+                                        <option value="" disabled selected style="display:none;">Seleccionar Rol</option>
                                         <?php echo obtenerRoles($usuario); ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="edit-descripcion">Descripción</label>
-                                    <input type="text" class="form-control" id="edit-descripcion" name="descripcion" placeholder="Descripción del NombreRol">
+                                    <input type="text" class="form-control" id="edit-descripcion" name="NombreRol" placeholder="Descripción del Rol">
                                 </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary" id="btnEditRole">Actualizar NombreRol</button>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary" id="btnAddRole">Guardar Rol</button>
                                 </div>
                             </form>
                         </div>
@@ -255,7 +250,7 @@ if (isset($_SESSION["IdUsuario"])) {
                         </div>
                         <div class="modal-body">
                             <form id="deleteRoleForm">
-                                <input type="hidden" id="delete-rol-id" name="id_rol">
+                                <input type="hidden" id="delete-rol-id" name="IdRol">
                                 <!-- Otros campos del formulario -->
                             </form>
                         </div>
@@ -272,14 +267,14 @@ if (isset($_SESSION["IdUsuario"])) {
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Editar NombreRol</h5>
+                            <h5 class="modal-title">Editar Rol</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
                             <form id="editRoleForm">
-                                <input type="hidden" id="edit-rol-id" name="id_rol">
+                                <input type="hidden" id="edit-rol-id" name="IdRol">
                                 <!-- Otros campos del formulario -->
                             </form>
                         </div>

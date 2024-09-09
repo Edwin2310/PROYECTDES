@@ -15,46 +15,46 @@ if (!$conn) {
 // Verificar si se ha enviado el formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Recibir y limpiar los datos del formulario
-    $id_parametro = filter_input(INPUT_POST, 'id_parametro', FILTER_SANITIZE_NUMBER_INT);
-    $parametro = filter_input(INPUT_POST, 'parametro', FILTER_SANITIZE_STRING);
-    $valor = filter_input(INPUT_POST, 'valor', FILTER_SANITIZE_STRING);
+    $IdParametro = filter_input(INPUT_POST, 'IdParametro', FILTER_SANITIZE_NUMBER_INT);
+    $Parametro = filter_input(INPUT_POST, 'Parametro', FILTER_SANITIZE_STRING);
+    $Valor = filter_input(INPUT_POST, 'Valor', FILTER_SANITIZE_STRING);
 
-    // Obtener el IdUsuario y CREADO_POR del parámetro antes de la actualización
-    $sql_datos_parametro = "SELECT IdUsuario, CREADO_POR FROM tbl_ms_parametros WHERE ID_PARAMETRO = :id_parametro";
-    $stmt_datos_parametro = $conn->prepare($sql_datos_parametro);
-    $stmt_datos_parametro->bindParam(':id_parametro', $id_parametro, PDO::PARAM_INT);
-    $stmt_datos_parametro->execute();
-    $datos_parametro = $stmt_datos_parametro->fetch(PDO::FETCH_ASSOC);
+    // Obtener el IdUsuario y CreadoPor del parámetro antes de la actualización
+    $sql_datos_Parametro = "SELECT IdUsuario, CreadoPor FROM `seguridad.tblparametros` WHERE IdParametro = :IdParametro";
+    $stmt_datos_Parametro = $conn->prepare($sql_datos_Parametro);
+    $stmt_datos_Parametro->bindParam(':IdParametro', $IdParametro, PDO::PARAM_INT);
+    $stmt_datos_Parametro->execute();
+    $datos_Parametro = $stmt_datos_Parametro->fetch(PDO::FETCH_ASSOC);
 
-    if (!$datos_parametro) {
-        $_SESSION['error_message'] = "Error: No se encontró el parámetro con ID $id_parametro.";
+    if (!$datos_Parametro) {
+        $_SESSION['error_message'] = "Error: No se encontró el parámetro con ID $IdParametro.";
         header("Location: ../../Seguridad/Parametros.php");
         exit();
     }
 
-    $id_usuario = $datos_parametro['IdUsuario'];
-    $creado_por = $datos_parametro['CREADO_POR'];
+    $IdUsuario = $datos_Parametro['IdUsuario'];
+    $CreadoPor = $datos_Parametro['CreadoPor'];
 
     // Obtener el nombre de usuario actual (simulado para ejemplo)
-    $modificado_por = "usuario_actual"; // Aquí deberías implementar la lógica para obtener el nombre del usuario actual
+    $ModificadoPor = "usuario_actual"; // Aquí deberías implementar la lógica para obtener el nombre del usuario actual
 
     // Preparar la consulta SQL para actualizar el parámetro
-    $sql = "UPDATE tbl_ms_parametros SET 
-            PARAMETRO = :parametro, 
-            VALOR = :valor, 
-            IdUsuario = :id_usuario,
-            MODIFICADO_POR = :modificado_por
-            WHERE ID_PARAMETRO = :id_parametro";
+    $sql = "UPDATE `seguridad.tblparametros` SET 
+            Parametro = :Parametro, 
+            Valor = :Valor, 
+            IdUsuario = :IdUsuario,
+            ModificadoPor = :ModificadoPor
+            WHERE IdParametro = :IdParametro";
 
     // Preparar la declaración
     $stmt = $conn->prepare($sql);
 
     // Bind de parámetros
-    $stmt->bindParam(':parametro', $parametro, PDO::PARAM_STR);
-    $stmt->bindParam(':valor', $valor, PDO::PARAM_STR);
-    $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
-    $stmt->bindParam(':modificado_por', $creado_por, PDO::PARAM_STR); // Aquí se usa CREADO_POR como MODIFICADO_POR
-    $stmt->bindParam(':id_parametro', $id_parametro, PDO::PARAM_INT);
+    $stmt->bindParam(':Parametro', $Parametro, PDO::PARAM_STR);
+    $stmt->bindParam(':Valor', $Valor, PDO::PARAM_STR);
+    $stmt->bindParam(':IdUsuario', $IdUsuario, PDO::PARAM_INT);
+    $stmt->bindParam(':ModificadoPor', $CreadoPor, PDO::PARAM_STR); // Aquí se usa CreadoPor como ModificadoPor
+    $stmt->bindParam(':IdParametro', $IdParametro, PDO::PARAM_INT);
 
     // Ejecutar la consulta
     if ($stmt->execute()) {
@@ -72,4 +72,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // Cerrar la conexión
 $conn = null;
-?>

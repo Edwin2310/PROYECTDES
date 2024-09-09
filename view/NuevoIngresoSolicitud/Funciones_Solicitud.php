@@ -9,7 +9,7 @@ function obtenerCodigos($usuario)
         $conn = $conexion->Conexion();
 
         // Llamada al procedimiento almacenado con parámetro
-        $sql = "CALL splCodigoMostrar(:usuario)";
+        $sql = "CALL `proceso.splCodigoMostrar`(:usuario)";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':usuario', $usuario, PDO::PARAM_STR);
         $stmt->execute();
@@ -39,7 +39,7 @@ function obtenerGrados($usuario)
         $conn = $conexion->Conexion();
 
         // Llamada al procedimiento almacenado con parámetro
-        $sql = "CALL splGradoMostrar(:usuario)";
+        $sql = "CALL `proceso.splGradoMostrar`(:usuario)";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':usuario', $usuario, PDO::PARAM_STR);
         $stmt->execute();
@@ -70,7 +70,7 @@ function obtenerModalidades($usuario)
         $conn = $conexion->Conexion();
 
         // Llamada al procedimiento almacenado con parámetro
-        $sql = "CALL splModalidadMostrar(:usuario)";
+        $sql = "CALL `proceso.splModalidadMostrar`(:usuario)";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':usuario', $usuario, PDO::PARAM_STR);
         $stmt->execute();
@@ -100,7 +100,7 @@ function obtenerUniversidades($usuario)
         $conn = $conexion->Conexion();
 
         // Llamada al procedimiento almacenado con parámetro
-        $sql = "CALL splUniversidadesMostrar(:usuario)";
+        $sql = "CALL `proceso.splUniversidadesMostrar`(:usuario)";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':usuario', $usuario, PDO::PARAM_STR);
         $stmt->execute();
@@ -129,7 +129,7 @@ function obtenerDepartamentos($usuario)
         $conn = $conexion->Conexion();
 
         // Llamada al procedimiento almacenado con parámetro
-        $sql = "CALL splDepartamentoMostrar(:usuario)";
+        $sql = "CALL `proceso.splDepartamentoMostrar`(:usuario)";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':usuario', $usuario, PDO::PARAM_STR);
         $stmt->execute();

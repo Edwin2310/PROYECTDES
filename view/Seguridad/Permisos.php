@@ -81,7 +81,7 @@ if (isset($_SESSION["IdUsuario"])) {
                         }
                         ?>
                         
-                        <h3 class="block-title text-center font-weight-bold display-5 ">Permisos del Rol <?php echo htmlspecialchars($nombre_rol); ?></h3>
+                        <h3 class="block-title text-center font-weight-bold display-5 ">Permisos del NombreRol <?php echo htmlspecialchars($nombre_rol); ?></h3>
                         
                     </div>
                     <div class="block-content block-content-full">
@@ -108,7 +108,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                 $id_rol = isset($_GET['id_rol']) ? intval($_GET['id_rol']) : 0;
 
                                 // Depuración: Verificar que se captura el IdRol correctamente
-                                // echo "ID Rol: " . $id_rol;
+                                // echo "ID NombreRol: " . $id_rol;
 
                                 $sql = "SELECT r.id_rol, r.nombre_rol, o.IdObjeto, o.OBJETO, 
                                               p.PERMISO_INSERCION,

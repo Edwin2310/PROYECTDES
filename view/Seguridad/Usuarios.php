@@ -106,7 +106,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                                 <th class="d-none d-sm-table-cell">Nombre Usuario</th>
                                                 <th class="d-none d-sm-table-cell">Número Empleado</th>
                                                 <th class="d-none d-sm-table-cell">Estado Usuario</th>
-                                                <th class="d-none d-sm-table-cell">Nombre Rol</th>
+                                                <th class="d-none d-sm-table-cell">Nombre NombreRol</th>
                                                 <th class="text-center hidden-column">Fecha Creación</th>
                                                 <th class="text-center hidden-column">Creado Por</th>
                                                 <th class="text-center hidden-column">Universidad</th>
@@ -227,9 +227,9 @@ if (isset($_SESSION["IdUsuario"])) {
                             </div>
                             <input type="hidden" id="estado_usuario" name="estado_usuario" value="1">
                             <div class="form-group">
-                                <label for="id_rol">Rol</label>
+                                <label for="id_rol">NombreRol</label>
                                 <select class="form-control" id="id_rol" name="id_rol" required>
-                                    <option value="" disabled selected style="display:none;">Seleccionar Rol</option>
+                                    <option value="" disabled selected style="display:none;">Seleccionar NombreRol</option>
                                     <?php echo obtenerRoles($usuario); ?>
                                 </select>
                             </div>
@@ -300,13 +300,13 @@ if (isset($_SESSION["IdUsuario"])) {
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="edit_id_rol">Rol</label>
+                                <label for="edit_id_rol">NombreRol</label>
                                 <input type="text" class="form-control" id="edit_id_rol" name="id_rol" readonly>
                             </div>
                             <div class="form-group">
-                                <label for="edit_rol">Seleccionar Nuevo Rol</label>
+                                <label for="edit_rol">Seleccionar Nuevo NombreRol</label>
                                 <select class="form-control" id="edit_rol" name="rol" required>
-                                    <option value="" disabled selected style="display:none;">Seleccionar Rol</option>
+                                    <option value="" disabled selected style="display:none;">Seleccionar NombreRol</option>
                                     <?php echo obtenerRoles($usuario); ?>
                                 </select>
                             </div>

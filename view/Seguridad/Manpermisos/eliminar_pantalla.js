@@ -35,7 +35,7 @@ $(document).ready(function() {
         var idRol = $row.data('id-rol');
         var idObjeto = $row.data('id-objeto');
 
-       /*  console.log('ID Rol:', idRol); // Verificar en consola
+       /*  console.log('ID NombreRol:', idRol); // Verificar en consola
         console.log('ID Objeto:', idObjeto); // Verificar en consola */
 
         Swal.fire({

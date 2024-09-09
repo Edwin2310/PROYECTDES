@@ -105,7 +105,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                         $conn = $conexion->Conexion();
 
                                         // Llamada al procedimiento almacenado
-                                        $sql = "CALL `seguridad.splRolesMostrar`()";
+                                        $sql = "CALL `seguridad.splRolesLlenarSelect`()";
                                         $stmt = $conn->prepare($sql);
                                         $stmt->execute();
 
@@ -118,7 +118,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                         // Poblar el elemento select
                                         foreach ($roles as $rol) {
                                             $idRol = htmlspecialchars($rol['IdRol'], ENT_QUOTES, 'UTF-8');
-                                            $nombreRol = htmlspecialchars($rol['Rol'], ENT_QUOTES, 'UTF-8');
+                                            $nombreRol = htmlspecialchars($rol['NombreRol'], ENT_QUOTES, 'UTF-8');
                                             echo "<option value='$idRol'>$nombreRol</option>";
                                         }
                                     } catch (PDOException $e) {
@@ -143,7 +143,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                         $conn = $conexion->Conexion();
 
                                         // Llamada al procedimiento almacenado
-                                        $sql = "CALL `seguridad.splObjetosMostrar`()";
+                                        $sql = "CALL `seguridad.splObjetosLlenarSelect`()";
                                         $stmt = $conn->prepare($sql);
                                         $stmt->execute();
 
@@ -208,20 +208,20 @@ if (isset($_SESSION["IdUsuario"])) {
                                 <!-- Filtros -->
                                 <div class="row align-items-end">
                                     <div class="w-50">
-                                        <label for="filterRole">Filtrar por Nombre de Rol:</label>
+                                        <label for="filterRole">Filtrar por Nombre de NombreRol:</label>
                                         <select id="filterRole" name="filterRole" class="form-control">
                                             <option value="">Todos los Roles</option>
                                             <?php
                                             // Conectar y obtener roles
                                             $conexion = new Conectar();
                                             $conn = $conexion->Conexion();
-                                            $sql = "CALL `seguridad.splRolesMostrar`()";
+                                            $sql = "CALL `seguridad.splRolesLlenarSelect`()";
                                             $stmt = $conn->prepare($sql);
                                             $stmt->execute();
                                             $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             foreach ($roles as $rol) {
                                                 $idRol = htmlspecialchars($rol['IdRol'], ENT_QUOTES, 'UTF-8');
-                                                $nombreRol = htmlspecialchars($rol['Rol'], ENT_QUOTES, 'UTF-8');
+                                                $nombreRol = htmlspecialchars($rol['NombreRol'], ENT_QUOTES, 'UTF-8');
                                                 echo "<option value='$idRol'" . ($idRol == $_GET['filterRole'] ? ' selected' : '') . ">$nombreRol</option>";
                                             }
                                             ?>
@@ -234,7 +234,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                                 <option value="">Todas las Pantallas</option>
                                                 <?php
                                                 // Conectar y obtener pantallas
-                                                $sql = "CALL `seguridad.splObjetosMostrar`()";
+                                                $sql = "CALL `seguridad.splObjetosLlenarSelect`()";
                                                 $stmt = $conn->prepare($sql);
                                                 $stmt->execute();
                                                 $pantallas = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -262,7 +262,7 @@ if (isset($_SESSION["IdUsuario"])) {
                             <table id="permisosTable" class="table table-bordered table-striped table-vcenter">
                                 <thead>
                                     <tr>
-                                        <th class="d-none d-sm-table-cell text-center ">Nombre Rol</th>
+                                        <th class="d-none d-sm-table-cell text-center ">Nombre NombreRol</th>
                                         <th class="d-none d-sm-table-cell text-center ">Nombre Pantalla</th>
                                         <th class="d-none d-sm-table-cell text-center">Permiso Inserción</th>
                                         <th class="d-none d-sm-table-cell text-center">Permiso Eliminación</th>
@@ -292,7 +292,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                         if ($result) {
                                             foreach ($result as $row) {
                                                 echo "<tr data-id-rol='{$row['IdRol']}' data-id-objeto='{$row['IdObjeto']}'>";
-                                                echo "<td>{$row['Rol']}</td>";
+                                                echo "<td>{$row['NombreRol']}</td>";
                                                 echo "<td>{$row['Objeto']}</td>";
                                                 echo "<td class='text-center'><input type='checkbox' disabled " . ($row['PermisoInsercion'] ? 'checked' : '') . "></td>";
                                                 echo "<td class='text-center'><input type='checkbox' disabled " . ($row['PermisoEliminacion'] ? 'checked' : '') . "></td>";

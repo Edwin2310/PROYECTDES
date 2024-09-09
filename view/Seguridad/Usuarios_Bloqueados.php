@@ -90,7 +90,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                         <th class="d-none d-sm-table-cell">Correo</th>
                                         <th class="d-none d-sm-table-cell">Nombre Usuario</th>
                                         <th class="d-none d-sm-table-cell">Estado Usuario</th>
-                                        <th class="d-none d-sm-table-cell">Nombre Rol</th>
+                                        <th class="d-none d-sm-table-cell">Nombre NombreRol</th>
                                         <th class="d-none d-sm-table-cell">Fecha Creación</th>
                                         <th class="d-none d-sm-table-cell">Creado Por</th>
                                         <th class="text-center hidden-column">Universidad</th>
@@ -212,13 +212,13 @@ if (isset($_SESSION["IdUsuario"])) {
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="edit_id_rol">Rol</label>
+                                        <label for="edit_id_rol">NombreRol</label>
                                         <input type="text" class="form-control" id="edit_id_rol" name="id_rol" readonly>
                                     </div>
                                     <div class="form-group">
-                                        <label for="edit-rol">Seleccionar Nuevo Rol</label>
+                                        <label for="edit-rol">Seleccionar Nuevo NombreRol</label>
                                         <select class="form-control" id="edit-rol" name="rol" required>
-                                            <option value="" disabled selected style="display:none;">Seleccionar Rol</option>
+                                            <option value="" disabled selected style="display:none;">Seleccionar NombreRol</option>
                                             <?php echo obtenerRoles($usuario); ?>
                                         </select>
                                     </div>

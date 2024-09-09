@@ -103,7 +103,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                             $conn = $conexion->Conexion();
 
                                             // Llamada al procedimiento almacenado
-                                            $stmt = $conn->prepare("CALL splUsuariosMostrarBloqueados(:usuario)");
+                                            $stmt = $conn->prepare("CALL `seguridad.splUsuariosMostrarBloqueados`(:usuario)");
                                             $stmt->bindValue(':usuario', $_SESSION["IdUsuario"], PDO::PARAM_STR);
                                             $stmt->execute();
                                             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);

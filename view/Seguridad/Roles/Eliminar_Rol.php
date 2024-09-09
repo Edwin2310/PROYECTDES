@@ -13,15 +13,15 @@ if (!$conn) {
 }
 
 // Obtener el ID del rol desde el formulario
-$id_rol = $_POST['id_rol'];
+$IdRol = $_POST['IdRol'];
 
 // Preparar la consulta SQL para eliminar el rol
-$sql = "DELETE FROM tbl_ms_roles WHERE IdRol = ?";
+$sql = "DELETE FROM `seguridad.tblmsroles` WHERE IdRol = ?";
 
 $stmt = $conn->prepare($sql);
 
 if ($stmt) {
-    if ($stmt->execute([$id_rol])) {
+    if ($stmt->execute([$IdRol])) {
         // Redirigir a la página de roles con un mensaje de éxito
         header("Location: ../../Seguridad/Roles.php?mensaje=eliminado");
         exit();
@@ -33,5 +33,3 @@ if ($stmt) {
 } else {
     echo "Error en la preparación de la consulta: " . $conn->errorInfo()[2];
 }
-
-?>

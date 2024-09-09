@@ -11,12 +11,12 @@ if (!$conn) {
     die("Conexión fallida: " . $conexion->Conexion()->errorInfo());
 }
 
-$id_parametro = $_POST['id_parametro'];
+$IdParametro = $_POST['IdParametro'];
 
-$sql = "DELETE FROM tbl_ms_parametros WHERE id_parametro = :id_parametro";
+$sql = "DELETE FROM `seguridad.tblparametros` WHERE IdParametro = :IdParametro";
 
 if ($stmt = $conn->prepare($sql)) {
-    $stmt->bindValue(':id_parametro', $id_parametro, PDO::PARAM_INT);
+    $stmt->bindValue(':IdParametro', $IdParametro, PDO::PARAM_INT);
 
     if ($stmt->execute()) {
         header("Location: ../../Seguridad/Parametros.php?mensaje=eliminado");
@@ -28,4 +28,3 @@ if ($stmt = $conn->prepare($sql)) {
 }
 
 $conn = null;
-?>

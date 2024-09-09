@@ -9,7 +9,7 @@ function obtenerRoles($usuario)
         $conn = $conexion->Conexion();
 
         // Llamada al procedimiento almacenado con parámetro
-        $sql = "CALL splRolesMostrar(:usuario)";
+        $sql = "CALL `seguridad.splRolesMostrar`(:usuario)";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':usuario', $usuario, PDO::PARAM_STR);
         $stmt->execute();
@@ -22,7 +22,7 @@ function obtenerRoles($usuario)
         $opciones = "";
         foreach ($roles as $rol) {
             $idRol = htmlspecialchars($rol['IdRol'], ENT_QUOTES, 'UTF-8');
-            $nombreRol = htmlspecialchars($rol['Rol'], ENT_QUOTES, 'UTF-8');
+            $nombreRol = htmlspecialchars($rol['NombreRol'], ENT_QUOTES, 'UTF-8');
             $opciones .= "<option value='$idRol'>$nombreRol</option>";
         }
         return $opciones;
@@ -38,7 +38,7 @@ function obtenerUniversidades($usuario)
         $conn = $conexion->Conexion();
 
         // Llamada al procedimiento almacenado con parámetro
-        $sql = "CALL splUniversidadesMostrar(:usuario)";
+        $sql = "CALL `proceso.splUniversidadesMostrar`(:usuario)";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':usuario', $usuario, PDO::PARAM_STR);
         $stmt->execute();
@@ -68,7 +68,7 @@ function editarEstados($usuario)
         $conn = $conexion->Conexion();
 
         // Llamada al procedimiento almacenado con parámetro
-        $sql = "CALL splEstadosEditar(:usuario)";
+        $sql = "CALL `seguridad.splEstadosEditar`(:usuario)";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':usuario', $usuario, PDO::PARAM_STR);
         $stmt->execute();
@@ -99,7 +99,7 @@ function editarEstadosInactivos($usuario)
         $conn = $conexion->Conexion();
 
         // Llamada al procedimiento almacenado con parámetro
-        $sql = "CALL splEstadosEditarInactivos(:usuario)";
+        $sql = "CALL `seguridad.splEstadosEditarInactivos`(:usuario)";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':usuario', $usuario, PDO::PARAM_STR);
         $stmt->execute();

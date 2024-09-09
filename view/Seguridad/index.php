@@ -2,7 +2,14 @@
 session_start();
 
 require_once("../../config/conexion.php");
+require_once(__DIR__ . '/../Seguridad/Permisos/Funciones_Permisos.php');
 if (isset($_SESSION["IdUsuario"])) {
+
+    // Obtener los valores necesarios para la verificación
+    $id_rol = $_SESSION['IdRol'] ?? null;
+    $id_objeto = 11; // ID del objeto o módulo correspondiente a esta página
+    // Llama a la función para verificar los permisos
+    verificarPermiso($id_rol, $id_objeto);
 
 ?>
 

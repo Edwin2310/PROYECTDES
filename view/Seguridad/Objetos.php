@@ -2,38 +2,18 @@
 session_start();
 require_once("../../config/conexion.php");
 require_once(__DIR__ . '/Script/Funciones.php');
+require_once(__DIR__ . '/../Seguridad/Permisos/Funciones_Permisos.php');
 if (isset($_SESSION["IdUsuario"])) {
 
-    ?>
-    <?php
-        $id_rol = $_SESSION['IdRol'] ?? null;
-        $id_objeto = 20; // ID del objeto o módulo correspondiente a esta página
-    
-        if (!$id_rol) {
-            header("Location: ../Seguridad/Permisos/denegado.php");
-            exit();
-        }
-    
-        // Conectar a la base de datos
-        $conexion = new Conectar();
-        $conn = $conexion->Conexion();
-    
-        // Verificar permiso en la base de datos
-        $sql = "SELECT * FROM `seguridad.tblpermisos` WHERE IdRol = :idRol AND IdObjeto = :idObjeto";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':idRol', $id_rol);
-        $stmt->bindParam(':idObjeto', $id_objeto);
-    
-        if ($stmt->execute() && $stmt->rowCount() > 0) {
-            // Usuario tiene permiso, continuar con el contenido de la página
-        } else {
-            header("Location: ../Seguridad/Permisos/denegado.php");
-            exit();
-        }
-        ?>
+    // Obtener los valores necesarios para la verificación
+    $id_rol = $_SESSION['IdRol'] ?? null;
+    $id_objeto = 20; // ID del objeto o módulo correspondiente a esta página
+    // Llama a la función para verificar los permisos
+    verificarPermiso($id_rol, $id_objeto);
+
+?>
     <!doctype html>
     <html lang="en" class="no-focus">
-
 
     <head>
         <?php require_once("../MainHead/MainHead.php"); ?>
@@ -123,7 +103,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                         $conn = $conexion->Conexion();
 
                                         // Llamada al procedimiento almacenado
-                                        $stmt = $conn->prepare("CALL splObjetosMostrar(:usuario)");
+                                        $stmt = $conn->prepare("CALL `seguridad.splObjetosMostrar`(:usuario)");
                                         $stmt->bindValue(':usuario', $_SESSION["IdUsuario"], PDO::PARAM_STR);
                                         $stmt->execute();
                                         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -131,28 +111,28 @@ if (isset($_SESSION["IdUsuario"])) {
                                         if ($result !== false && count($result) > 0) {
                                             foreach ($result as $row) {
                                                 echo "<tr>";
-                                                echo "<td class='text-center'>{$row['id_objeto']}</td>";
-                                                echo "<td class='d-none d-sm-table-cell'>{$row['objeto']}</td>";
-                                                echo "<td class='d-none d-sm-table-cell'>{$row['tipo_objeto']}</td>";
-                                                echo "<td class='d-none d-sm-table-cell'>{$row['descripcion']}</td>";
-                                                echo "<td>{$row['fecha_creacion']}</td>";
-                                                echo "<td class='text-center'>{$row['creado_por']}</td>";
-                                                echo "<td class='text-center hidden-column'>{$row['fecha_modificacion']}</td>";
-                                                echo "<td class='text-center hidden-column'>{$row['modificado_por']}</td>";
+                                                echo "<td class='text-center'>{$row['IdObjeto']}</td>";
+                                                echo "<td class='d-none d-sm-table-cell'>{$row['Objeto']}</td>";
+                                                echo "<td class='d-none d-sm-table-cell'>{$row['TipoObjeto']}</td>";
+                                                echo "<td class='d-none d-sm-table-cell'>{$row['Descripcion']}</td>";
+                                                echo "<td>{$row['FechaCreacion']}</td>";
+                                                echo "<td class='text-center'>{$row['CreadoPor']}</td>";
+                                                echo "<td class='text-center hidden-column'>{$row['FechaModificacion']}</td>";
+                                                echo "<td class='text-center hidden-column'>{$row['ModificadoPor']}</td>";
                                                 echo "<td class='text-center'> 
                                                 <button type='button' class='btn btn-sm btn-secondary' data-toggle='modal' data-target='#editObjectModal' 
-                                                        data-id='{$row['id_objeto']}' 
-                                                        data-objeto='{$row['objeto']}' 
-                                                        data-tipo_objeto='{$row['tipo_objeto']}' 
-                                                        data-descripcion='{$row['descripcion']}' 
-                                                        data-creado_por='{$row['creado_por']}'
+                                                        data-id='{$row['IdObjeto']}' 
+                                                        data-objeto='{$row['Objeto']}' 
+                                                        data-tipo_objeto='{$row['TipoObjeto']}' 
+                                                        data-descripcion='{$row['Descripcion']}' 
+                                                        data-creado_por='{$row['CreadoPor']}'
                                                         data-id_usuario='{$_SESSION['IdUsuario']}'> <!-- Añadir ID del usuario aquí -->
                                                     <i class='si si-note'></i>
                                                 </button>
                                                 </td>";
                                                 echo "<td class='text-center'> 
                                                 <button type='button' class='btn btn-sm btn-danger' data-toggle='modal' data-target='#confirmDeleteModal' 
-                                                        data-id='{$row['id_objeto']}'>
+                                                        data-id='{$row['IdObjeto']}'>
                                                     <i class='si si-trash'></i>
                                                 </button>
                                                 </td>";
@@ -189,15 +169,15 @@ if (isset($_SESSION["IdUsuario"])) {
                             <form id="addObjectForm" method="POST" action="../Seguridad/Objetos/Agregar_Objeto.php">
                                 <div class="form-group">
                                     <label for="objeto">Objeto</label>
-                                    <input type="text" class="form-control" id="objeto" name="objeto" required>
+                                    <input type="text" class="form-control" id="objeto" name="Objeto" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="tipo_objeto">Tipo Objeto</label>
-                                    <input type="text" class="form-control" id="tipo_objeto" name="tipo_objeto" required>
+                                    <input type="text" class="form-control" id="tipo_objeto" name="TipoObjeto" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="descripcion">Descripcion</label>
-                                    <input type="text" class="form-control" id="descripcion" name="descripcion" required>
+                                    <input type="text" class="form-control" id="descripcion" name="Descripcion" required>
                                 </div>
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-primary">Guardar</button>
@@ -220,25 +200,27 @@ if (isset($_SESSION["IdUsuario"])) {
                         </div>
                         <div class="modal-body">
                             <form id="editObjectForm" method="POST" action="../Seguridad/Objetos/Editar_Objeto.php">
-                                <input type="hidden" id="edit-id_objeto" name="id_objeto">
-                                <input type="hidden" id="edit-id_usuario" name="id_usuario"> <!-- Campo oculto para id_usuario -->
+                                <input type="hidden" id="edit-id_objeto" name="IdObjeto">
+                                <input type="hidden" id="edit-id_usuario" name="IdUsuario"> <!-- Campo oculto para id_usuario -->
                                 <div class="form-group">
                                     <label for="edit-objeto">Objeto</label>
-                                    <input type="text" class="form-control" id="edit-objeto" name="objeto" required>
+                                    <input type="text" class="form-control" id="edit-objeto" name="Objeto" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="edit-tipo_objeto">Tipo Objeto</label>
-                                    <input type="text" class="form-control" id="edit-tipo_objeto" name="tipo_objeto" required>
+                                    <input type="text" class="form-control" id="edit-tipo_objeto" name="TipoObjeto" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="edit-descripcion">Descripcion</label>
-                                    <input type="text" class="form-control" id="edit-descripcion" name="descripcion" required>
+                                    <input type="text" class="form-control" id="edit-descripcion" name="Descripcion" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="edit-creado_por">Creado Por</label>
-                                    <input type="text" class="form-control" id="edit-creado_por" name="creado_por" readonly>
+                                    <input type="text" class="form-control" id="edit-creado_por" name="CreadoPor" readonly>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Actualizar</button>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -261,7 +243,7 @@ if (isset($_SESSION["IdUsuario"])) {
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                             <form id="deleteObjectForm" method="POST" action="../Seguridad/Objetos/Eliminar_Objeto.php">
-                                <input type="hidden" id="delete_id_objeto" name="id_objeto">
+                                <input type="hidden" id="delete_id_objeto" name="IdObjeto">
                                 <button type="submit" class="btn btn-danger">Eliminar</button>
                             </form>
                         </div>

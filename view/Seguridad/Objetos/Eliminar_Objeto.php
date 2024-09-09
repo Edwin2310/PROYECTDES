@@ -11,12 +11,12 @@ if (!$conn) {
     die("Conexión fallida: " . $conexion->Conexion()->errorInfo());
 }
 
-$id_objeto = $_POST['id_objeto'];
+$IdObjeto = $_POST['IdObjeto'];
 
-$sql = "DELETE FROM tbl_ms_objetos WHERE id_objeto = :id_objeto";
+$sql = "DELETE FROM `seguridad.tblobjetos` WHERE IdObjeto = :IdObjeto";
 
 if ($stmt = $conn->prepare($sql)) {
-    $stmt->bindValue(':id_objeto', $id_objeto, PDO::PARAM_INT);
+    $stmt->bindValue(':IdObjeto', $IdObjeto, PDO::PARAM_INT);
 
     if ($stmt->execute()) {
         header("Location: ../../Seguridad/Objetos.php?mensaje=eliminado");
@@ -28,4 +28,3 @@ if ($stmt = $conn->prepare($sql)) {
 }
 
 $conn = null;
-?>

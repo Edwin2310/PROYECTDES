@@ -14,9 +14,9 @@ if (!$conn) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Obtener los datos del formulario
-    $id_rol = $_POST["id_rol"];
-    $rol = $_POST["rol"];
-    $descripcion = $_POST["descripcion"];
+    $IdRol = $_POST["IdRol"];
+    $Rol = $_POST["Rol"];
+    $NombreRol = $_POST["NombreRol"];
 
     // Obtener el ID del usuario que está realizando la modificación
     if (isset($_SESSION["IdUsuario"])) {
@@ -28,14 +28,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Preparar la consulta SQL
-    $sql = "UPDATE tbl_ms_roles SET ROL = ?, DESCRIPCION = ?, FECHA_MODIFICACION = NOW(), MODIFICADO_POR = ? WHERE IdRol = ?";
+    $sql = "UPDATE `seguridad.tblmsroles` SET Rol = ?, NombreRol = ?, FechaModificacion = NOW(), ModificadoPor = ? WHERE IdRol = ?";
 
     // Preparar la declaración
     $stmt = $conn->prepare($sql);
 
     if ($stmt) {
         // Vincular los parámetros
-        if ($stmt->execute([$rol, $descripcion, $id_usuario_modificador, $id_rol])) {
+        if ($stmt->execute([$Rol, $NombreRol, $id_usuario_modificador, $IdRol])) {
             // Éxito al actualizar el rol
             header("Location: ../../Seguridad/Roles.php");
             exit();
@@ -51,4 +51,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Redireccionar si se intenta acceder directamente a este script sin un POST
     exit();
 }
-?>

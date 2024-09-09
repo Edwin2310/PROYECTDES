@@ -11,7 +11,7 @@ if (isset($_SESSION["IdUsuario"])) {
     verificarPermiso($id_rol, $id_objeto);
 
 ?>
- 
+
     <!doctype html>
     <html lang="en" class="no-focus">
 
@@ -328,9 +328,9 @@ if (isset($_SESSION["IdUsuario"])) {
 }
 ?>
 <!-- Incluye los JS -->
-<script src="../NuevoIngresoSolicitud/obtener_municipio.js"></script>
+<script src="../NuevoIngresoSolicitud/js/obtener_municipio.js"></script>
 <script src="../NuevoIngresoSolicitud/js/Guardar_Adjuntos.js"></script>
 <script src="../Seguridad//Bitacora/Bitacora.js"></script>
-<script src="../NuevoIngresoSolicitud/obtener_categoria.js"></script>
-<script src="../NuevoIngresoSolicitud/vali.js"></script>
-<script src="../NuevoIngresoSolicitud/ValidacionesInputs.js"></script>
+<script src="../NuevoIngresoSolicitud/js/obtener_categoria.js"></script>
+<script src="../NuevoIngresoSolicitud/js/vali.js"></script>
+<script src="../NuevoIngresoSolicitud/js/ValidacionesInputs.js"></script>

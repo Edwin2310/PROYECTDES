@@ -1,10 +1,17 @@
 <?php
 session_start();
 require_once("../../config/conexion.php");
-
+require_once(__DIR__ . '/../Seguridad/Permisos/Funciones_Permisos.php');
 if (isset($_SESSION["IdUsuario"])) {
 
+    // Obtener los valores necesarios para la verificación
+    $id_rol = $_SESSION['IdRol'] ?? null;
+    $id_objeto = 21; // ID del objeto o módulo correspondiente a esta página
+    // Llama a la función para verificar los permisos
+    verificarPermiso($id_rol, $id_objeto);
+
 ?>
+
     <?php
     $id_rol = $_SESSION['IdRol'] ?? null;
     $id_objeto = 21; // ID del objeto o módulo correspondiente a esta página
@@ -110,7 +117,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                         <th class="text-center">Id Bitacora</th>
                                         <th class="d-none d-sm-table-cell">Fecha y Hora</th>
                                         <th class="d-none d-sm-table-cell">Id Usuario</th>
-                                     <!--    <th class="d-none d-sm-table-cell">Usuario</th> -->
+                                        <!--    <th class="d-none d-sm-table-cell">Usuario</th> -->
                                         <th class="d-none d-sm-table-cell">Id Objeto</th>
                                         <th class="d-none d-sm-table-cell">Acción</th>
                                         <th class="d-none d-sm-table-cell">Descripción</th>
@@ -119,7 +126,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                         <th class="text-center"><input type="text" placeholder="Buscar por Id Bitacora" /></th>
                                         <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por Fecha y Hora" /></th>
                                         <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por ID Usuario" /></th>
-                                 <!--        <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por Usuario" /></th> -->
+                                        <!--        <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por Usuario" /></th> -->
                                         <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por ID Objeto" /></th>
                                         <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por Acción" /></th>
                                         <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por Descripción" /></th>
@@ -143,7 +150,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                             echo "<td class='text-center'>{$row['IdBitacora']}</td>";
                                             echo "<td>{$row['FechaHora']}</td>";
                                             echo "<td>{$row['IdUsuario']}</td>";
-                                        /*     echo "<td>{$row['NOMBRE_USUARIO']}</td>"; */
+                                            /*     echo "<td>{$row['NOMBRE_USUARIO']}</td>"; */
                                             echo "<td>{$row['IdObjeto']}</td>";
                                             echo "<td>{$row['Accion']}</td>";
                                             echo "<td>{$row['Descripcion']}</td>";

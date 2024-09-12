@@ -20,6 +20,7 @@ class Email extends PHPMailer {
         }
         
         $nom = $datos[0]["NOMBRE_USUARIO"]; // Suponiendo que obtienes el nombre del primer registro
+        $idUsuario = $datos[0]["IdUsuario"]; // Suponiendo que este es el nombre del campo en la tabla seguridad.tblusuarios
 
         $token = bin2hex(random_bytes(16)); // Generar un token más seguro y único
         $codigoValidacion = rand(100000, 999999); // Código de 6 dígitos
@@ -69,7 +70,8 @@ class Email extends PHPMailer {
                 $conexion = $conn->Conexion();
 
                 // Preparar y ejecutar la inserción en la tabla tbl_reset_contraseña
-                $stmt = $conexion->prepare("INSERT INTO `seguridad.tblresetcontraseñas` (CorreoElectronico, Token, CodigoValidacion, FechaVencimiento) VALUES (:correo, :token, :codigoValidacion, :fechaVencimiento)");
+                $stmt = $conexion->prepare("INSERT INTO `seguridad.tblresetcontraseñas` (IdUsuario, CorreoElectronico, Token, CodigoValidacion, FechaVencimiento) VALUES (:idUsuario, :correo, :token, :codigoValidacion, :fechaVencimiento)");
+                $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_STR);
                 $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
                 $stmt->bindParam(':token', $token, PDO::PARAM_STR);
                 $stmt->bindParam(':codigoValidacion', $codigoValidacion, PDO::PARAM_INT);

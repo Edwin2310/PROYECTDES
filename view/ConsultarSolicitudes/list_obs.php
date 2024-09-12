@@ -9,9 +9,9 @@ if ($id) {
         $conn = $conexion->Conexion();
 
         // Consulta para obtener la última observación de la solicitud
-        $sql = "SELECT DOC_OBSERVACION 
-                FROM tbl_observaciones 
-                WHERE ID_SOLICITUD = :id
+        $sql = "SELECT DocObservacion 
+                FROM `documentos.tblobservaciones` 
+                WHERE IdSolicitud = :id
                 ORDER BY ID_OBSERVACION DESC
                 LIMIT 1";
         
@@ -20,8 +20,8 @@ if ($id) {
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($row && $row['DOC_OBSERVACION']) {
-            $relativePath = $row['DOC_OBSERVACION'];
+        if ($row && $row['DocObservacion']) {
+            $relativePath = $row['DocObservacion'];
             $fileName = basename($relativePath);
 
             // Construir la URL completa del archivo

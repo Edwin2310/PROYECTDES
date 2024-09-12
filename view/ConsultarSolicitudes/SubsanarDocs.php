@@ -9,8 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Obtener el ID de usuario y nombre de usuario de la sesión
     session_start();
-    $idUsuario = isset($_SESSION["ID_USUARIO"]) ? $_SESSION["ID_USUARIO"] : null;
-    $nombreUsuario = isset($_SESSION["NOMBRE_USUARIO"]) ? $_SESSION["NOMBRE_USUARIO"] : null;
+    $idUsuario = isset($_SESSION["IdUsuario"]) ? $_SESSION["IdUsuario"] : null;
+    $nombreUsuario = isset($_SESSION["NombreUsuario"]) ? $_SESSION["NombreUsuario"] : null;
 
     if ($idSolicitud && $fileName && $filePath) {
         // Conectar a la base de datos
@@ -22,27 +22,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $conn->beginTransaction();
 
             // Definir el campo para actualizar basado en el tipo de archivo
-            $sql = "UPDATE tbl_observaciones 
-                    SET ID_USUARIO = :idUsuario, CREADO_POR = :nombreUsuario, ";
+            $sql = "UPDATE `documentos.tblobservaciones` 
+                    SET IdUsuario = :idUsuario, CreadoPor = :nombreUsuario, ";
 
             switch ($fileType) {
                 case 'SUBSOLI':
-                    $sql .= "SOLICITUD = :filePath";
+                    $sql .= "Solicitud = :filePath";
                     break;
                 case 'SUBPLAN':
-                    $sql .= "PLAN_ESTUDIOS = :filePath";
+                    $sql .= "PlanEstudios = :filePath";
                     break;
                 case 'SUBPDOC':
-                    $sql .= "PLANTA_DOCENTE = :filePath";
+                    $sql .= "PlantaDocente = :filePath";
                     break;
                 case 'SUBDIAG':
-                    $sql .= "DIAGNOSTICO = :filePath";
+                    $sql .= "Diagnostico = :filePath";
                     break;
                 default:
                     throw new Exception('Tipo de archivo desconocido.');
             }
 
-            $sql .= " WHERE ID_SOLICITUD = :idSolicitud";
+            $sql .= " WHERE IdSolicitud = :idSolicitud";
 
             $stmt = $conn->prepare($sql);
 
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             if ($stmt->execute()) {
                 // Actualizar el estado de la solicitud a 3
-                $updateSql = "UPDATE tbl_solicitudes SET ID_ESTADO = :nuevoEstado WHERE ID_SOLICITUD = :id_solicitud";
+                $updateSql = "UPDATE `proceso.tblsolicitudes` SET IdEstado = :nuevoEstado WHERE IdSolicitud = :id_solicitud";
                 $updateStmt = $conn->prepare($updateSql);
                 $nuevoEstado = 3;
                 $updateStmt->bindParam(':nuevoEstado', $nuevoEstado, PDO::PARAM_INT);

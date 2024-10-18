@@ -1,12 +1,13 @@
 <?php
 session_start();
 require_once("../../config/conexion.php");
+require_once(__DIR__ . '/../NuevoIngresoSolicitud/Funciones_Solicitud.php');
 require_once(__DIR__ . '/../Seguridad/Permisos/Funciones_Permisos.php');
-    // Obtener los valores necesarios para la verificación
-    $id_rol = $_SESSION['IdRol'] ?? null;
-    $id_objeto = 9; // ID del objeto o módulo correspondiente a esta página
-    // Llama a la función para verificar los permisos
-    verificarPermiso($id_rol, $id_objeto);
+// Obtener los valores necesarios para la verificación
+$id_rol = $_SESSION['IdRol'] ?? null;
+$id_objeto = 9; // ID del objeto o módulo correspondiente a esta página
+// Llama a la función para verificar los permisos
+verificarPermiso($id_rol, $id_objeto);
 
 if (!$id_rol) {
     header("Location: ../Seguridad/Permisos/denegado.php");
@@ -32,8 +33,8 @@ if ($stmt->execute() && $stmt->rowCount() > 0) {
 
 
 if (isset($_SESSION["IdUsuario"])) {
-    $idUniversidad = isset($_GET['id_universidad']) ? $_GET['id_universidad'] : '';
-    $idCarrera = isset($_GET['id_carrera']) ? $_GET['id_carrera'] : '';
+    $idUniversidad = isset($_GET['IdUniversidad']) ? $_GET['IdUniversidad'] : '';
+    $idCarrera = isset($_GET['IdCarrera']) ? $_GET['IdCarrera'] : '';
     $fechaInicio = isset($_GET['fecha_inicio']) ? $_GET['fecha_inicio'] : '';
     $fechaFin = isset($_GET['fecha_fin']) ? $_GET['fecha_fin'] : '';
 
@@ -48,29 +49,30 @@ if (isset($_SESSION["IdUsuario"])) {
         // Solo ejecutar la consulta si ambos filtros están seleccionados
         if ($idUniversidad && $idCarrera) {
             $query = "SELECT
-                s.ID_SOLICITUD,
-                u.NOM_UNIVERSIDAD,
-                c.NOM_CARRERA,
-                m.NOM_MODALIDAD,
-                g.NOM_GRADO,
-                s.FECHA_INGRESO,
-                a.ACUERDO_ADMISION,
-                ap.FECHA_CREACION AS FECHA_APROBACION,
-                ap.ACUERDO_APROBACION
+                s.IdSolicitud,
+                u.NomUniversidad,
+                c.NomCarrera,
+                m.NomModalidad,
+                g.NomGrado,
+                s.FechaIngreso,
+                a.AcuerdoAdmision,
+                ap.FechaCreacion AS FechaAprobacion,
+                ap.AcuerdoAprobacion
             FROM
-                tbl_solicitudes s
-            JOIN tbl_modalidad m ON s.ID_MODALIDAD = m.ID_MODALIDAD
-            JOIN tbl_grado_academico g ON s.ID_GRADO = g.ID_GRADO
-            LEFT JOIN tbl_acuerdo_ces_admin a ON s.ID_SOLICITUD = a.ID_SOLICITUD
-            LEFT JOIN tbl_acuerdo_ces_aprob ap ON s.ID_SOLICITUD = ap.ID_SOLICITUD
-            LEFT JOIN tbl_carrera c ON s.ID_CARRERA = c.ID_CARRERA
-            LEFT JOIN tbl_universidad_centro u ON s.ID_UNIVERSIDAD = u.ID_UNIVERSIDAD
-            WHERE s.ID_UNIVERSIDAD = :idUniversidad 
-            AND c.ID_CARRERA = :idCarrera";
+                `proceso.tblsolicitudes` s
+            JOIN `mantenimiento.tblmodalidades` m ON s.IdModalidad = m.IdModalidad
+            JOIN `mantenimiento.tblgradosacademicos` g ON s.IdGrado = g.IdGrado
+            LEFT JOIN `proceso.tblacuerdoscesadmin` a ON s.IdSolicitud = a.IdSolicitud
+            LEFT JOIN `proceso.tblacuerdoscesaprob` ap ON s.IdSolicitud = ap.IdSolicitud
+            LEFT JOIN `mantenimiento.tblcarreras` c ON s.IdCarrera = c.IdCarrera
+            LEFT JOIN `mantenimiento.tbluniversidadescentros` u ON s.IdUniversidad = u.IdUniversidad
+            WHERE
+                s.IdUniversidad = : IdUniversidad
+            AND c.IdCarrera = : IdCarrera";
 
             // Agregar filtros de fecha si están presentes
             if ($fechaInicio && $fechaFin) {
-                $query .= " AND s.FECHA_INGRESO BETWEEN :fechaInicio AND :fechaFin";
+                $query .= " AND s.FechaIngreso BETWEEN :fechaInicio AND :fechaFin";
             }
 
             $stmt = $pdo->prepare($query);
@@ -117,7 +119,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                         alt="">
                                 </a>
                                 <a class="align-middle link-effect text-primary-dark font-w600" href="be_pages_generic_profile.html">
-                                    <span><?php echo $_SESSION["NOMBRE_USUARIO"] ?></span>
+                                    <span><?php echo $_SESSION["NombreUsuario"] ?></span>
                                 </a>
                             </div>
                         </div>
@@ -143,39 +145,17 @@ if (isset($_SESSION["IdUsuario"])) {
                         <form method="GET" action="">
                             <div class="filters">
                                 <div class="form-group">
-                                    <label for="id_universidad">Universidad:</label>
-                                    <select class="form-control" id="id_universidad" name="id_universidad" required>
+                                    <label for="IdUniversidad">Universidad:</label>
+                                    <select class="form-control" id="IdUniversidad" name="IdUniversidad" required>
                                         <option value="" disabled selected style="display:none;">Seleccionar Universidad</option>
-                                        <?php
-                                        $conexion = new Conectar();
-                                        $conn = $conexion->Conexion();
-                                        $sql_universidad = "SELECT ID_UNIVERSIDAD, NOM_UNIVERSIDAD FROM tbl_universidad_centro";
-                                        $result_universidad = $conn->query($sql_universidad);
-                                        if ($result_universidad !== false && $result_universidad->rowCount() > 0) {
-                                            while ($row = $result_universidad->fetch(PDO::FETCH_ASSOC)) {
-                                                echo "<option value='" . $row["ID_UNIVERSIDAD"] . "'>" . $row["NOM_UNIVERSIDAD"] . "</option>";
-                                            }
-                                        }
-                                        $conn = null;
-                                        ?>
+                                        <?php echo obtenerUniversidades($usuario); ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="id_carrera">Carrera:</label>
-                                    <select class="form-control" id="id_carrera" name="id_carrera" required>
+                                    <label for="IdCarrera">Carrera:</label>
+                                    <select class="form-control" id="IdCarrera" name="IdCarrera" required>
                                         <option value="" disabled selected style="display:none;">Seleccionar Carrera</option>
-                                        <?php
-                                        $conexion = new Conectar();
-                                        $conn = $conexion->Conexion();
-                                        $sql_carrera = "SELECT ID_CARRERA, NOM_CARRERA FROM tbl_carrera";
-                                        $result_carrera = $conn->query($sql_carrera);
-                                        if ($result_carrera !== false && $result_carrera->rowCount() > 0) {
-                                            while ($row = $result_carrera->fetch(PDO::FETCH_ASSOC)) {
-                                                echo "<option value='" . $row["ID_CARRERA"] . "'>" . $row["NOM_CARRERA"] . "</option>";
-                                            }
-                                        }
-                                        $conn = null;
-                                        ?>
+                                        <?php echo obtenerCarreras($usuario); ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -209,15 +189,15 @@ if (isset($_SESSION["IdUsuario"])) {
                                 <tbody>
                                     <?php foreach ($result as $row) : ?>
                                         <tr>
-                                            <td><?php echo htmlspecialchars($row['ID_SOLICITUD']); ?></td>
-                                            <td><?php echo htmlspecialchars($row['NOM_UNIVERSIDAD']); ?></td>
-                                            <td><?php echo htmlspecialchars($row['NOM_CARRERA']); ?></td>
-                                            <td><?php echo htmlspecialchars($row['NOM_MODALIDAD']); ?></td>
-                                            <td><?php echo htmlspecialchars($row['NOM_GRADO']); ?></td>
-                                            <td><?php echo htmlspecialchars($row['FECHA_INGRESO']); ?></td>
-                                            <td><?php echo htmlspecialchars($row['ACUERDO_ADMISION']); ?></td>
-                                            <td><?php echo htmlspecialchars($row['FECHA_APROBACION']); ?></td>
-                                            <td><?php echo htmlspecialchars($row['ACUERDO_APROBACION']); ?></td>
+                                            <td><?php echo htmlspecialchars($row['IdSolicitud']); ?></td>
+                                            <td><?php echo htmlspecialchars($row['NomUniversidad']); ?></td>
+                                            <td><?php echo htmlspecialchars($row['NomCarrera']); ?></td>
+                                            <td><?php echo htmlspecialchars($row['NomModalidad']); ?></td>
+                                            <td><?php echo htmlspecialchars($row['NomGrado']); ?></td>
+                                            <td><?php echo htmlspecialchars($row['FechaIngreso']); ?></td>
+                                            <td><?php echo htmlspecialchars($row['AcuerdoAdmision']); ?></td>
+                                            <td><?php echo htmlspecialchars($row['FechaAprobacion']); ?></td>
+                                            <td><?php echo htmlspecialchars($row['AcuerdoAprobacion']); ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -261,7 +241,7 @@ if (isset($_SESSION["IdUsuario"])) {
                     var carrera = $(this).data('carrera');
                     var fechaInicio = $('#fecha_inicio').val();
                     var fechaFin = $('#fecha_fin').val();
-                    window.location.href = "exportar.php?id_universidad=" + universidad + "&id_carrera=" + carrera + "&fecha_inicio=" + fechaInicio + "&fecha_fin=" + fechaFin + "&type=excel";
+                    window.location.href = "exportar.php?IdUniversidad=" + universidad + "&IdCarrera=" + carrera + "&fecha_inicio=" + fechaInicio + "&fecha_fin=" + fechaFin + "&type=excel";
                 });
 
                 $('#export-pdf').on('click', function() {
@@ -269,7 +249,7 @@ if (isset($_SESSION["IdUsuario"])) {
                     var carrera = $(this).data('carrera');
                     var fechaInicio = $('#fecha_inicio').val();
                     var fechaFin = $('#fecha_fin').val();
-                    window.location.href = "exportar.php?id_universidad=" + universidad + "&id_carrera=" + carrera + "&fecha_inicio=" + fechaInicio + "&fecha_fin=" + fechaFin + "&type=pdf";
+                    window.location.href = "exportar.php?IdUniversidad=" + universidad + "&IdCarrera=" + carrera + "&fecha_inicio=" + fechaInicio + "&fecha_fin=" + fechaFin + "&type=pdf";
                 });
             });
         </script>

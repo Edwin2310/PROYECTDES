@@ -21,8 +21,8 @@ function obtenerCodigos($usuario)
         // Generar opciones HTML para el <select>
         $opciones = "";
         foreach ($categorias as $categoria) {
-            $idCategoria = htmlspecialchars($categoria['ID_CATEGORIA'], ENT_QUOTES, 'UTF-8');
-            $codigoArbitrios = htmlspecialchars($categoria['COD_ARBITRIOS'], ENT_QUOTES, 'UTF-8');
+            $idCategoria = htmlspecialchars($categoria['IdCategoria'], ENT_QUOTES, 'UTF-8');
+            $codigoArbitrios = htmlspecialchars($categoria['CodArbitrios'], ENT_QUOTES, 'UTF-8');
             $opciones .= "<option value='$idCategoria'>$codigoArbitrios</option>";
         }
         return $opciones;
@@ -51,8 +51,8 @@ function obtenerGrados($usuario)
         // Generar opciones HTML para el <select>
         $opciones = "";
         foreach ($grados as $grado) {
-            $idGrado = htmlspecialchars($grado['ID_GRADO'], ENT_QUOTES, 'UTF-8');
-            $nombreGrado = htmlspecialchars($grado['NOM_GRADO'], ENT_QUOTES, 'UTF-8');
+            $idGrado = htmlspecialchars($grado['IdGrado'], ENT_QUOTES, 'UTF-8');
+            $nombreGrado = htmlspecialchars($grado['NomGrado'], ENT_QUOTES, 'UTF-8');
             $opciones .= "<option value='$idGrado'>$nombreGrado</option>";
         }
 
@@ -82,8 +82,8 @@ function obtenerModalidades($usuario)
         // Generar opciones HTML para el <select>
         $opciones = "";
         foreach ($modalidades as $modalidad) {
-            $idModalidad = htmlspecialchars($modalidad['ID_MODALIDAD'], ENT_QUOTES, 'UTF-8');
-            $nombreModalidad = htmlspecialchars($modalidad['NOM_MODALIDAD'], ENT_QUOTES, 'UTF-8');
+            $idModalidad = htmlspecialchars($modalidad['IdModalidad'], ENT_QUOTES, 'UTF-8');
+            $nombreModalidad = htmlspecialchars($modalidad['NomModalidad'], ENT_QUOTES, 'UTF-8');
             $opciones .= "<option value='$idModalidad'>$nombreModalidad</option>";
         }
 
@@ -112,8 +112,8 @@ function obtenerUniversidades($usuario)
         // Generar opciones HTML para el <select>
         $opciones = "";
         foreach ($universidades as $universidad) {
-            $idUniversidad = htmlspecialchars($universidad['ID_UNIVERSIDAD'], ENT_QUOTES, 'UTF-8');
-            $nombreUniversidad = htmlspecialchars($universidad['NOM_UNIVERSIDAD'], ENT_QUOTES, 'UTF-8');
+            $idUniversidad = htmlspecialchars($universidad['IdUniversidad'], ENT_QUOTES, 'UTF-8');
+            $nombreUniversidad = htmlspecialchars($universidad['NomUniversidad'], ENT_QUOTES, 'UTF-8');
             $opciones .= "<option value='$idUniversidad'>$nombreUniversidad</option>";
         }
         return $opciones;
@@ -141,11 +141,40 @@ function obtenerDepartamentos($usuario)
         // Generar opciones HTML para el <select>
         $opciones = "";
         foreach ($departamentos as $departamento) {
-            $idDepartamento = htmlspecialchars($departamento['ID_DEPARTAMENTO'], ENT_QUOTES, 'UTF-8');
-            $nombreDepartamento = htmlspecialchars($departamento['NOM_DEPTO'], ENT_QUOTES, 'UTF-8');
+            $idDepartamento = htmlspecialchars($departamento['IdDepartamento'], ENT_QUOTES, 'UTF-8');
+            $nombreDepartamento = htmlspecialchars($departamento['NomDepto'], ENT_QUOTES, 'UTF-8');
             $opciones .= "<option value='$idDepartamento'>$nombreDepartamento</option>";
         }
 
+        return $opciones;
+    } catch (PDOException $e) {
+        return "Error: " . $e->getMessage();
+    }
+}
+
+function obtenerCarreras($usuario)
+{
+    try {
+        $conexion = new Conectar();
+        $conn = $conexion->Conexion();
+
+        // Llamada al procedimiento almacenado con parámetro
+        $sql = "CALL `proceso.splCarrerasMostrar`(:usuario)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':usuario', $usuario, PDO::PARAM_STR);
+        $stmt->execute();
+
+        // Obtener los resultados
+        $carreras = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+
+        // Generar opciones HTML para el <select>
+        $opciones = "";
+        foreach ($carreras as $carrera) {
+            $idCarrera = htmlspecialchars($carrera['IdCarrera'], ENT_QUOTES, 'UTF-8');
+            $nombreCarrerra = htmlspecialchars($carrera['NomCarrera'], ENT_QUOTES, 'UTF-8');
+            $opciones .= "<option value='$idCarrera'>$nombreCarrerra</option>";
+        }
         return $opciones;
     } catch (PDOException $e) {
         return "Error: " . $e->getMessage();

@@ -20,10 +20,7 @@ var dropzoneDocuments = new Dropzone("#dropzone-documents", {
 
     this.on("sending", function (file, xhr, formData) {
       // Añadir campos adicionales al enviar
-      formData.append(
-        "id_usuario",
-        document.querySelector("#id_usuario").value
-      );
+      formData.append("IdUsuario", document.querySelector("#IdUsuario").value);
       totalFiles++; // Incrementar el contador de archivos al comenzar la subida
     });
 

@@ -14,8 +14,8 @@ if (!isset($_SESSION["IdUsuario"])) {
 }
 
 // Obtener y verificar los parámetros
-$idUniversidad = isset($_GET['id_universidad']) ? $_GET['id_universidad'] : '';
-$idCarrera = isset($_GET['id_carrera']) ? $_GET['id_carrera'] : '';
+$idUniversidad = isset($_GET['IdUniversidad']) ? $_GET['IdUniversidad'] : '';
+$idCarrera = isset($_GET['IdCarrera']) ? $_GET['IdCarrera'] : '';
 $fechaInicio = isset($_GET['fecha_inicio']) ? $_GET['fecha_inicio'] : '';
 $fechaFin = isset($_GET['fecha_fin']) ? $_GET['fecha_fin'] : '';
 $type = isset($_GET['type']) ? $_GET['type'] : '';
@@ -31,39 +31,40 @@ try {
 
     // Consulta SQL actualizada
     $query = "SELECT
-                s.ID_SOLICITUD,
-                c.NOM_CARRERA,
-                s.DESCRIPCION,
-                ts.NOM_TIPO,
-                ct.NOM_CATEGORIA,
-                u.NOM_UNIVERSIDAD,
-                g.NOM_GRADO,
-                m.NOM_MODALIDAD,
-                dt.NOM_DEPTO,
-                mc.NOM_MUNICIPIO,
-                s.FECHA_INGRESO,
-                a.ACUERDO_ADMISION,
-                ap.FECHA_CREACION AS FECHA_APROBACION,
-                ap.ACUERDO_APROBACION,
-                ur.USUARIO
-            FROM
-                tbl_solicitudes s
-            JOIN tbl_modalidad m ON s.ID_MODALIDAD = m.ID_MODALIDAD
-            JOIN tbl_grado_academico g ON s.ID_GRADO = g.ID_GRADO
-            LEFT JOIN tbl_acuerdo_ces_admin a ON s.ID_SOLICITUD = a.ID_SOLICITUD
-            LEFT JOIN tbl_acuerdo_ces_aprob ap ON s.ID_SOLICITUD = ap.ID_SOLICITUD
-            LEFT JOIN tbl_carrera c ON s.ID_CARRERA = c.ID_CARRERA
-            LEFT JOIN tbl_universidad_centro u ON s.ID_UNIVERSIDAD = u.ID_UNIVERSIDAD
-            LEFT JOIN tbl_tipo_solicitud ts ON s.ID_TIPO_SOLICITUD = ts.ID_TIPO_SOLICITUD
-            LEFT JOIN tbl_categoria ct ON s.ID_CATEGORIA = ct.ID_CATEGORIA
-            LEFT JOIN tbl_deptos dt ON s.ID_DEPARTAMENTO = dt.ID_DEPARTAMENTO
-            LEFT JOIN tbl_municipios mc ON s.ID_MUNICIPIO = mc.ID_MUNICIPIO
-            LEFT JOIN tbl_ms_usuario ur ON s.IdUsuario = ur.IdUsuario
-            WHERE s.ID_UNIVERSIDAD = :idUniversidad 
-            AND c.ID_CARRERA = :idCarrera";
+            s.IdSolicitud,
+            c.NomCarrera,
+            s.Descripcion,
+            ts.NomTipoSolicitud,
+            ct.NomCategoria,
+            u.NomUniversidad,
+            g.NomGrado,
+            m.NomModalidad,
+            dt.NomDepto,
+            mc.NomMunicipio,
+            s.FechaIngreso,
+            a.AcuerdoAdmision,
+            ap.FechaCreacion AS FechaAprobacion,
+            ap.AcuerdoAprobacion,
+            ur.Usuario
+        FROM
+            `proceso.tblsolicitudes` s
+        JOIN `mantenimiento.tblmodalidades` m ON s.IdModalidad = m.IdModalidad
+        JOIN `mantenimiento.tblgradosacademicos` g ON s.IdGrado = g.IdGrado
+        LEFT JOIN `proceso.tblacuerdoscesadmin` a ON s.IdSolicitud = a.IdSolicitud
+        LEFT JOIN `proceso.tblacuerdoscesaprob` ap ON s.IdSolicitud = ap.IdSolicitud
+        LEFT JOIN `mantenimiento.tblcarreras` c ON s.IdCarrera = c.IdCarrera
+        LEFT JOIN `mantenimiento.tbluniversidadescentros` u ON s.IdUniversidad = u.IdUniversidad
+        LEFT JOIN `mantenimiento.tbltiposolicitudes` ts ON s.IdTiposolicitud = ts.IdTiposolicitud
+        LEFT JOIN `mantenimiento.tblcategorias` ct ON s.IdCategoria = ct.IdCategoria
+        LEFT JOIN `mantenimiento.tbldeptos` dt ON s.IdDepartamento = dt.IdDepartamento
+        LEFT JOIN `mantenimiento.tblmunicipios` mc ON s.IdMunicipio = mc.IdMunicipio
+        LEFT JOIN `seguridad.tblusuarios_personal` ur ON s.IdUsuario = ur.IdUsuario
+        WHERE
+            s.IdUniversidad = : idUniversidad
+        AND c.IdCarrera = : idCarrera";
 
     if ($fechaInicio && $fechaFin) {
-        $query .= " AND s.FECHA_INGRESO BETWEEN :fechaInicio AND :fechaFin";
+        $query .= " AND s.FechaIngreso BETWEEN :fechaInicio AND :fechaFin";
     }
 
     $stmt = $pdo->prepare($query);
@@ -106,15 +107,15 @@ if ($type === 'excel') {
 
     $row = 2;
     foreach ($result as $data) {
-        $sheet->setCellValue('A' . $row, $data['ID_SOLICITUD']);
-        $sheet->setCellValue('B' . $row, $data['NOM_UNIVERSIDAD']);
-        $sheet->setCellValue('C' . $row, $data['NOM_CARRERA']);
-        $sheet->setCellValue('D' . $row, $data['NOM_MODALIDAD']);
-        $sheet->setCellValue('E' . $row, $data['NOM_GRADO']);
-        $sheet->setCellValue('F' . $row, $data['FECHA_INGRESO']);
-        $sheet->setCellValue('G' . $row, $data['ACUERDO_ADMISION']);
-        $sheet->setCellValue('H' . $row, $data['FECHA_APROBACION']);
-        $sheet->setCellValue('I' . $row, $data['ACUERDO_APROBACION']);
+        $sheet->setCellValue('A' . $row, $data['IdSolicitud']);
+        $sheet->setCellValue('B' . $row, $data['NomUniversidad']);
+        $sheet->setCellValue('C' . $row, $data['NomCarrera']);
+        $sheet->setCellValue('D' . $row, $data['NomModalidad']);
+        $sheet->setCellValue('E' . $row, $data['NomGrado']);
+        $sheet->setCellValue('F' . $row, $data['FechaIngreso']);
+        $sheet->setCellValue('G' . $row, $data['AcuerdoAdmision']);
+        $sheet->setCellValue('H' . $row, $data['FechaAprobacion']);
+        $sheet->setCellValue('I' . $row, $data['AcuerdoAprobacion']);
         $row++;
     }
 
@@ -220,49 +221,49 @@ if ($type === 'excel') {
     <table>
         <tr>
             <td class="table-title" width="20%">Nombre Carrera</td>
-            <td width="30%">' . $data['NOM_CARRERA'] . '</td>
+            <td width="30%">' . $data['NomCarrera'] . '</td>
             <td class="table-title" width="20%">N° Solicitud</td>
-            <td width="30%">' . $data['ID_SOLICITUD'] . '</td>
+            <td width="30%">' . $data['IdSolicitud'] . '</td>
         </tr>
         <tr>
             <td class="table-title">Descripción</td>
-            <td colspan="3">' . $data['DESCRIPCION'] . '</td>
+            <td colspan="3">' . $data['Descripcion'] . '</td>
         </tr>
         <tr>
             <td class="table-title">Tipo de Solicitud</td>
-            <td>' . $data['NOM_TIPO'] . '</td>
+            <td>' . $data['NomTipoSolicitud'] . '</td>
             <td class="table-title">Categoría</td>
-            <td>' . $data['NOM_CATEGORIA'] . '</td>
+            <td>' . $data['NomCategoria'] . '</td>
         </tr>
         <tr>
             <td class="table-title">Centro de Educación Superior</td>
-            <td>' . $data['NOM_UNIVERSIDAD'] . '</td>
+            <td>' . $data['NomUniversidad'] . '</td>
             <td class="table-title">Grado Académico</td>
-            <td>' . $data['NOM_GRADO'] . '</td>
+            <td>' . $data['NomGrado'] . '</td>
         </tr>
         <tr>
             <td class="table-title">Modalidad</td>
-            <td>' . $data['NOM_MODALIDAD'] . '</td>
+            <td>' . $data['NomModalidad'] . '</td>
             <td class="table-title">Departamento</td>
-            <td>' . $data['NOM_DEPTO'] . '</td>
+            <td>' . $data['NomDepto'] . '</td>
         </tr>
         <tr>
             <td class="table-title">Municipio</td>
-            <td>' . $data['NOM_MUNICIPIO'] . '</td>
+            <td>' . $data['NomMunicipio'] . '</td>
             <td class="table-title">Fecha de Ingreso</td>
-            <td>' . $data['FECHA_INGRESO'] . '</td>
+            <td>' . $data['FechaIngreso'] . '</td>
         </tr>
         <tr>
             <td class="table-title">Acuerdo de Admisión</td>
-            <td>' . $data['ACUERDO_ADMISION'] . '</td>
+            <td>' . $data['AcuerdoAdmision'] . '</td>
             <td class="table-title">Fecha de Aprobación</td>
-            <td>' . $data['FECHA_APROBACION'] . '</td>
+            <td>' . $data['FechaAprobacion'] . '</td>
         </tr>
         <tr>
             <td class="table-title">Acuerdo de Aprobación</td>
-            <td>' . $data['ACUERDO_APROBACION'] . '</td>
+            <td>' . $data['AcuerdoAprobacion'] . '</td>
             <td class="table-title">Usuario Responsable</td>
-            <td>' . $data['USUARIO'] . '</td>
+            <td>' . $data['Usuario'] . '</td>
         </tr>
     </table>';
 

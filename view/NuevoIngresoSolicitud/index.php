@@ -55,7 +55,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                 <a class="img-link mr-5" href="be_pages_generic_profile.html">
                                     <img class="img-avatar img-avatar32" src="../../public/assets/img/avatars/avatar15.jpg" alt="">
                                 </a>
-                                <a class="align-middle link-effect text-primary-dark font-w600" href="be_pages_generic_profile.html"><?php echo $_SESSION["NOMBRE_USUARIO"] ?></a>
+                                <a class="align-middle link-effect text-primary-dark font-w600" href="be_pages_generic_profile.html"><?php echo $_SESSION["NombreUsuario"] ?></a>
                             </div>
                         </div>
                     </div>
@@ -96,23 +96,23 @@ if (isset($_SESSION["IdUsuario"])) {
 
                                 <!-- Form -->
                                 <form id="wizard-form" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" id="id_usuario" name="id_usuario" value="<?php echo $_SESSION['IdUsuario']; ?>">
+                                    <input type="hidden" id="IdUsuario" name="IdUsuario" value="<?php echo $_SESSION['IdUsuario']; ?>">
 
                                     <!-- Steps Content -->
                                     <div class="block-content block-content-full tab-content" style="min-height: 265px;">
                                         <!-- Step 1 -->
                                         <div class="tab-pane active" id="wizard-simple-step1" role="tabpanel">
                                             <div class="form-group row">
-                                                <label class="col-12" for="NOMBRE_COMPLETO">Nombre Completo</label>
+                                                <label class="col-12" for="NombreCompleto">Nombre Completo</label>
                                                 <div class="col-12">
-                                                    <input type="text" class="form-control" id="NOMBRE_COMPLETO" name="NOMBRE_COMPLETO" placeholder="Coord. Curricular de la Carrera + Nombre completo" required oninput="validateForm(event)">
+                                                    <input type="text" class="form-control" id="NombreCompleto" name="NombreCompleto" placeholder="Coord. Curricular de la Carrera + Nombre completo" required oninput="validateForm(event)">
                                                 </div>
                                             </div>
 
                                             <div class="form-group row">
-                                                <label class="col-12" for="EMAIL">Correo Electrónico</label>
+                                                <label class="col-12" for="CorreoElectronico">Correo Electrónico</label>
                                                 <div class="col-12">
-                                                    <input type="email" class="form-control" id="EMAIL" name="EMAIL" placeholder="correoinstitucional@unitec.com" required oninput="validateForm(event)">
+                                                    <input type="CorreoElectronico" class="form-control" id="CorreoElectronico" name="CorreoElectronico" placeholder="correoinstitucional@unitec.com" required oninput="validateForm(event)">
                                                 </div>
                                             </div>
 
@@ -127,9 +127,9 @@ if (isset($_SESSION["IdUsuario"])) {
                                             <div class="form-group">
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <label class="col-12" for="codigo-pago">Código de Pago</label>
+                                                        <label class="col-12" for="CodigoPago">Código de Pago</label>
                                                         <div class="col-12">
-                                                            <select class="form-control" id="codigo-pago" name="codigo-pago">
+                                                            <select class="form-control" id="CodigoPago" name="CodigoPago">
                                                                 <option value="0">Seleccione un código</option>
                                                                 <?php echo obtenerCodigos($usuario); ?>
                                                             </select>
@@ -137,42 +137,42 @@ if (isset($_SESSION["IdUsuario"])) {
                                                     </div>
 
                                                     <div class="col-md-6">
-                                                        <label class="col-12" for="id_categoria">Categoría de Solicitud</label>
+                                                        <label class="col-12" for="IdCategoria">Categoría de Solicitud</label>
                                                         <div class="col-12">
-                                                            <select class="form-control" id="id_categoria" name="id_categoria" required></select>
+                                                            <select class="form-control" id="IdCategoria" name="IdCategoria" required></select>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="row">
                                                     <div class="col-md-3">
-                                                        <label class="col-12" for="id_tipo_solicitud">Tipo Solicitud</label>
+                                                        <label class="col-12" for="IdTiposolicitud">Tipo Solicitud</label>
                                                         <div class="col-12">
-                                                            <select class="form-control" id="id_tipo_solicitud" name="id_tipo_solicitud" required></select>
+                                                            <select class="form-control" id="IdTiposolicitud" name="IdTiposolicitud" required></select>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <label class="col-12" for="Num_referencia">Número de Referencia</label>
+                                                        <label class="col-12" for="NumReferencia">Número de Referencia</label>
                                                         <div class="col-12">
-                                                            <input type="text" class="form-control" id="Num_referencia" name="Num_referencia" placeholder="Número de referencia del recibo de pago" required>
+                                                            <input type="text" class="form-control" id="NumReferencia" name="NumReferencia" placeholder="Número de referencia del recibo de pago" required>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <label class="col-12" for="id_carrera">Nombre de la Carrera</label>
+                                                        <label class="col-12" for="IdCarrera">Nombre de la Carrera</label>
                                                         <div class="col-12">
-                                                            <input class="form-control" type="text" id="id_carrera" name="id_carrera" required>
+                                                            <input class="form-control" type="text" id="IdCarrera" name="IdCarrera" required>
 
                                                             </input>
                                                         </div>
                                                     </div>
 
                                                     <div class="col-md-6">
-                                                        <label class="col-12" for="id_grado_acad">Grado Académico</label>
+                                                        <label class="col-12" for="IdGrado">Grado Académico</label>
                                                         <div class="col-12">
-                                                            <select class="form-control" id="id_grado_acad" name="id_grado_acad">
+                                                            <select class="form-control" id="IdGrado" name="IdGrado">
                                                                 <option value="0">Seleccione un grado académico</option>
                                                                 <?php echo obtenerGrados($usuario); ?>
                                                             </select>
@@ -180,9 +180,9 @@ if (isset($_SESSION["IdUsuario"])) {
                                                     </div>
 
                                                     <div class="col-md-6">
-                                                        <label class="col-12" for="id_modalidad">Modalidad</label>
+                                                        <label class="col-12" for="IdModalidad">Modalidad</label>
                                                         <div class="col-12">
-                                                            <select class="form-control" id="id_modalidad" name="id_modalidad">
+                                                            <select class="form-control" id="IdModalidad" name="IdModalidad">
                                                                 <option value="0">Seleccione una modalidad</option>
                                                                 <?php echo obtenerModalidades($usuario); ?>
                                                             </select>
@@ -190,9 +190,9 @@ if (isset($_SESSION["IdUsuario"])) {
                                                     </div>
 
                                                     <div class="col-md-6">
-                                                        <label class="col-12" for="Universidad">Universidad</label>
+                                                        <label class="col-12" for="IdUniversidad">Universidad</label>
                                                         <div class="col-12">
-                                                            <select class="form-control" id="Universidad" name="Universidad" required>
+                                                            <select class="form-control" id="IdUniversidad" name="IdUniversidad" required>
                                                                 <option value="" disabled selected style="display:none;">Seleccionar Universidad</option>
                                                                 <?php echo obtenerUniversidades($usuario); ?>
                                                             </select>
@@ -200,9 +200,9 @@ if (isset($_SESSION["IdUsuario"])) {
                                                     </div>
 
                                                     <div class="col-md-6" id="div-departamento1">
-                                                        <label class="col-12" for="Departamento1">Departamento</label>
+                                                        <label class="col-12" for="IdDepartamento">Departamento</label>
                                                         <div class="col-12">
-                                                            <select class="form-control" id="Departamento1" name="Departamento[]" required>
+                                                            <select class="form-control" id="IdDepartamento" name="Departamento[]" required>
                                                                 <option value="0">Seleccione un Departamento</option>
                                                                 <?php echo obtenerDepartamentos($usuario); ?>
                                                             </select>
@@ -210,9 +210,9 @@ if (isset($_SESSION["IdUsuario"])) {
                                                     </div>
 
                                                     <div class="col-md-6" id="div-municipio1">
-                                                        <label class="col-12" for="Municipio1">Municipio</label>
+                                                        <label class="col-12" for="IdMunicipio">Municipio</label>
                                                         <div class="col-12">
-                                                            <select class="form-control" id="Municipio1" name="Municipio[]" required>
+                                                            <select class="form-control" id="IdMunicipio" name="Municipio[]" required>
                                                                 <option value="0">Seleccione un Municipio</option>
                                                             </select>
                                                         </div>
@@ -235,7 +235,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                             <div class="form-group">
 
                                                 <!-- Campo oculto para el ID del usuario -->
-                                                <input type="hidden" id="id_usuario" name="id_usuario" value="<?php echo $_SESSION['IdUsuario']; ?>">
+                                                <input type="hidden" id="IdUsuario" name="IdUsuario" value="<?php echo $_SESSION['IdUsuario']; ?>">
                                                 <!-- Área de Dropzone para subir documentos -->
                                                 <div class="form-group">
                                                     <b>

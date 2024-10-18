@@ -25,7 +25,7 @@ class Usuario extends Conectar
                 header("Location:" . Conectar::ruta() . "index.php");
                 exit();
             } else {
-                $sql = "SELECT * FROM `seguridad.tblusuarios` WHERE CorreoElectronico=? AND EstadoUsuario='1'";
+                $sql = "SELECT * FROM `seguridad.tblusuarios` WHERE CorreoElectronico=? AND IdEstado='1'";
                 $stmt = $conectar->prepare($sql);
                 $stmt->bindValue(1, $correo);
                 $stmt->execute();
@@ -41,8 +41,8 @@ class Usuario extends Conectar
                         $_SESSION["CorreoElectronico"] = $resultado["CorreoElectronico"];
                         $_SESSION["IdRol"] = $resultado["IdRol"];
 
-                        // Nueva consulta para obtener el NombreUsuario desde la tabla seguridad.tblusuariospersonal
-                        $sql_personal = "SELECT NombreUsuario FROM `seguridad.tblusuariospersonal` WHERE IdUsuario = ?";
+                        // Nueva consulta para obtener el NombreUsuario desde la tabla seguridad.tbldatospersonales
+                        $sql_personal = "SELECT NombreUsuario FROM `seguridad.tbldatospersonales` WHERE IdUsuario = ?";
                         $stmt_personal = $conectar->prepare($sql_personal);
                         $stmt_personal->bindValue(1, $resultado["IdUsuario"]);
                         $stmt_personal->execute();
@@ -103,7 +103,7 @@ class Usuario extends Conectar
     {
         $conectar = parent::Conexion();
         parent::set_names();
-        $sql = "SELECT EstadoUsuario FROM `seguridad.tblusuarios` WHERE CorreoElectronico=?";
+        $sql = "SELECT IdUsuario, IdEstado FROM `seguridad.tblusuarios` WHERE CorreoElectronico=?";
         $stmt = $conectar->prepare($sql);
         $stmt->bindValue(1, $correo);
         $stmt->execute();
@@ -128,7 +128,7 @@ class Usuario extends Conectar
 
             if ($id_usuario) {
                 // Actualizar la contraseña en la tabla principal de usuarios
-                $stmt_update = $conexion->prepare("UPDATE `seguridad.tblusuarios` SET Contraseña = :nueva_contrasena, EstadoUsuario = 1, NumIntentos = 0 WHERE CorreoElectronico = :correo");
+                $stmt_update = $conexion->prepare("UPDATE `seguridad.tblusuarios` SET Contraseña = :nueva_contrasena, IdEstado = 1, NumIntentos = 0 WHERE CorreoElectronico = :correo");
                 $stmt_update->bindParam(':nueva_contrasena', $nueva_contrasena, PDO::PARAM_STR);
                 $stmt_update->bindParam(':correo', $correo, PDO::PARAM_STR);
                 $stmt_update->execute();
@@ -217,13 +217,13 @@ class Usuario extends Conectar
         $stmt->closeCursor();
     }
 
-    // Función para bloquear al usuario cambiando EstadoUsuario a 3
+    // Función para bloquear al usuario cambiando IdEstado a 3
     private function bloquear_usuario($correo)
     {
         $conn = new Conectar();
         $conexion = $conn->Conexion();
 
-        $sql = "UPDATE `seguridad.tblusuarios` SET EstadoUsuario = 3 WHERE CorreoElectronico = ?";
+        $sql = "UPDATE `seguridad.tblusuarios` SET IdEstado = 3 WHERE CorreoElectronico = ?";
         $stmt = $conexion->prepare($sql);
         $stmt->bindValue(1, $correo);
         $stmt->execute();

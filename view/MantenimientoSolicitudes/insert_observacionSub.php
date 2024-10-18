@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Obtener el ID de usuario y nombre de usuario de la sesión
     session_start();
     $idUsuario = isset($_SESSION["IdUsuario"]) ? $_SESSION["IdUsuario"] : null;
-    $nombreUsuario = isset($_SESSION["NOMBRE_USUARIO"]) ? $_SESSION["NOMBRE_USUARIO"] : null;
+    $nombreUsuario = isset($_SESSION["NombreUsuario"]) ? $_SESSION["NombreUsuario"] : null;
 
     // Sanear las observaciones para eliminar caracteres '<' y '>'
     $observaciones = str_replace(['<', '>'], '', $observaciones);
@@ -24,38 +24,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Iniciar una transacción
             $conn->beginTransaction();
 
-            // Insertar en la base de datos
-            $sqlInsert = "INSERT INTO tbl_observaciones (OBSERVACION, DOC_OBSERVACION, ID_SOLICITUD, IdUsuario, CREADO_POR, FECHA_OBSERVACION) 
-                          VALUES (:observacion, :doc_observacion, :id_solicitud, :id_usuario, :creado_por, NOW())";
+            // Llamar al procedimiento para insertar observaciones
+            $sqlInsert = "CALL `proceso.splObservacionInsertar`(:observacion, :doc_observacion, :id_solicitud, :id_usuario, :creado_por)";
             $stmtInsert = $conn->prepare($sqlInsert);
-
-            // Insertar datos
             $stmtInsert->bindParam(':observacion', $observaciones);
-            $stmtInsert->bindParam(':doc_observacion', $filePath); // Corregir el nombre de la variable
+            $stmtInsert->bindParam(':doc_observacion', $filePath);
             $stmtInsert->bindParam(':id_solicitud', $idSolicitud, PDO::PARAM_INT);
             $stmtInsert->bindParam(':id_usuario', $idUsuario, PDO::PARAM_INT);
             $stmtInsert->bindParam(':creado_por', $nombreUsuario, PDO::PARAM_STR);
+            $stmtInsert->execute();
 
-            if ($stmtInsert->execute()) {
-                // Actualizar el estado de la solicitud a 2
-                $updateSql = "UPDATE tbl_solicitudes SET ID_ESTADO = 2 WHERE ID_SOLICITUD = :id_solicitud";
-                $updateStmt = $conn->prepare($updateSql);
-                $updateStmt->bindParam(':id_solicitud', $idSolicitud, PDO::PARAM_INT);
+            // Llamar al procedimiento para actualizar el estado de la solicitud
+            $sqlUpdate = "CALL `proceso.splEstadoObservacionActualizar`(:id_solicitud)";
+            $stmtUpdate = $conn->prepare($sqlUpdate);
+            $stmtUpdate->bindParam(':id_solicitud', $idSolicitud, PDO::PARAM_INT);
+            $stmtUpdate->execute();
 
-                if ($updateStmt->execute()) {
-                    // Confirmar la transacción
-                    $conn->commit();
-                    echo json_encode(['success' => true, 'message' => 'Archivo, observaciones y estado actualizados correctamente.']);
-                } else {
-                    // Revertir la transacción si la actualización falla
-                    $conn->rollBack();
-                    echo json_encode(['success' => false, 'message' => 'Error al actualizar el estado de la solicitud.']);
-                }
-            } else {
-                // Revertir la transacción en caso de error en la inserción
-                $conn->rollBack();
-                echo json_encode(['success' => false, 'message' => 'Error al insertar archivo y observaciones.']);
-            }
+            // Confirmar la transacción
+            $conn->commit();
+            echo json_encode(['success' => true, 'message' => 'Archivo, observaciones y estado actualizados correctamente.']);
         } catch (Exception $e) {
             // Revertir la transacción en caso de error
             $conn->rollBack();

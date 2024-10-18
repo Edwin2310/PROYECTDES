@@ -53,12 +53,13 @@ var myDropzone = new Dropzone("#dropzone-documents", {
                     now.getFullYear() +
                     (now.getMonth() + 1).toString().padStart(2, "0") +
                     now.getDate().toString().padStart(2, "0");
-
-                var expectedFormat = `OBSPLAN_${dateStr}`;
+        
+                // Cambiar el formato esperado a OBSDOC
+                var expectedFormat = `OBSDOC_${dateStr}`;
                 var regex = new RegExp(`^${expectedFormat}(\\d{3})?\\.`); // Permite nombres con o sin números de tres dígitos
-
+        
                 console.log("Formato esperado: " + expectedFormat);
-
+        
                 if (!regex.test(fileName)) {
                     self.removeFile(file);
                     Swal.fire({
@@ -72,6 +73,7 @@ var myDropzone = new Dropzone("#dropzone-documents", {
                 }
             }
         });
+        
 
         this.on("removedfile", function (file) {
             console.log('Archivo eliminado:', file);

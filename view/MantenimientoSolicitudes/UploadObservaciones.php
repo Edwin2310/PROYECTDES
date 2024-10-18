@@ -1,4 +1,3 @@
-
 <?php
 header('Content-Type: application/json');
 
@@ -17,10 +16,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        // Generar el nombre base del archivo
+        // Generar el nombre base del archivo con el prefijo OBSDOC
         $now = new DateTime();
         $dateStr = $now->format('Ymd');
-        $baseFileName = "OBSPLAN_" . $dateStr;
+        $baseFileName = "OBSDOC_" . $dateStr;
         $fileName = $file['name'];
         $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
 

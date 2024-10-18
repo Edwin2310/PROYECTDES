@@ -8,21 +8,23 @@ if (isset($_SESSION["IdUsuario"])) {
     if ($id) {
         $conexion = new Conectar();
         $conn = $conexion->Conexion();
-        $sql = "SELECT s.ID_SOLICITUD, tp.NOM_TIPO, cat.NOM_CATEGORIA, s.NUM_REFERENCIA, s.DESCRIPCION, s.NOMBRE_CARRERA, g.NOM_GRADO, m.NOM_MODALIDAD,
-                       uc.NOM_UNIVERSIDAD, d.NOM_DEPTO, mu.NOM_MUNICIPIO, u.NOMBRE_USUARIO, s.NOMBRE_COMPLETO, s.EMAIL, s.FECHA_INGRESO, 
-                       s.FECHA_MODIFICACION, cat.COD_ARBITRIOS, c.NOM_CARRERA, e.ESTADO_SOLICITUD
-                    FROM tbl_solicitudes s
-                    LEFT JOIN tbl_tipo_solicitud tp ON s.ID_TIPO_SOLICITUD = tp.ID_TIPO_SOLICITUD
-                    LEFT JOIN tbl_categoria cat ON s.ID_CATEGORIA = cat.ID_CATEGORIA
-                    LEFT JOIN tbl_carrera c ON s.ID_CARRERA = c.ID_CARRERA
-                    LEFT JOIN tbl_grado_academico g ON s.ID_GRADO = g.ID_GRADO
-                    LEFT JOIN tbl_modalidad m ON s.ID_MODALIDAD = m.ID_MODALIDAD
-                    LEFT JOIN tbl_universidad_centro uc ON s.ID_UNIVERSIDAD = uc.ID_UNIVERSIDAD
-                    LEFT JOIN tbl_deptos d ON s.ID_DEPARTAMENTO = d.ID_DEPARTAMENTO
-                    LEFT JOIN tbl_municipios mu ON s.ID_MUNICIPIO = mu.ID_MUNICIPIO
-                    LEFT JOIN tbl_ms_usuario u ON s.IdUsuario = u.IdUsuario
-                    LEFT JOIN tbl_estado_solicitud e ON s.ID_ESTADO = e.ID_ESTADO
-                    WHERE s.ID_SOLICITUD = :solicitud_id";
+        $sql = "SELECT s.IdSolicitud, ts.NomTipoSolicitud, cat.NomCategoria, s.NumReferencia, s.Descripcion, 
+                       s.NombreCarrera, g.NomGrado, m.NomModalidad, uc.NomUniversidad, d.NomDepto, 
+                       mu.NomMunicipio, u.NombreUsuario, s.NombreCompleto, s.CorreoElectronico, s.FechaIngreso,
+                       s.FechaModificacion, cat.CodArbitrios, c.NomCarrera, e.EstadoSolicitud
+                FROM `proceso.tblSolicitudes` s
+                LEFT JOIN `mantenimiento.tblcategorias` cat ON s.IdCategoria = cat.IdCategoria
+                LEFT JOIN `mantenimiento.tbltiposolicitudes` ts ON cat.IdTiposolicitud = ts.IdTiposolicitud 
+                LEFT JOIN `mantenimiento.tblcarreras` c ON s.IdCarrera = c.IdCarrera
+                LEFT JOIN `mantenimiento.tblgradosacademicos` g ON s.IdGrado = g.IdGrado
+                LEFT JOIN `mantenimiento.tblmodalidades` m ON s.IdModalidad = m.IdModalidad
+                LEFT JOIN `mantenimiento.tbluniversidadescentros` uc ON s.IdUniversidad = uc.IdUniversidad
+                LEFT JOIN `mantenimiento.tbldeptos` d ON s.IdDepartamento = d.IdDepartamento
+                LEFT JOIN `mantenimiento.tblmunicipios` mu ON s.IdMunicipio = mu.IdMunicipio
+                LEFT JOIN `seguridad.tbldatospersonales` u ON s.IdUsuario = u.IdUsuario
+                LEFT JOIN `mantenimiento.tblestadossolicitudes` e ON s.IdEstado = e.IdEstado
+                WHERE s.IdSolicitud = :solicitud_id";
+
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':solicitud_id', $id, PDO::PARAM_INT);
         $stmt->execute();
@@ -34,13 +36,13 @@ if (isset($_SESSION["IdUsuario"])) {
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['estado_id'])) {
         $estado_id = $_POST['estado_id'];
-        $query = "UPDATE tbl_solicitudes SET ID_ESTADO = :estado_id WHERE ID_SOLICITUD = :solicitud_id";
-        $stmt = $conn->prepare($query);
-        $stmt->bindParam(':estado_id', $estado_id, PDO::PARAM_INT);
-        $stmt->bindParam(':solicitud_id', $id, PDO::PARAM_INT);
 
         if (isset($_POST['confirmar_solicitud']) && $_POST['confirmar_solicitud'] === 'yes') {
-            // Solo actualiza si se confirma
+            $query = "CALL `proceso.splEstadoSolicitudActualizar`(:solicitud_id, :estado_id)";
+            $stmt = $conn->prepare($query);
+            $stmt->bindParam(':solicitud_id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':estado_id', $estado_id, PDO::PARAM_INT);
+
             if ($stmt->execute()) {
                 $success = true;
                 $mensaje = 'Solicitud confirmada exitosamente'; // Mensaje para actualización de estado
@@ -48,11 +50,11 @@ if (isset($_SESSION["IdUsuario"])) {
         }
     }
 
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editar_solicitud'])) {
         // Captura los datos del formulario
         $tipo_solicitud = $_POST['tipo_solicitud'];
         $categoria = $_POST['categoria'];
-        $codigo_pago = $_POST['codigo_pago'];
         $carrera = $_POST['carrera'];
         $grado_academico = $_POST['grado_academico'];
         $modalidad = $_POST['modalidad'];
@@ -61,20 +63,10 @@ if (isset($_SESSION["IdUsuario"])) {
         $municipio = $_POST['municipio'];
         $descripcion = $_POST['descripcion'];
 
-        // Actualiza la solicitud en la base de datos
-        $update_query = "UPDATE tbl_solicitudes SET 
-                            ID_TIPO_SOLICITUD = :tipo_solicitud,
-                            ID_CATEGORIA = :categoria,
-                            NOMBRE_CARRERA = :carrera,
-                            ID_GRADO = :grado_academico,
-                            ID_MODALIDAD = :modalidad,
-                            ID_UNIVERSIDAD = :universidad,
-                            ID_DEPARTAMENTO = :departamento,
-                            ID_MUNICIPIO = :municipio,
-                            DESCRIPCION = :descripcion
-                        WHERE ID_SOLICITUD = :solicitud_id";
-
+        // Llamar al procedimiento almacenado
+        $update_query = "CALL `proceso.splRevisionDocsActualizar`(:solicitud_id, :tipo_solicitud, :categoria, :carrera, :grado_academico, :modalidad, :universidad, :departamento, :municipio, :descripcion)";
         $update_stmt = $conn->prepare($update_query);
+        $update_stmt->bindParam(':solicitud_id', $id, PDO::PARAM_INT);
         $update_stmt->bindParam(':tipo_solicitud', $tipo_solicitud, PDO::PARAM_INT);
         $update_stmt->bindParam(':categoria', $categoria, PDO::PARAM_INT);
         $update_stmt->bindParam(':carrera', $carrera, PDO::PARAM_STR);
@@ -84,7 +76,6 @@ if (isset($_SESSION["IdUsuario"])) {
         $update_stmt->bindParam(':departamento', $departamento, PDO::PARAM_INT);
         $update_stmt->bindParam(':municipio', $municipio, PDO::PARAM_INT);
         $update_stmt->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
-        $update_stmt->bindParam(':solicitud_id', $id, PDO::PARAM_INT);
 
         if ($update_stmt->execute()) {
             $success = true; // Indica que la actualización fue exitosa
@@ -152,13 +143,19 @@ if (isset($_SESSION["IdUsuario"])) {
                                                         <div class="col-12">
                                                             <select class="form-control" id="tipo_solicitud" name="tipo_solicitud">
                                                                 <?php
-                                                                $query_tipo = "SELECT ID_TIPO_SOLICITUD, NOM_TIPO FROM tbl_tipo_solicitud";
+                                                                // Consulta para obtener los tipos de solicitud
+                                                                $query_tipo = "SELECT TipoSolicitud FROM `proceso.tblsolicitudes`";
                                                                 $stmt_tipo = $conn->prepare($query_tipo);
                                                                 $stmt_tipo->execute();
+
+                                                                // Recorre cada tipo de solicitud y crea las opciones del select
                                                                 while ($tipo = $stmt_tipo->fetch(PDO::FETCH_ASSOC)) {
-                                                                    echo '<option value="' . htmlspecialchars($tipo['ID_TIPO_SOLICITUD'], ENT_QUOTES, 'UTF-8') . '"';
-                                                                    if ($tipo['NOM_TIPO'] == $row['NOM_TIPO']) echo ' selected';
-                                                                    echo '>' . htmlspecialchars($tipo['NOM_TIPO'], ENT_QUOTES, 'UTF-8') . '</option>';
+                                                                    echo '<option value="' . htmlspecialchars($tipo['IdTiposolicitud'], ENT_QUOTES, 'UTF-8') . '"';
+                                                                    // Verifica que $row['TipoSolicitud'] esté definido y sea igual al IdTiposolicitud
+                                                                    if (isset($row['TipoSolicitud']) && $tipo['IdTiposolicitud'] == $row['TipoSolicitud']) {
+                                                                        echo ' selected'; // Marca como seleccionado si coinciden
+                                                                    }
+                                                                    echo '>' . htmlspecialchars($tipo['TipoSolicitud'], ENT_QUOTES, 'UTF-8') . '</option>';
                                                                 }
                                                                 ?>
                                                             </select>
@@ -169,13 +166,13 @@ if (isset($_SESSION["IdUsuario"])) {
                                                         <div class="col-12">
                                                             <select class="form-control" id="categoria" name="categoria">
                                                                 <?php
-                                                                $query_categoria = "SELECT ID_CATEGORIA, NOM_CATEGORIA FROM tbl_categoria";
+                                                                $query_categoria = "SELECT IdCategoria, NomCategoria FROM `mantenimiento.tblcategorias`";
                                                                 $stmt_categoria = $conn->prepare($query_categoria);
                                                                 $stmt_categoria->execute();
                                                                 while ($categoria = $stmt_categoria->fetch(PDO::FETCH_ASSOC)) {
-                                                                    echo '<option value="' . htmlspecialchars($categoria['ID_CATEGORIA'], ENT_QUOTES, 'UTF-8') . '"';
-                                                                    if ($categoria['NOM_CATEGORIA'] == $row['NOM_CATEGORIA']) echo ' selected';
-                                                                    echo '>' . htmlspecialchars($categoria['NOM_CATEGORIA'], ENT_QUOTES, 'UTF-8') . '</option>';
+                                                                    echo '<option value="' . htmlspecialchars($categoria['IdCategoria'], ENT_QUOTES, 'UTF-8') . '"';
+                                                                    if ($categoria['NomCategoria'] == $row['NomCategoria']) echo ' selected';
+                                                                    echo '>' . htmlspecialchars($categoria['NomCategoria'], ENT_QUOTES, 'UTF-8') . '</option>';
                                                                 }
                                                                 ?>
                                                             </select>
@@ -188,13 +185,13 @@ if (isset($_SESSION["IdUsuario"])) {
                                                         <div class="col-12">
                                                             <select class="form-control" id="codigo_pago" name="codigo_pago">
                                                                 <?php
-                                                                $query_codigo = "SELECT ID_CATEGORIA, COD_ARBITRIOS FROM tbl_categoria";
+                                                                $query_codigo = "SELECT IdCategoria, CodArbitrios FROM `mantenimiento.tblcategorias`";
                                                                 $stmt_codigo = $conn->prepare($query_codigo);
                                                                 $stmt_codigo->execute();
                                                                 while ($codigo = $stmt_codigo->fetch(PDO::FETCH_ASSOC)) {
-                                                                    echo '<option value="' . htmlspecialchars($codigo['ID_CATEGORIA'], ENT_QUOTES, 'UTF-8') . '"';
-                                                                    if ($codigo['COD_ARBITRIOS'] == $row['COD_ARBITRIOS']) echo ' selected';
-                                                                    echo '>' . htmlspecialchars($codigo['COD_ARBITRIOS'], ENT_QUOTES, 'UTF-8') . '</option>';
+                                                                    echo '<option value="' . htmlspecialchars($codigo['IdCategoria'], ENT_QUOTES, 'UTF-8') . '"';
+                                                                    if ($codigo['CodArbitrios'] == $row['CodArbitrios']) echo ' selected';
+                                                                    echo '>' . htmlspecialchars($codigo['CodArbitrios'], ENT_QUOTES, 'UTF-8') . '</option>';
                                                                 }
                                                                 ?>
                                                             </select>
@@ -205,7 +202,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                                     <div class="col-md-6 justify-content-center">
                                                         <label class="col-12" for="carrera">Nombre de la Carrera</label>
                                                         <div class="col-12">
-                                                            <input type="text" class="form-control" id="carrera" name="carrera" value="<?php echo htmlspecialchars($row['NOM_CARRERA'], ENT_QUOTES, 'UTF-8'); ?>">
+                                                            <input type="text" class="form-control" id="carrera" name="carrera" value="<?php echo htmlspecialchars($row['NomCarrera'], ENT_QUOTES, 'UTF-8'); ?>">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 justify-content-center">
@@ -213,13 +210,13 @@ if (isset($_SESSION["IdUsuario"])) {
                                                         <div class="col-12">
                                                             <select class="form-control" id="grado_academico" name="grado_academico">
                                                                 <?php
-                                                                $query_grado = "SELECT ID_GRADO, NOM_GRADO FROM tbl_grado_academico";
+                                                                $query_grado = "SELECT idGrado, NomGrado FROM `mantenimiento.tblgradosacademicos`";
                                                                 $stmt_grado = $conn->prepare($query_grado);
                                                                 $stmt_grado->execute();
                                                                 while ($grado = $stmt_grado->fetch(PDO::FETCH_ASSOC)) {
-                                                                    echo '<option value="' . htmlspecialchars($grado['ID_GRADO'], ENT_QUOTES, 'UTF-8') . '"';
-                                                                    if ($grado['NOM_GRADO'] == $row['NOM_GRADO']) echo ' selected';
-                                                                    echo '>' . htmlspecialchars($grado['NOM_GRADO'], ENT_QUOTES, 'UTF-8') . '</option>';
+                                                                    echo '<option value="' . htmlspecialchars($grado['idGrado'], ENT_QUOTES, 'UTF-8') . '"';
+                                                                    if ($grado['NomGrado'] == $row['NomGrado']) echo ' selected';
+                                                                    echo '>' . htmlspecialchars($grado['NomGrado'], ENT_QUOTES, 'UTF-8') . '</option>';
                                                                 }
                                                                 ?>
                                                             </select>
@@ -230,13 +227,13 @@ if (isset($_SESSION["IdUsuario"])) {
                                                         <div class="col-12">
                                                             <select class="form-control" id="modalidad" name="modalidad">
                                                                 <?php
-                                                                $query_modalidad = "SELECT ID_MODALIDAD, NOM_MODALIDAD FROM tbl_modalidad";
+                                                                $query_modalidad = "SELECT IdModalidad, NomModalidad FROM `mantenimiento.tblmodalidades`";
                                                                 $stmt_modalidad = $conn->prepare($query_modalidad);
                                                                 $stmt_modalidad->execute();
                                                                 while ($modalidad = $stmt_modalidad->fetch(PDO::FETCH_ASSOC)) {
-                                                                    echo '<option value="' . htmlspecialchars($modalidad['ID_MODALIDAD'], ENT_QUOTES, 'UTF-8') . '"';
-                                                                    if ($modalidad['NOM_MODALIDAD'] == $row['NOM_MODALIDAD']) echo ' selected';
-                                                                    echo '>' . htmlspecialchars($modalidad['NOM_MODALIDAD'], ENT_QUOTES, 'UTF-8') . '</option>';
+                                                                    echo '<option value="' . htmlspecialchars($modalidad['IdModalidad'], ENT_QUOTES, 'UTF-8') . '"';
+                                                                    if ($modalidad['NomModalidad'] == $row['NomModalidad']) echo ' selected';
+                                                                    echo '>' . htmlspecialchars($modalidad['NomModalidad'], ENT_QUOTES, 'UTF-8') . '</option>';
                                                                 }
                                                                 ?>
                                                             </select>
@@ -247,13 +244,13 @@ if (isset($_SESSION["IdUsuario"])) {
                                                         <div class="col-12">
                                                             <select class="form-control" id="universidad" name="universidad">
                                                                 <?php
-                                                                $query_universidad = "SELECT ID_UNIVERSIDAD, NOM_UNIVERSIDAD FROM tbl_universidad_centro";
+                                                                $query_universidad = "SELECT IdUniversidad, NomUniversidad FROM `mantenimiento.tbluniversidadescentros`";
                                                                 $stmt_universidad = $conn->prepare($query_universidad);
                                                                 $stmt_universidad->execute();
                                                                 while ($universidad = $stmt_universidad->fetch(PDO::FETCH_ASSOC)) {
-                                                                    echo '<option value="' . htmlspecialchars($universidad['ID_UNIVERSIDAD'], ENT_QUOTES, 'UTF-8') . '"';
-                                                                    if ($universidad['NOM_UNIVERSIDAD'] == $row['NOM_UNIVERSIDAD']) echo ' selected';
-                                                                    echo '>' . htmlspecialchars($universidad['NOM_UNIVERSIDAD'], ENT_QUOTES, 'UTF-8') . '</option>';
+                                                                    echo '<option value="' . htmlspecialchars($universidad['IdUniversidad'], ENT_QUOTES, 'UTF-8') . '"';
+                                                                    if ($universidad['NomUniversidad'] == $row['NomUniversidad']) echo ' selected';
+                                                                    echo '>' . htmlspecialchars($universidad['NomUniversidad'], ENT_QUOTES, 'UTF-8') . '</option>';
                                                                 }
                                                                 ?>
                                                             </select>
@@ -264,13 +261,13 @@ if (isset($_SESSION["IdUsuario"])) {
                                                         <div class="col-12">
                                                             <select class="form-control" id="departamento" name="departamento">
                                                                 <?php
-                                                                $query_departamento = "SELECT ID_DEPARTAMENTO, NOM_DEPTO FROM tbl_deptos";
+                                                                $query_departamento = "SELECT IdDepartamento, NomDepto FROM `mantenimiento.tbldeptos`";
                                                                 $stmt_departamento = $conn->prepare($query_departamento);
                                                                 $stmt_departamento->execute();
                                                                 while ($departamento = $stmt_departamento->fetch(PDO::FETCH_ASSOC)) {
-                                                                    echo '<option value="' . htmlspecialchars($departamento['ID_DEPARTAMENTO'], ENT_QUOTES, 'UTF-8') . '"';
-                                                                    if ($departamento['NOM_DEPTO'] == $row['NOM_DEPTO']) echo ' selected';
-                                                                    echo '>' . htmlspecialchars($departamento['NOM_DEPTO'], ENT_QUOTES, 'UTF-8') . '</option>';
+                                                                    echo '<option value="' . htmlspecialchars($departamento['IdDepartamento'], ENT_QUOTES, 'UTF-8') . '"';
+                                                                    if ($departamento['NomDepto'] == $row['NomDepto']) echo ' selected';
+                                                                    echo '>' . htmlspecialchars($departamento['NomDepto'], ENT_QUOTES, 'UTF-8') . '</option>';
                                                                 }
                                                                 ?>
                                                             </select>
@@ -281,13 +278,13 @@ if (isset($_SESSION["IdUsuario"])) {
                                                         <div class="col-12">
                                                             <select class="form-control" id="municipio" name="municipio">
                                                                 <?php
-                                                                $query_municipio = "SELECT ID_MUNICIPIO, NOM_MUNICIPIO FROM tbl_municipios";
+                                                                $query_municipio = "SELECT IdMunicipio, NomMunicipio FROM `mantenimiento.tblmunicipios`";
                                                                 $stmt_municipio = $conn->prepare($query_municipio);
                                                                 $stmt_municipio->execute();
                                                                 while ($municipio = $stmt_municipio->fetch(PDO::FETCH_ASSOC)) {
-                                                                    echo '<option value="' . htmlspecialchars($municipio['ID_MUNICIPIO'], ENT_QUOTES, 'UTF-8') . '"';
-                                                                    if ($municipio['NOM_MUNICIPIO'] == $row['NOM_MUNICIPIO']) echo ' selected';
-                                                                    echo '>' . htmlspecialchars($municipio['NOM_MUNICIPIO'], ENT_QUOTES, 'UTF-8') . '</option>';
+                                                                    echo '<option value="' . htmlspecialchars($municipio['IdMunicipio'], ENT_QUOTES, 'UTF-8') . '"';
+                                                                    if ($municipio['NomMunicipio'] == $row['NomMunicipio']) echo ' selected';
+                                                                    echo '>' . htmlspecialchars($municipio['NomMunicipio'], ENT_QUOTES, 'UTF-8') . '</option>';
                                                                 }
                                                                 ?>
                                                             </select>
@@ -297,7 +294,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                                 <div class="">
                                                     <label class="col-12" for="descripciones">Descripcion de la Solicitud</label>
                                                     <div class="col-12">
-                                                        <textarea class="form-control" id="descripcion" name="descripcion" rows="3"><?php echo htmlspecialchars($row['DESCRIPCION'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+                                                        <textarea class="form-control" id="descripcion" name="descripcion" rows="3"><?php echo htmlspecialchars($row['Descripcion'], ENT_QUOTES, 'UTF-8'); ?></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -307,7 +304,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                         <div class="row">
                                             <div class="col-12 text-center">
                                                 <button type="button" class="btn btn-alt-info" title="Regresar a revisión de documentación" style="width: 200px;" onclick="window.history.back()"><i class="si si-action-undo mr-5"></i>Regresar</button>
-                                                <a href="RevisionSubsanacion.php?id=<?php echo htmlspecialchars($row['ID_SOLICITUD'], ENT_QUOTES, 'UTF-8'); ?>">
+                                                <a href="RevisionSubsanacion.php?id=<?php echo htmlspecialchars($row['IdSolicitud'], ENT_QUOTES, 'UTF-8'); ?>">
                                                     <button type="button" class="btn btn-alt-info" title="Solicitar subsanación de documentos incompletos o incorrectos" style="width: 200px;"><i class="si si-docs mr-5"></i>Subsanación</button>
                                                 </a>
                                                 <a id="descargarBtn" href="#" class="btn btn-alt-info" title="Descargar adjuntos relacionados a la solicitud" style="width: 200px;"><i class="si si-folder-alt mr-5"></i>Descargar Adjuntos</a>
@@ -315,18 +312,18 @@ if (isset($_SESSION["IdUsuario"])) {
                                                 <button type="submit" name="editar_solicitud" class="btn btn-alt-info" title="Editar campos incorrectos" style="width: 200px;"><i class="fa fa-edit mr-5"></i>Editar</button>
                                                 <div class="row justify-content-between px-4">
                                                     <div class="col-md-6 text-left">
-                                                        <span class="small text-secondary">Nombre del solicitante: <?php echo htmlspecialchars($row['NOMBRE_COMPLETO'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                                        <span class="small text-secondary">Nombre del solicitante: <?php echo htmlspecialchars($row['NombreCompleto'], ENT_QUOTES, 'UTF-8'); ?></span>
                                                     </div>
                                                     <div class="col-md-6 text-right">
-                                                        <span class="small text-secondary">Fecha de Ingreso: <?php echo htmlspecialchars($row['FECHA_INGRESO'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                                        <span class="small text-secondary">Fecha de Ingreso: <?php echo htmlspecialchars($row['FechaIngreso'], ENT_QUOTES, 'UTF-8'); ?></span>
                                                     </div>
                                                 </div>
                                                 <div class="row justify-content-end px-4">
                                                     <div class="col-md-6 text-left">
-                                                        <span class="small text-secondary">Correo: <?php echo htmlspecialchars($row['EMAIL'], ENT_QUOTES, 'UTF-8');; ?></span>
+                                                        <span class="small text-secondary">Correo: <?php echo htmlspecialchars($row['CorreoElectronico'], ENT_QUOTES, 'UTF-8');; ?></span>
                                                     </div>
                                                     <div class="col-md-6 text-right">
-                                                        <span class="small text-secondary">Fecha de Ultima Modificación: <?php echo htmlspecialchars($row['FECHA_MODIFICACION'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                                        <span class="small text-secondary">Fecha de Ultima Modificación: <?php echo htmlspecialchars($row['FechaModificacion'], ENT_QUOTES, 'UTF-8'); ?></span>
                                                     </div>
                                                 </div>
                                 </form>

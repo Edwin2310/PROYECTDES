@@ -11,16 +11,16 @@ if (isset($_GET['solicitud_id'])) {
     // Consulta para obtener los archivos asociados al ID de solicitud y verificar que exista en tbl_solicitudes
     $query = "
         SELECT 
-            a.DIAGNOSTICO, 
-            a.PLAN_ESTUDIOS, 
-            a.PLANTA_DOCENTE, 
-            a.SOLICITUD 
+            a.Diagnostico, 
+            a.PlanEstudios, 
+            a.PlantaDocente, 
+            a.Solicitud
         FROM 
-            tbl_archivos_adjuntos a
+            `documentos.tblarchivosadjuntos` a
         INNER JOIN 
-            tbl_solicitudes s ON a.ID_SOLICITUD = s.ID_SOLICITUD
+            `proceso.tblSolicitudes` s ON a.IdSolicitud = s.IdSolicitud
         WHERE 
-            a.ID_SOLICITUD = :solicitud_id
+            a.IdSolicitud = :solicitud_id
     ";
     $stmt = $pdo->prepare($query);
     $stmt->bindValue(':solicitud_id', $solicitud_id, PDO::PARAM_INT);

@@ -78,7 +78,7 @@ if (isset($_SESSION["IdUsuario"])) {
 
                 <div class="content">
                     <h2 class="content-heading">
-                        <span>Bienvenido, <?php echo $_SESSION["NOMBRE_USUARIO"] ?></span>
+                        <span>Bienvenido, <?php echo $_SESSION["NombreUsuario"] ?></span>
 
                     </h2>
 

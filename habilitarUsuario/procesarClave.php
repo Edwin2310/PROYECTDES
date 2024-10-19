@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $correo_electronico = $temp_password_row['CorreoElectronico'];
 
             // Preparar y ejecutar la actualización de contraseña y estado_usuario
-            $stmt_update = $conexion->prepare("UPDATE `seguridad.tblusuarios` SET Contraseña = ?, EstadoUsuario = 1 WHERE CorreoElectronico = ?");
+            $stmt_update = $conexion->prepare("UPDATE `seguridad.tblusuarios` SET Contraseña = ?, IdEstado = 1 WHERE CorreoElectronico = ?");
             if (!$stmt_update) {
                 throw new Exception('Error al preparar la consulta de actualización.');
             }

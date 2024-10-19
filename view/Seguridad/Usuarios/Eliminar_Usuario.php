@@ -16,7 +16,7 @@ if (!$conn) {
 $IdUsuario = $_POST['IdUsuario'];
 
 // Preparar la consulta SQL para actualizar el estado del usuario
-$sql = "UPDATE `seguridad.tblusuarios` SET EstadoUsuario = 2 WHERE IdUsuario = :IdUsuario";
+$sql = "UPDATE `seguridad.tblusuarios` SET IdEstado = 2 WHERE IdUsuario = :IdUsuario";
 
 $stmt = $conn->prepare($sql);
 

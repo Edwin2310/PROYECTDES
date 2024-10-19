@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         // Verificar si el número de identidad ya existe
-        $sql_check_identidad = "SELECT COUNT(*) as count FROM `seguridad.tblusuariospersonal` WHERE NumIdentidad = :NumIdentidad";
+        $sql_check_identidad = "SELECT COUNT(*) as count FROM `seguridad.tbldatospersonales` WHERE NumIdentidad = :NumIdentidad";
         $stmt_check_identidad = $conn->prepare($sql_check_identidad);
         $stmt_check_identidad->bindParam(':NumIdentidad', $NumIdentidad);
         $stmt_check_identidad->execute();
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $response['message'] = 'El número de identidad ya está en uso.';
         } else {
             // Verificar si el usuario ya existe
-            $sql_check_usuario = "SELECT COUNT(*) as count FROM `seguridad.tblusuariospersonal` WHERE Usuario = :Usuario";
+            $sql_check_usuario = "SELECT COUNT(*) as count FROM `seguridad.tbldatospersonales` WHERE Usuario = :Usuario";
             $stmt_check_usuario = $conn->prepare($sql_check_usuario);
             $stmt_check_usuario->bindParam(':Usuario', $Usuario);
             $stmt_check_usuario->execute();
@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $CodigoValidacion = generateValidationCode();
 
                     // Insertar el nuevo usuario en la tabla seguridad.tblusuarios
-                    $sql = "INSERT INTO `seguridad.tblusuarios` (CorreoElectronico, Contraseña, IdRol, IdUniversidad, CreadoPor, EstadoUsuario) VALUES (?, ?, ?, ?, ?, 4)";
+                    $sql = "INSERT INTO `seguridad.tblusuarios` (CorreoElectronico, Contraseña, IdRol, IdUniversidad, CreadoPor, IdEstado) VALUES (?, ?, ?, ?, ?, 4)";
                     $stmt = $conn->prepare($sql);
                     $stmt->execute([
                         $CorreoElectronico,
@@ -110,8 +110,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // Obtener el IdUsuario generado
                     $IdUsuario = $conn->lastInsertId();
 
-                    // Insertar el nuevo registro en seguridad.tblusuariospersonal
-                    $sql_personal = "INSERT INTO `seguridad.tblusuariospersonal` (IdUsuario, NombreUsuario, NumIdentidad, NumEmpleado, Usuario, EmpleadoDes, Direccion) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                    // Insertar el nuevo registro en seguridad.tbldatospersonales
+                    $sql_personal = "INSERT INTO `seguridad.tbldatospersonales` (IdUsuario, NombreUsuario, NumIdentidad, NumEmpleado, Usuario, EmpleadoDes, Direccion) VALUES (?, ?, ?, ?, ?, ?, ?)";
                     $stmt_personal = $conn->prepare($sql_personal);
                     $stmt_personal->execute([
                         $IdUsuario,

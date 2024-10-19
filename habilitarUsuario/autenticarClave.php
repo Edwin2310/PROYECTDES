@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($update_stmt->rowCount() > 0) {
                 // Obtener el correo electrónico del usuario desde la tabla reset_contraseña
-                $stmt_correo = $conexion->prepare("SELECT r.CorreoElectronico, p.NombreUsuario FROM `seguridad.tblresetcontraseñas` r INNER JOIN `seguridad.tblusuarios` u ON r.CorreoElectronico = u.CorreoElectronico INNER JOIN `seguridad.tblusuariospersonal` p ON u.IdUsuario = p.IdUsuario WHERE r.CodigoValidacion =  ?");
+                $stmt_correo = $conexion->prepare("SELECT r.CorreoElectronico, p.NombreUsuario FROM `seguridad.tblresetcontraseñas` r INNER JOIN `seguridad.tblusuarios` u ON r.CorreoElectronico = u.CorreoElectronico INNER JOIN `seguridad.tbldatospersonales` p ON u.IdUsuario = p.IdUsuario WHERE r.CodigoValidacion =  ?");
                 $stmt_correo->execute([$CodigoValidacion]);
                 $resultado_correo = $stmt_correo->fetch(PDO::FETCH_ASSOC);
 

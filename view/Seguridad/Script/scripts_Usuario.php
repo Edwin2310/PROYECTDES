@@ -64,7 +64,7 @@
     });
 </script>
 
-
+<!-- Script que levanta el modal de Editar, donde estan los datos -->
 <script>
     $('#editUserModal').on('show.bs.modal', function(event) {
         var button = $(event.relatedTarget);
@@ -75,9 +75,8 @@
         var CorreoElectronico = button.data('correoelectronico');
         var NombreUsuario = button.data('nombreusuario');
         var NumEmpleado = button.data('numempleado');
-        var EstadoUsuario = button.data('estadousuario');
+        var IdEstado = button.data('idestado'); // Aquí debe ser minúscula
         var IdRol = button.data('idrol');
-        var CreadoPor = button.data('creadopor');
 
         var modal = $(this);
         modal.find('.modal-body #edit_IdUsuario').val(id);
@@ -87,9 +86,8 @@
         modal.find('.modal-body #edit_CorreoElectronico').val(CorreoElectronico);
         modal.find('.modal-body #edit_NombreUsuario').val(NombreUsuario);
         modal.find('.modal-body #edit_NumEmpleado').val(NumEmpleado);
-        modal.find('.modal-body #edit_EstadoUsuario').val(EstadoUsuario);
+        modal.find('.modal-body #edit_IdEstado').val(IdEstado); // Asignar valor a edit_IdEstado
         modal.find('.modal-body #edit_IdRol').val(IdRol);
-        modal.find('.modal-body #edit_universidad_nueva').val(IdUniversidad);
     });
 
     $('#confirmDeleteModal').on('show.bs.modal', function(event) {

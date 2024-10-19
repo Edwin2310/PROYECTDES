@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $Usuario = filter_input(INPUT_POST, 'Usuario', FILTER_SANITIZE_STRING);
     $CorreoElectronico = filter_input(INPUT_POST, 'CorreoElectronico', FILTER_SANITIZE_EMAIL);
     $NombreUsuario = filter_input(INPUT_POST, 'NombreUsuario', FILTER_SANITIZE_STRING);
-    $EstadoUsuario = filter_input(INPUT_POST, 'EstadoUsuario', FILTER_SANITIZE_NUMBER_INT);
+    $IdEstado = filter_input(INPUT_POST, 'IdEstado', FILTER_SANITIZE_NUMBER_INT);
     $IdRol = filter_input(INPUT_POST, 'rol', FILTER_SANITIZE_NUMBER_INT);
     $NumEmpleado = filter_input(INPUT_POST, 'NumEmpleado', FILTER_SANITIZE_NUMBER_INT);
     $IdUniversidad = filter_input(INPUT_POST, 'IdUniversidad', FILTER_SANITIZE_NUMBER_INT);
@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Primera consulta para actualizar la tabla `seguridad.tblusuarios`
     $sql = "UPDATE `seguridad.tblusuarios` SET 
             CorreoElectronico = :CorreoElectronico, 
-            EstadoUsuario = :EstadoUsuario, 
+            IdEstado = :IdEstado, 
             IdRol = :IdRol, 
             IdUniversidad = :IdUniversidad, 
             ModificadoPor = :ModificadoPor
@@ -41,14 +41,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Bind de parámetros para la primera consulta
     $stmt1->bindParam(':CorreoElectronico', $CorreoElectronico, PDO::PARAM_STR);
-    $stmt1->bindParam(':EstadoUsuario', $EstadoUsuario, PDO::PARAM_INT);
+    $stmt1->bindParam(':IdEstado', $IdEstado, PDO::PARAM_INT);
     $stmt1->bindParam(':IdRol', $IdRol, PDO::PARAM_INT);
     $stmt1->bindParam(':IdUniversidad', $IdUniversidad, PDO::PARAM_INT);
     $stmt1->bindParam(':ModificadoPor', $ModificadoPor, PDO::PARAM_INT);
     $stmt1->bindParam(':IdUsuario', $IdUsuario, PDO::PARAM_INT);
 
-    // Segunda consulta para actualizar la tabla `seguridad.tblusuariospersonal`
-    $sql2 = "UPDATE `seguridad.tblusuariospersonal` SET 
+    // Segunda consulta para actualizar la tabla `seguridad.tbldatospersonales`
+    $sql2 = "UPDATE `seguridad.tbldatospersonales` SET 
         NumIdentidad = :NumIdentidad, 
         Direccion = :Direccion, 
         Usuario = :Usuario, 
@@ -72,9 +72,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Ejecutar la segunda consulta
         if ($stmt2->execute()) {
             // Si el nuevo estado es 'Activo', actualizamos el estado y los intentos
-            if ($EstadoUsuario == 1) {
+            if ($IdEstado == 1) {
                 $sql_update_estado = "UPDATE `seguridad.tblusuarios` SET 
-                                      EstadoUsuario = :EstadoUsuario, 
+                                      IdEstado = :IdEstado, 
                                       NumIntentos = 0
                                       WHERE IdUsuario = :IdUsuario";
 
@@ -82,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt_update_estado = $conn->prepare($sql_update_estado);
 
                 // Bind de parámetros
-                $stmt_update_estado->bindParam(':EstadoUsuario', $EstadoUsuario, PDO::PARAM_INT);
+                $stmt_update_estado->bindParam(':IdEstado', $IdEstado, PDO::PARAM_INT);
                 $stmt_update_estado->bindParam(':IdUsuario', $IdUsuario, PDO::PARAM_INT);
 
                 // Ejecutar la consulta

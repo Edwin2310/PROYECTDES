@@ -16,7 +16,7 @@ $Valor = $_POST['Valor'];
 $IdUsuario = $_POST['IdUsuario'];
 
 // Obtener el nombre del usuario según el IdUsuario
-$sql_nombre_usuario = "SELECT NombreUsuario FROM `seguridad.tblusuariospersonal` WHERE IdUsuario = :IdUsuario";
+$sql_nombre_usuario = "SELECT NombreUsuario FROM `seguridad.tbldatospersonales` WHERE IdUsuario = :IdUsuario";
 $stmt_nombre_usuario = $conn->prepare($sql_nombre_usuario);
 $stmt_nombre_usuario->bindParam(':IdUsuario', $IdUsuario);
 $stmt_nombre_usuario->execute();

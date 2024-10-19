@@ -2,15 +2,23 @@
 session_start();
 require_once("../../config/conexion.php");
 require_once(__DIR__ . '/Script/Funciones.php');
+require_once(__DIR__ . '/../Seguridad/Permisos/Funciones_Permisos.php');
 if (isset($_SESSION["IdUsuario"])) {
 
+    // Obtener los valores necesarios para la verificación
+    $id_rol = $_SESSION['IdRol'] ?? null;
+    $id_objeto = 15; // ID del objeto o módulo correspondiente a esta página
+    // Llama a la función para verificar los permisos
+    verificarPermiso($id_rol, $id_objeto);
+
 ?>
+
 
     <!doctype html>
     <html lang="en" class="no-focus">
 
     <head>
-        <title>Usuarios</title>
+        <title>Usuarios Inactivos</title>
         <?php require_once("../MainHead/MainHead.php"); ?>
         <script src="../Seguridad/Bitacora/Bitacora.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -64,7 +72,7 @@ if (isset($_SESSION["IdUsuario"])) {
                 <div class="content">
                     <div class="block">
                         <div class="block-header block-header-default">
-                            <h3 class="block-title">Menú Ingreso De Usuario Inactivos<small></small></h3>
+                            <h3 class="block-title">Menú Ingreso De Usuario Inactivos <small></small></h3>
                         </div>
                         <div class="block-content block-content-full">
                             <td class="text-center">
@@ -91,7 +99,6 @@ if (isset($_SESSION["IdUsuario"])) {
                                                 <th class="d-none d-sm-table-cell">Estado Usuario</th>
                                                 <th class="d-none d-sm-table-cell">Nombre Rol</th>
                                                 <th class="text-center hidden-column">Fecha Creación</th>
-                                                <th class="text-center hidden-column">Modificado Por</th>
                                                 <th class="text-center hidden-column">Universidad</th>
                                                 <th class="text-center" style="width: 15%;">Editar Usuario</th>
                                             </tr>
@@ -118,10 +125,9 @@ if (isset($_SESSION["IdUsuario"])) {
                                                     echo "<td>{$row['CorreoElectronico']}</td>";
                                                     echo "<td>{$row['NombreUsuario']}</td>";
                                                     echo "<td>{$row['NumEmpleado']}</td>";
-                                                    echo "<td>{$row['EstadoUsuario']}</td>";
+                                                    echo "<td>{$row['IdEstado']}</td>";
                                                     echo "<td>{$row['IdRol']}</td>";
                                                     echo "<td class='text-center hidden-column'>{$row['FechaCreacion']}</td>";
-                                                    echo "<td class='text-center hidden-column'>{$row['ModificadoPor']}</td>";
                                                     echo "<td class='text-center hidden-column'>{$row['IdUniversidad']}</td>";
                                                     echo "<td class='text-center'> 
                                                         <button type='button' class='btn btn-sm btn-secondary' data-toggle='modal' data-target='#editUserModal' 
@@ -132,13 +138,11 @@ if (isset($_SESSION["IdUsuario"])) {
                                                                 data-CorreoElectronico='" . $row["CorreoElectronico"] . "' 
                                                                 data-NombreUsuario='" . $row["NombreUsuario"] . "' 
                                                                 data-NumEmpleado='" . $row["NumEmpleado"] . "'
-                                                                data-EstadoUsuario='" . $row["EstadoUsuario"] . "' 
-                                                                data-IdRol='" . $row["IdRol"] . "' 
-                                                                data-ModificadoPor='" . $row["ModificadoPor"] . "'>
+                                                                data-IdEstado='" . $row["IdEstado"] . "' 
+                                                                data-IdRol='" . $row["IdRol"] . "'>
                                                                 <i class='si si-note'></i>
                                                            </button>
-                                                           </td>";
-                                                    echo "</tr>";
+                                                        </td>";
                                                 }
                                             } else {
                                                 echo "<tr><td colspan='12' class='text-center'>No hay datos disponibles</td></tr>";
@@ -157,74 +161,6 @@ if (isset($_SESSION["IdUsuario"])) {
         </div>
         <?php require_once("../MainJs/MainJs.php"); ?>
 
-        <!-- Modal para agregar usuarios -->
-        <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addUserModalLabel">Añadir Usuario</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="addUserForm" method="POST">
-                            <div class="form-group">
-                                <label for="NumIdentidad">Número de Identidad</label>
-                                <input type="text" class="form-control" id="NumIdentidad" name="NumIdentidad" placeholder="0801199923672" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="Direccion">Dirección</label>
-                                <input type="text" class="form-control" id="Direccion" name="Direccion" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="Usuario">Usuario</label>
-                                <input type="text" class="form-control" id="Usuario" name="Usuario" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="CorreoElectronico">Correo Electrónico</label>
-                                <input type="email" class="form-control" id="CorreoElectronico" name="CorreoElectronico" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="NombreUsuario">Nombre de Usuario</label>
-                                <input type="text" class="form-control" id="NombreUsuario" name="NombreUsuario" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="NumEmpleado">Número de Empleado</label>
-                                <input type="number" class="form-control" id="NumEmpleado" name="NumEmpleado" required>
-                            </div>
-                            <div class="form-group" id="EmpleadoDes">
-                                <label for="EmpleadoDes">Empleado DES</label>
-                                <select class="form-control" id="EmpleadoDes_select" name="EmpleadoDes" required>
-                                    <option value="" disabled selected style="display:none;">Seleccionar Opción</option>
-                                    <option value="1">Sí</option>
-                                    <option value="2">No</option>
-                                </select>
-                            </div>
-                            <input type="hidden" id="EstadoUsuario" name="EstadoUsuario" value="1">
-                            <div class="form-group">
-                                <label for="IdRol">Rol</label>
-                                <select class="form-control" id="IdRol" name="IdRol" required>
-                                    <option value="" disabled selected style="display:none;">Seleccionar Rol</option>
-                                    <?php echo obtenerRoles($usuario); ?>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="IdUniversidad">Universidad</label>
-                                <select class="form-control" id="IdUniversidad" name="IdUniversidad" required>
-                                    <option value="" disabled selected style="display:none;">Seleccionar Universidad</option>
-                                    <?php echo obtenerUniversidades($usuario); ?>
-                                </select>
-                            </div>
-                            <input type="hidden" id="IdUsuario" name="IdUsuario" value="<?php echo $_SESSION['IdUsuario']; ?>">
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary" id="guardarBtn">Guardar</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- Modal para editar usuarios -->
         <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
@@ -265,12 +201,12 @@ if (isset($_SESSION["IdUsuario"])) {
                                 <input type="text" class="form-control" id="edit_NumEmpleado" name="NumEmpleado">
                             </div>
                             <div class="form-group">
-                                <label for="edit_EstadoUsuario">Estado Usuario</label>
-                                <input type="text" class="form-control" id="edit_EstadoUsuario" name="EstadoUsuario" readonly>
+                                <label for="edit_IdEstado">Estado Usuario</label>
+                                <input type="text" class="form-control" id="edit_IdEstado" name="IdEstado" readonly>
                             </div>
                             <div class="form-group">
-                                <label for="edit_EstadoUsuario_nuevo">Seleccionar Nuevo Estado</label>
-                                <select class="form-control" id="edit_EstadoUsuario_nuevo" name="EstadoUsuario" required>
+                                <label for="edit_IdEstado_nuevo">Seleccionar Nuevo Estado</label>
+                                <select class="form-control" id="edit_IdEstado_nuevo" name="IdEstado" required>
                                     <option value="" disabled selected style="display:none;">Seleccionar Estado</option>
                                     <?php echo editarEstadosInactivos($usuario); ?>
                                 </select>
@@ -301,7 +237,6 @@ if (isset($_SESSION["IdUsuario"])) {
                 </div>
             </div>
         </div>
-
 
         <?php include("./Script/scripts_Usuario.php"); ?>
 

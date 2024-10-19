@@ -137,7 +137,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                                     echo "<td>{$row['CorreoElectronico']}</td>";
                                                     echo "<td>{$row['NombreUsuario']}</td>";
                                                     echo "<td>{$row['NumEmpleado']}</td>";
-                                                    echo "<td>{$row['EstadoUsuario']}</td>";
+                                                    echo "<td>{$row['IdEstado']}</td>";
                                                     echo "<td>{$row['IdRol']}</td>";
                                                     echo "<td class='text-center hidden-column'>{$row['FechaCreacion']}</td>";
                                                     echo "<td class='text-center hidden-column'>{$row['CreadoPor']}</td>";
@@ -151,7 +151,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                                                 data-CorreoElectronico='" . $row["CorreoElectronico"] . "' 
                                                                 data-NombreUsuario='" . $row["NombreUsuario"] . "' 
                                                                 data-NumEmpleado='" . $row["NumEmpleado"] . "'
-                                                                data-EstadoUsuario='" . $row["EstadoUsuario"] . "' 
+                                                                data-IdEstado='" . $row["IdEstado"] . "' 
                                                                 data-IdRol='" . $row["IdRol"] . "' 
                                                                 data-CreadoPor='" . $row["CreadoPor"] . "'>
                                                                 <i class='si si-note'></i>
@@ -226,7 +226,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                     <option value="2">No</option>
                                 </select>
                             </div>
-                            <input type="hidden" id="EstadoUsuario" name="EstadoUsuario" value="1">
+                            <input type="hidden" id="IdEstado" name="IdEstado" value="1">
                             <div class="form-group">
                                 <label for="IdRol">Rol</label>
                                 <select class="form-control" id="IdRol" name="IdRol" required>
@@ -290,12 +290,12 @@ if (isset($_SESSION["IdUsuario"])) {
                                 <input type="text" class="form-control" id="edit_NumEmpleado" name="NumEmpleado">
                             </div>
                             <div class="form-group">
-                                <label for="edit_EstadoUsuario">Estado Usuario</label>
-                                <input type="text" class="form-control" id="edit_EstadoUsuario" name="EstadoUsuario" readonly>
+                                <label for="edit_IdEstado">Estado Usuario</label>
+                                <input type="text" class="form-control" id="edit_IdEstado" name="IdEstado" readonly>
                             </div>
                             <div class="form-group">
-                                <label for="edit_EstadoUsuario_nuevo">Seleccionar Nuevo Estado</label>
-                                <select class="form-control" id="edit_EstadoUsuario_nuevo" name="EstadoUsuario" required>
+                                <label for="edit_IdEstado_nuevo">Seleccionar Nuevo Estado</label>
+                                <select class="form-control" id="edit_IdEstado_nuevo" name="IdEstado" required>
                                     <option value="" disabled selected style="display:none;">Seleccionar Estado</option>
                                     <?php echo editarEstados($usuario); ?>
                                 </select>

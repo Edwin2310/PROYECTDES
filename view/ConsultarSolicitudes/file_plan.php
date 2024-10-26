@@ -1,41 +1,44 @@
 <?php
 require_once("../../config/conexion.php");
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 $id = isset($_GET['id']) ? htmlspecialchars($_GET['id']) : '';
 
 if ($id) {
-    $conexion = new Conectar();
-    $conn = $conexion->Conexion();
+    try {
+        $conexion = new Conectar();
+        $conn = $conexion->Conexion();
 
-    // Consulta para obtener la última observación de la solicitud
-    $sql = "SELECT ADJUNTO_PLAN 
-            FROM tbl_plan_estudio
-            WHERE ID_SOLICITUD = :id
-            ORDER BY ID_PLAN_ESTUDIO DESC
-            LIMIT 1";
-    
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    $stmt->execute();
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Llamada al procedimiento almacenado
+        $sql = "CALL `proceso.splObtenerArchivoPlanEstudio`(:id)";
 
-    if ($row) {
-        $relativePath = $row['ADJUNTO_PLAN'];
-        $fileName = basename($relativePath);
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Construir la URL completa del archivo
-        $basePath = "../MantenimientoSolicitudes/";
-        $fullPath = $basePath . $relativePath;
+        if ($row) {
+            $relativePath = $row['AdjuntoPlan'];
+            $fileName = basename($relativePath);
 
-        // Devolver la respuesta en formato JSON
-        echo json_encode([
-            'name' => $fileName,
-            'url' => $fullPath
-        ]);
-    } else {
-        echo json_encode([]);
+            // Construir la URL completa del archivo
+            $basePath = "../MantenimientoSolicitudes/";
+            $fullPath = $basePath . $relativePath;
+
+            // Devolver la respuesta en formato JSON
+            echo json_encode([
+                'name' => $fileName,
+                'url' => $fullPath
+            ]);
+        } else {
+            echo json_encode([]);
+        }
+    } catch (Exception $e) {
+        echo json_encode(['error' => $e->getMessage()]);
     }
+} else {
+    echo json_encode(['error' => 'No se proporcionó el ID de solicitud']);
 }
-
-
-

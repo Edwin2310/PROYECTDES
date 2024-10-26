@@ -146,97 +146,89 @@ if (isset($_SESSION["IdUsuario"])) {
                                     );
 
                                     // Define qué estados requieren un proceso adicional
-                                    $requiere_proceso = array(
-                                        2,
-                                        10,
-                                        17
-                                    );
+                                    $requiere_proceso = array(2, 10, 17);
 
+                                    // Mapeo de procesos y sus links
                                     $procesos_links = array(
                                         2 => 'SubsanarDocumentos.php',
                                         10 => 'SubsanacionAnalisisCurricular.php',
                                         17 => 'entregaplanestudios.php'
-                                        // Agrega otros estados con enlaces específicos aquí si es necesario
                                     );
 
-                                    $sql = "SELECT a.ID_SOLICITUD, b.NOM_CARRERA, c.NOM_CATEGORIA, d.NOM_UNIVERSIDAD, e.NOM_GRADO, f.ESTADO_sOLICITUD, g.NOM_MODALIDAD, a.ID_ESTADO
-                                            FROM tbl_solicitudes a 
-                                            LEFT JOIN tbl_carrera b ON a.ID_CARRERA = b.ID_CARRERA
-                                            LEFT JOIN tbl_categoria c ON a.ID_CATEGORIA = c.ID_CATEGORIA
-                                            LEFT JOIN tbl_universidad_centro d ON a.ID_UNIVERSIDAD = d.ID_UNIVERSIDAD
-                                            LEFT JOIN tbl_grado_academico e ON a.ID_GRADO = e.ID_GRADO
-                                            LEFT JOIN tbl_estado_solicitud f ON a.ID_ESTADO = f.ID_ESTADO
-                                            LEFT JOIN tbl_modalidad g ON a.ID_MODALIDAD = g.ID_MODALIDAD
-                                            WHERE a.ID_ESTADO";
+                                    try {
+                                        // Llamar al procedimiento almacenado
+                                        $sql = "CALL `proceso.splConsultarSolicitudes`()";
+                                        $result = $conn->query($sql);
 
-                                    $result = $conn->query($sql);
-                                    if ($result !== false && $result->rowCount() > 0) {
-                                        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                                            $estado_num = $row['ID_ESTADO'];
-                                            $progreso = isset($estado_progreso[$estado_num]) ? $estado_progreso[$estado_num] : 0;
+                                        if ($result !== false && $result->rowCount() > 0) {
+                                            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                                                $estado_num = $row['IdEstado'];
+                                                $progreso = isset($estado_progreso[$estado_num]) ? $estado_progreso[$estado_num] : 0;
 
-                                            // Definir color según el progreso
-                                            if ($progreso <= 20) {
-                                                $bg_color = 'bg-danger';
-                                            } elseif ($progreso <= 40) {
-                                                $bg_color = 'bg-warning';
-                                            } elseif ($progreso <= 60) {
-                                                $bg_color = 'bg-info';
-                                            } elseif ($progreso <= 80) {
-                                                $bg_color = 'bg-primary';
-                                            } elseif ($progreso < 100) {
-                                                $bg_color = 'bg-success';
-                                            } else {
-                                                // Ajustar el color de fondo para el 100% (verde success o azul)
-                                                $bg_color = 'bg-success'; // Cambia a 'bg-primary' para azul
-                                            }
+                                                // Definir color según el progreso
+                                                if ($progreso <= 20) {
+                                                    $bg_color = 'bg-danger';
+                                                } elseif ($progreso <= 40) {
+                                                    $bg_color = 'bg-warning';
+                                                } elseif ($progreso <= 60) {
+                                                    $bg_color = 'bg-info';
+                                                } elseif ($progreso <= 80) {
+                                                    $bg_color = 'bg-primary';
+                                                } elseif ($progreso < 100) {
+                                                    $bg_color = 'bg-success';
+                                                } else {
+                                                    $bg_color = 'bg-success'; // Para 100%
+                                                }
 
-                                            // Cambiar color de la pleca SPA según el estado
-                                            if ($progreso <= 20) {
-                                                $estado_color = 'badge-danger';
-                                            } elseif ($progreso <= 40) {
-                                                $estado_color = 'badge-warning';
-                                            } elseif ($progreso <= 60) {
-                                                $estado_color = 'badge-info';
-                                            } elseif ($progreso <= 80) {
-                                                $estado_color = 'badge-primary';
-                                            } elseif ($progreso < 100) {
-                                                $estado_color = 'badge-success';
-                                            } else {
-                                                // Ajustar el color de la pleca para el 100% (verde success o azul)
-                                                $estado_color = 'badge-success'; // Cambia a 'badge-primary' para azul
-                                            }
-                                            // Verificar si el estado requiere un proceso
-                                            $is_proceso = in_array($estado_num, $requiere_proceso);
-                                            $btn_disabled = !$is_proceso ? 'disabled' : '';
+                                                // Cambiar color de la pleca SPA según el estado
+                                                if ($progreso <= 20) {
+                                                    $estado_color = 'badge-danger';
+                                                } elseif ($progreso <= 40) {
+                                                    $estado_color = 'badge-warning';
+                                                } elseif ($progreso <= 60) {
+                                                    $estado_color = 'badge-info';
+                                                } elseif ($progreso <= 80) {
+                                                    $estado_color = 'badge-primary';
+                                                } elseif ($progreso < 100) {
+                                                    $estado_color = 'badge-success';
+                                                } else {
+                                                    $estado_color = 'badge-success'; // Para 100%
+                                                }
 
-                                            // Determinar el enlace basado en el estado y añadir la ID de la solicitud
-                                            $link_proceso = $is_proceso ? (isset($procesos_links[$estado_num]) ? $procesos_links[$estado_num] . "?id=" . $row['ID_SOLICITUD'] : '#') : '#';
+                                                // Verificar si el estado requiere un proceso
+                                                $is_proceso = in_array($estado_num, $requiere_proceso);
+                                                $btn_disabled = !$is_proceso ? 'disabled' : '';
 
-                                            // Datos de la solicitud
-                                            echo "<tr>";
-                                            echo "<td class='text-center'>{$row['ID_SOLICITUD']}</td>";
-                                            echo "<td>{$row['NOM_CARRERA']}</td>";
-                                            echo "<td>{$row['NOM_CATEGORIA']}</td>";
-                                            echo "<td>{$row['NOM_UNIVERSIDAD']}</td>";
-                                            echo "<td>{$row['NOM_GRADO']}</td>";
-                                            echo "<td><span class='badge $estado_color'>{$row['ESTADO_sOLICITUD']}</span></td>";
-                                            echo "<td class='text-center'>
-                                                <div class='progress'>
-                                                    <div class='progress-bar progress-bar-striped progress-bar-animated $bg_color' role='progressbar' style='width: {$progreso}%; position: relative;' aria-valuenow='{$progreso}' aria-valuemin='0' aria-valuemax='100'>
-                                                        <span class='progress-bar-label' style='position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); text-align: center; color: #000; font-weight: bold;'>{$progreso}%</span>
+                                                // Determinar el enlace basado en el estado y añadir la ID de la solicitud
+                                                $link_proceso = $is_proceso ? (isset($procesos_links[$estado_num]) ? $procesos_links[$estado_num] . "?id=" . $row['IdSolicitud'] : '#') : '#';
+
+                                                // Datos de la solicitud
+                                                echo "<tr>";
+                                                echo "<td class='text-center'>{$row['IdSolicitud']}</td>";
+                                                echo "<td>{$row['NomCarrera']}</td>";
+                                                echo "<td>{$row['NomCategoria']}</td>";
+                                                echo "<td>{$row['NomUniversidad']}</td>";
+                                                echo "<td>{$row['NomGrado']}</td>";
+                                                echo "<td><span class='badge $estado_color'>{$row['EstadoSolicitud']}</span></td>";
+                                                echo "<td class='text-center'>
+                                                    <div class='progress'>
+                                                        <div class='progress-bar progress-bar-striped progress-bar-animated $bg_color' role='progressbar' style='width: {$progreso}%; position: relative;' aria-valuenow='{$progreso}' aria-valuemin='0' aria-valuemax='100'>
+                                                            <span class='progress-bar-label' style='position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); text-align: center; color: #000; font-weight: bold;'>{$progreso}%</span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </td>";
-                                            echo "<td class='text-center'>
-                                                <a href='{$link_proceso}' class='btn btn-sm btn-secondary $btn_disabled' " . ($btn_disabled ? "title='No se puede realizar proceso en este estado'" : "") . ">
-                                                    Proceso
-                                                </a>
-                                            </td>";
-                                            echo "</tr>";
+                                                </td>";
+                                                                            echo "<td class='text-center'>
+                                                    <a href='{$link_proceso}' class='btn btn-sm btn-secondary $btn_disabled' " . ($btn_disabled ? "title='No se puede realizar proceso en este estado'" : "") . ">
+                                                        Proceso
+                                                    </a>
+                                                </td>";
+                                                echo "</tr>";
+                                            }
+                                        } else {
+                                            echo "<tr><td colspan='8' class='text-center'>No hay datos disponibles</td></tr>";
                                         }
-                                    } else {
-                                        echo "<tr><td colspan='8' class='text-center'>No hay datos disponibles</td></tr>";
+                                    } catch (PDOException $e) {
+                                        echo "Error: " . $e->getMessage();
                                     }
                                     ?>
 

@@ -104,51 +104,50 @@ if (isset($_SESSION["IdUsuario"])) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php
+                                <?php
                                     require_once("../../config/conexion.php");
+
                                     $conexion = new Conectar();
                                     $conn = $conexion->Conexion();
 
-                                    $sql = "SELECT a.ID_SOLICITUD, b.NOM_CARRERA, c.NOM_CATEGORIA, d.NOM_UNIVERSIDAD, e.NOM_GRADO, f.ESTADO_sOLICITUD, g.NOM_MODALIDAD, a.ID_ESTADO
-                                            FROM tbl_solicitudes a 
-                                            LEFT JOIN tbl_carrera b ON a.ID_CARRERA = b.ID_CARRERA
-                                            LEFT JOIN tbl_categoria c ON a.ID_CATEGORIA = c.ID_CATEGORIA
-                                            LEFT JOIN tbl_universidad_centro d ON a.ID_UNIVERSIDAD = d.ID_UNIVERSIDAD
-                                            LEFT JOIN tbl_grado_academico e ON a.ID_GRADO = e.ID_GRADO
-                                            LEFT JOIN tbl_estado_solicitud f ON a.ID_ESTADO = f.ID_ESTADO
-                                            LEFT JOIN tbl_modalidad g ON a.ID_MODALIDAD = g.ID_MODALIDAD
-                                            WHERE a.ID_ESTADO IN (19, 13);"; // IN para seleccionar los estados 8 y 11
+                                    try {
+                                        // Preparar la llamada al procedimiento almacenado
+                                        $sql = "CALL `proceso.splSolicitudesDGCA`()";
+                                        $stmt = $conn->prepare($sql);
+                                        $stmt->execute();
 
-                                    $result = $conn->query($sql);
-                                    if ($result !== false && $result->rowCount() > 0) {
-                                        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                                            echo "<tr>";
-                                            echo "<td class='text-center'>{$row['ID_SOLICITUD']}</td>";
-                                            echo "<td>{$row['NOM_CARRERA']}</td>";
-                                            echo "<td>{$row['NOM_CATEGORIA']}</td>";
-                                            echo "<td>{$row['NOM_UNIVERSIDAD']}</td>";
-                                            echo "<td>{$row['NOM_GRADO']}</td>";
+                                        // Verificar si hay resultados
+                                        if ($stmt->rowCount() > 0) {
+                                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                                echo "<tr>";
+                                                echo "<td class='text-center'>{$row['IdSolicitud']}</td>";
+                                                echo "<td>{$row['NomCarrera']}</td>";
+                                                echo "<td>{$row['NomCategoria']}</td>";
+                                                echo "<td>{$row['NomUniversidad']}</td>";
+                                                echo "<td>{$row['NomGrado']}</td>";
 
-                                            // Condición para mostrar el badge correcto según el estado
-                                            if ($row['ID_ESTADO'] == 19) {
-                                                echo "<td><span class='badge badge-info'>{$row['ESTADO_sOLICITUD']}</span></td>";
-                                            } elseif ($row['ID_ESTADO'] == 13) {
-                                                echo "<td><span class='badge badge-success'>{$row['ESTADO_sOLICITUD']}</span></td>";
-                                            } 
+                                                // Condición para mostrar el badge correcto según el estado
+                                                if ($row['IdEstado'] == 19) {
+                                                    echo "<td><span class='badge badge-info'>{$row['EstadoSolicitud']}</span></td>";
+                                                } elseif ($row['IdEstado'] == 13) {
+                                                    echo "<td><span class='badge badge-success'>{$row['EstadoSolicitud']}</span></td>";
+                                                }
 
-                                            echo "<td class='text-center'>
-                                                    <a href='SolicitudesProcesoDGAC.php?id={$row['ID_SOLICITUD']}'>
-                                                        <button type='button' class='btn btn-sm btn-secondary'>
-                                                            Revisar OR DES
-                                                        </button>
-                                                    </a>
-                                                  </td>";
-                                            echo "</tr>";
+                                                echo "<td class='text-center'>
+                                                <a href='SolicitudesProcesoDGAC.php?id={$row['IdSolicitud']}'>
+                                                    <button type='button' class='btn btn-sm btn-secondary'>
+                                                        Revisar OR DES
+                                                    </button>
+                                                </a>
+                                            </td>";
+                                                echo "</tr>";
+                                            }
+                                        } else {
+                                            echo "<tr><td colspan='7' class='text-center'>No hay datos disponibles</td></tr>";
                                         }
-                                    } else {
-                                        echo "<tr><td colspan='7' class='text-center'>No hay datos disponibles</td></tr>";
+                                    } catch (Exception $e) {
+                                        echo "<tr><td colspan='7' class='text-center'>Error: " . $e->getMessage() . "</td></tr>";
                                     }
-
                                     ?>
                                 </tbody>
                             </table>

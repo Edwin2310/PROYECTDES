@@ -4,36 +4,32 @@ require_once("../../config/conexion.php");
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $idSolicitud = isset($_POST['idSolicitud']) ? htmlspecialchars($_POST['idSolicitud']) : '';
     $nuevoEstado = isset($_POST['nuevoEstado']) ? htmlspecialchars($_POST['nuevoEstado']) : '';
+    $idUsuario = isset($_SESSION["IdUsuario"]) ? $_SESSION["IdUsuario"] : null; // Asegúrate de que el usuario está autenticado
 
-    if ($idSolicitud && $nuevoEstado) {
+    if ($idSolicitud && $nuevoEstado && $idUsuario) {
         // Conectar a la base de datos
         $conexion = new Conectar();
         $conn = $conexion->Conexion();
 
         try {
-            // Iniciar una transacción
-            $conn->beginTransaction();
+            // Preparar llamada al procedimiento almacenado
+            $callProcedureSql = "CALL `proceso.splAprobacionYRechazo`(:idSolicitud, :nuevoEstado, :idUsuario)";
+            $callProcedureStmt = $conn->prepare($callProcedureSql);
+            $callProcedureStmt->bindParam(':idSolicitud', $idSolicitud, PDO::PARAM_INT);
+            $callProcedureStmt->bindParam(':nuevoEstado', $nuevoEstado, PDO::PARAM_INT);
+            $callProcedureStmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+            
+            $callProcedureStmt->execute();
 
-            // Actualizar el estado de la solicitud
-            $updateEstadoSql = "UPDATE tbl_solicitudes 
-                                SET ID_ESTADO = :nuevoEstado 
-                                WHERE ID_SOLICITUD = :id_solicitud";
-            $updateEstadoStmt = $conn->prepare($updateEstadoSql);
-            $updateEstadoStmt->bindParam(':nuevoEstado', $nuevoEstado, PDO::PARAM_INT);
-            $updateEstadoStmt->bindParam(':id_solicitud', $idSolicitud, PDO::PARAM_INT);
+            // Obtener el resultado del procedimiento
+            $result = $callProcedureStmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($updateEstadoStmt->execute()) {
-                // Confirmar la transacción
-                $conn->commit();
+            if ($result && $result['Status'] == 'Success') {
                 echo json_encode(['success' => true, 'message' => 'Estado actualizado correctamente.']);
             } else {
-                // Revertir la transacción si la actualización falla
-                $conn->rollBack();
                 echo json_encode(['success' => false, 'message' => 'Error al actualizar el estado de la solicitud.']);
             }
         } catch (Exception $e) {
-            // Revertir la transacción en caso de error
-            $conn->rollBack();
             echo json_encode(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
         }
     } else {

@@ -5,7 +5,7 @@ require_once("../../config/conexion.php");
 if (isset($_SESSION["IdUsuario"])) {
 
 ?>
-    <?php
+     <?php
     require_once("../../config/conexion.php");
 
     $id = isset($_GET['id']) ? htmlspecialchars($_GET['id']) : '';
@@ -14,42 +14,26 @@ if (isset($_SESSION["IdUsuario"])) {
         $conexion = new Conectar();
         $conn = $conexion->Conexion();
 
-        // Consulta para obtener los detalles de la solicitud y la ruta del archivo adjunto
-        $sql = "SELECT a.ID_SOLICITUD, a.NOMBRE_COMPLETO, a.EMAIL, b.NOM_CARRERA, c.NOM_CATEGORIA, 
-                       d.NOM_UNIVERSIDAD, e.NOM_GRADO, f.ESTADO_SOLICITUD, g.NOM_MODALIDAD,
-                       adj.PLAN_ESTUDIOS 
-                FROM tbl_solicitudes a 
-                LEFT JOIN tbl_carrera b ON a.ID_CARRERA = b.ID_CARRERA
-                LEFT JOIN tbl_categoria c ON a.ID_CATEGORIA = c.ID_CATEGORIA
-                LEFT JOIN tbl_universidad_centro d ON a.ID_UNIVERSIDAD = d.ID_UNIVERSIDAD
-                LEFT JOIN tbl_grado_academico e ON a.ID_GRADO = e.ID_GRADO
-                LEFT JOIN tbl_estado_solicitud f ON a.ID_ESTADO = f.ID_ESTADO
-                LEFT JOIN tbl_modalidad g ON a.ID_MODALIDAD = g.ID_MODALIDAD
-                LEFT JOIN tbl_archivos_adjuntos adj ON a.ID_SOLICITUD = adj.ID_SOLICITUD
-                WHERE a.ID_SOLICITUD = :id";
+        try {
+            // Llamar al procedimiento almacenado
+            $sql = "CALL `proceso.splSubsanacionAnalisis`(:id)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
 
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            // Obtener los resultados del primer conjunto de resultados (detalles de la solicitud y archivo adjunto)
+            $details = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Si se encuentra el archivo, almacenar la ruta
-        $filePath = $row['PLAN_ESTUDIOS'] ?? null;
+            // Obtener los resultados del segundo conjunto de resultados (última observación)
+            $stmt->nextRowset(); // Moverse al siguiente conjunto de resultados
+            $observacionesRow = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Consulta para obtener la última observación de la solicitud
-        $obsSql = "SELECT OBSERVACIONES 
-                   FROM tbl_opinion_razonada 
-                   WHERE ID_SOLICITUD = :id 
-                   ORDER BY CREADO_POR DESC 
-                   LIMIT 1";
-
-        $obsStmt = $conn->prepare($obsSql);
-        $obsStmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $obsStmt->execute();
-        $obsRow = $obsStmt->fetch(PDO::FETCH_ASSOC);
-
-        // Obtener la última observación
-        $observaciones = $obsRow['OBSERVACIONES'] ?? '';
+            // Extraer la última observación
+            $observaciones = $observacionesRow['Observaciones'] ?? '';
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
+            exit;
+        }
     }
     ?>
 
@@ -87,7 +71,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                 <a class="img-link mr-5" href="be_pages_generic_profile.html">
                                     <img class="img-avatar img-avatar32" src="../../public/assets/img/avatars/avatar15.jpg" alt="">
                                 </a>
-                                <a class="align-middle link-effect text-primary-dark font-w600" href="be_pages_generic_profile.html"><?php echo $_SESSION["NOMBRE_USUARIO"] ?></a>
+                                <a class="align-middle link-effect text-primary-dark font-w600" href="be_pages_generic_profile.html"><?php echo $_SESSION["NombreUsuario"] ?></a>
                             </div>
 
                         </div>
@@ -148,25 +132,25 @@ if (isset($_SESSION["IdUsuario"])) {
                                                 <div class="form-group row">
                                                     <label class="col-12" for="nombre-carrera">Nombre de la Carrera</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="nombre-carrera" name="nombre_carrera" placeholder="" value="<?php echo htmlspecialchars($row['NOM_CARRERA']); ?>" readonly required>
+                                                        <input type="text" class="form-control" id="nombre-carrera" name="nombre_carrera" placeholder="" value="<?php echo htmlspecialchars($details['NomCarrera'] ?? ''); ?>" readonly required>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-12" for="modalidad">Modalidad</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="modalidad" name="modalidad" placeholder="" value="<?php echo htmlspecialchars($row['NOM_MODALIDAD']); ?>" readonly required>
+                                                        <input type="text" class="form-control" id="modalidad" name="modalidad" placeholder="" value="<?php echo htmlspecialchars($details['NomModalidad'] ?? ''); ?>" readonly required>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-12" for="universidad">Universidad/Centro</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="universidad" name="universidad" placeholder="" value="<?php echo htmlspecialchars($row['NOM_UNIVERSIDAD']); ?>" readonly required>
+                                                        <input type="text" class="form-control" id="universidad" name="universidad" placeholder="" value="<?php echo htmlspecialchars($details['NomUniversidad'] ?? ''); ?>" readonly required>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-12" for="grado">Grado Académico</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="grado" name="grado" placeholder="" value="<?php echo htmlspecialchars($row['NOM_GRADO']); ?>" readonly required>
+                                                        <input type="text" class="form-control" id="grado" name="grado" placeholder="" value="<?php echo htmlspecialchars($details['NomGrado'] ?? ''); ?>" readonly required>
                                                     </div>
                                                 </div>
 
@@ -223,14 +207,14 @@ if (isset($_SESSION["IdUsuario"])) {
                                                 <div class="form-group row">
                                                     <label class="col-12" for="example-text-input">Nombre Completo</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="nombre-completo" name="nombre_completo" placeholder="" value="<?php echo htmlspecialchars($row['NOMBRE_COMPLETO']); ?>" readonly required>
+                                                        <input type="text" class="form-control" id="nombre-completo" name="nombre_completo" placeholder="" value="<?php echo htmlspecialchars($details['NombreCompleto'] ?? ''); ?>" readonly required>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group row">
                                                     <label class="col-12" for="example-email-input">Correo Electronico</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="correo_electronico" name="correo_electronico" placeholder="" value="<?php echo htmlspecialchars($row['EMAIL']); ?>" readonly required>
+                                                        <input type="text" class="form-control" id="correo_electronico" name="correo_electronico" placeholder="" value="<?php echo htmlspecialchars($details['CorreoElectronico'] ?? ''); ?>" readonly required>
                                                     </div>
                                                 </div>
                                             </form>

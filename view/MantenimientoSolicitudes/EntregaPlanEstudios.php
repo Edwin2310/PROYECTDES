@@ -13,19 +13,19 @@ if (isset($_SESSION["IdUsuario"])) {
     if ($id) {
         $conexion = new Conectar();
         $conn = $conexion->Conexion();
-        $sql = "SELECT a.ID_SOLICITUD, a.NOMBRE_COMPLETO, a.EMAIL,  b.NOM_CARRERA, c.NOM_CATEGORIA, d.NOM_UNIVERSIDAD, e.NOM_GRADO, f.ESTADO_SOLICITUD, g.NOM_MODALIDAD
-                FROM tbl_solicitudes a 
-                LEFT JOIN tbl_carrera b ON a.ID_CARRERA = b.ID_CARRERA
-                LEFT JOIN tbl_categoria c ON a.ID_CATEGORIA = c.ID_CATEGORIA
-                LEFT JOIN tbl_universidad_centro d ON a.ID_UNIVERSIDAD = d.ID_UNIVERSIDAD
-                LEFT JOIN tbl_grado_academico e ON a.ID_GRADO = e.ID_GRADO
-                LEFT JOIN tbl_estado_solicitud f ON a.ID_ESTADO = f.ID_ESTADO
-                LEFT JOIN tbl_modalidad g ON a.ID_MODALIDAD = g.ID_MODALIDAD
-                WHERE a.ID_SOLICITUD = :id";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        try {
+            // Preparar la llamada al procedimiento almacenado
+            $sql = "CALL `proceso.splObtenerDetalleSolicitud`(:id)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            // Obtener el resultado
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            echo "<p>Error: " . $e->getMessage() . "</p>";
+        }
     }
     ?>
     <!doctype html>
@@ -125,25 +125,25 @@ if (isset($_SESSION["IdUsuario"])) {
                                                 <div class="form-group row">
                                                     <label class="col-12" for="nombre-carrera">Nombre de la Carrera</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="nombre-carrera" name="nombre_carrera" placeholder="Coord. Curricular de la Carrera" value="<?php echo htmlspecialchars($row['NOM_CARRERA']); ?>" readonly required>
+                                                        <input type="text" class="form-control" id="nombre-carrera" name="nombre_carrera" placeholder="Coord. Curricular de la Carrera" value="<?php echo htmlspecialchars($row['NomCarrera']); ?>" readonly required>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-12" for="modalidad">Modalidad</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="modalidad" name="modalidad" placeholder="Descripción de la Modalidad" value="<?php echo htmlspecialchars($row['NOM_MODALIDAD']); ?>" readonly required>
+                                                        <input type="text" class="form-control" id="modalidad" name="modalidad" placeholder="Descripción de la Modalidad" value="<?php echo htmlspecialchars($row['NomModalidad']); ?>" readonly required>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-12" for="universidad">Universidad/Centro</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="universidad" name="universidad" placeholder="Nombre de la Universidad" value="<?php echo htmlspecialchars($row['NOM_UNIVERSIDAD']); ?>" readonly required>
+                                                        <input type="text" class="form-control" id="universidad" name="universidad" placeholder="Nombre de la Universidad" value="<?php echo htmlspecialchars($row['NomUniversidad']); ?>" readonly required>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-12" for="grado">Grado Académico</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="grado" name="grado" placeholder="Grado Académico" value="<?php echo htmlspecialchars($row['NOM_GRADO']); ?>" readonly required>
+                                                        <input type="text" class="form-control" id="grado" name="grado" placeholder="Grado Académico" value="<?php echo htmlspecialchars($row['NomGrado']); ?>" readonly required>
                                                     </div>
                                                 </div>
 
@@ -167,14 +167,14 @@ if (isset($_SESSION["IdUsuario"])) {
                                                 <div class="form-group row">
                                                     <label class="col-12" for="example-text-input">Nombre Completo</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="nombre-completo" name="nombre_completo" placeholder="" value="<?php echo htmlspecialchars($row['NOMBRE_COMPLETO']); ?>" readonly required>
+                                                        <input type="text" class="form-control" id="nombre-completo" name="nombre_completo" placeholder="" value="<?php echo htmlspecialchars($row['NombreCompleto']); ?>" readonly required>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group row">
                                                     <label class="col-12" for="example-email-input">Correo Electronico</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="correo_electronico" name="correo_electronico" placeholder="" value="<?php echo htmlspecialchars($row['EMAIL']); ?>" readonly required>
+                                                        <input type="text" class="form-control" id="correo_electronico" name="correo_electronico" placeholder="" value="<?php echo htmlspecialchars($row['CorreoElectronico']); ?>" readonly required>
                                                     </div>
                                                 </div>
                                             </form>

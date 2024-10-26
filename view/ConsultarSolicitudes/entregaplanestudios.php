@@ -14,40 +14,28 @@ if (isset($_SESSION["IdUsuario"])) {
         $conexion = new Conectar();
         $conn = $conexion->Conexion();
 
-        // Consulta para obtener los detalles de la solicitud y la ruta del archivo adjunto
-        $sql = "SELECT a.ID_SOLICITUD, a.NOMBRE_COMPLETO, a.EMAIL, b.NOM_CARRERA, c.NOM_CATEGORIA, 
-                       d.NOM_UNIVERSIDAD, e.NOM_GRADO, f.ESTADO_SOLICITUD, g.NOM_MODALIDAD,
-                       adj.PLAN_ESTUDIOS 
-                FROM tbl_solicitudes a 
-                LEFT JOIN tbl_carrera b ON a.ID_CARRERA = b.ID_CARRERA
-                LEFT JOIN tbl_categoria c ON a.ID_CATEGORIA = c.ID_CATEGORIA
-                LEFT JOIN tbl_universidad_centro d ON a.ID_UNIVERSIDAD = d.ID_UNIVERSIDAD
-                LEFT JOIN tbl_grado_academico e ON a.ID_GRADO = e.ID_GRADO
-                LEFT JOIN tbl_estado_solicitud f ON a.ID_ESTADO = f.ID_ESTADO
-                LEFT JOIN tbl_modalidad g ON a.ID_MODALIDAD = g.ID_MODALIDAD
-                LEFT JOIN tbl_archivos_adjuntos adj ON a.ID_SOLICITUD = adj.ID_SOLICITUD
-                WHERE a.ID_SOLICITUD = :id";
+        try {
+            // Llamada al procedimiento almacenado para obtener los detalles y el número de registro
+            $sql = "CALL `proceso.splEntregaPlanEstudios`(:id)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
 
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            // Obtener el primer resultado (detalles de la solicitud)
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Si se encuentra el archivo, almacenar la ruta
-        $filePath = $row['PLAN_ESTUDIOS'] ?? null;
+            // Si se encuentra el archivo, almacenar la ruta
+            $filePath = $row['PlanEstudios'] ?? null;
 
-        // Consulta para obtener la última observación de la solicitud
-        $obsSql = "SELECT NUM_REGISTRO 
-                   FROM tbl_plan_estudio 
-                   WHERE ID_SOLICITUD = :id";
+            // Avanzar a la segunda consulta (número de registro)
+            $stmt->nextRowset();
+            $obsRow = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $obsStmt = $conn->prepare($obsSql);
-        $obsStmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $obsStmt->execute();
-        $obsRow = $obsStmt->fetch(PDO::FETCH_ASSOC);
-
-        // Obtener la última observación
-        $NUM = $obsRow['NUM_REGISTRO'] ?? '';
+            // Obtener el número de registro
+            $NUM = $obsRow['NumRegistro'] ?? '';
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
     }
     ?>
 
@@ -152,25 +140,25 @@ if (isset($_SESSION["IdUsuario"])) {
                                                 <div class="form-group row">
                                                     <label class="col-12" for="nombre-carrera">Nombre de la Carrera</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="nombre-carrera" name="nombre_carrera" placeholder="" value="<?php echo htmlspecialchars($row['NOM_CARRERA']); ?>" readonly required>
+                                                        <input type="text" class="form-control" id="nombre-carrera" name="nombre_carrera" placeholder="" value="<?php echo htmlspecialchars($row['NomCarrera']); ?>" readonly required>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-12" for="modalidad">Modalidad</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="modalidad" name="modalidad" placeholder="" value="<?php echo htmlspecialchars($row['NOM_MODALIDAD']); ?>" readonly required>
+                                                        <input type="text" class="form-control" id="modalidad" name="modalidad" placeholder="" value="<?php echo htmlspecialchars($row['NomModalidad']); ?>" readonly required>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-12" for="universidad">Universidad/Centro</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="universidad" name="universidad" placeholder="" value="<?php echo htmlspecialchars($row['NOM_UNIVERSIDAD']); ?>" readonly required>
+                                                        <input type="text" class="form-control" id="universidad" name="universidad" placeholder="" value="<?php echo htmlspecialchars($row['NomUniversidad']); ?>" readonly required>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-12" for="grado">Grado Académico</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="grado" name="grado" placeholder="" value="<?php echo htmlspecialchars($row['NOM_GRADO']); ?>" readonly required>
+                                                        <input type="text" class="form-control" id="grado" name="grado" placeholder="" value="<?php echo htmlspecialchars($row['NomGrado']); ?>" readonly required>
                                                     </div>
                                                 </div>
 

@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Obtener el ID de usuario y nombre de usuario de la sesión
     session_start();
-    $idUsuario = isset($_SESSION["IdUsuario"]) ? $_SESSION["IdUsuario"] : null;
+    $idUsuario = isset($_SESSION["ID_USUARIO"]) ? $_SESSION["ID_USUARIO"] : null;
     $nombreUsuario = isset($_SESSION["NOMBRE_USUARIO"]) ? $_SESSION["NOMBRE_USUARIO"] : null;
 
     if ($idSolicitud && $fileName && $filePath) {
@@ -20,33 +20,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Iniciar una transacción
             $conn->beginTransaction();
 
-            // Actualizar el campo PLAN_ESTUDIOS en la base de datos
-            $sql = "UPDATE tbl_opinion_razonada 
-                    SET PLAN_ESTUDIOS = :filePath 
-                    WHERE ID_SOLICITUD = :idSolicitud";
+            // Llamar al procedimiento almacenado
+            $sql = "CALL `proceso.splActualizarSolicitudSubsanada`(:idSolicitud, :filePath, :nuevoEstado)";
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':filePath', $filePath, PDO::PARAM_STR);
+            $nuevoEstado = 11; // Estado deseado
             $stmt->bindParam(':idSolicitud', $idSolicitud, PDO::PARAM_INT);
+            $stmt->bindParam(':filePath', $filePath, PDO::PARAM_STR);
+            $stmt->bindParam(':nuevoEstado', $nuevoEstado, PDO::PARAM_INT);
 
             if ($stmt->execute()) {
-                // Actualizar el estado de la solicitud a 10
-                $updateSql = "UPDATE tbl_solicitudes SET ID_ESTADO = :nuevoEstado WHERE ID_SOLICITUD = :id_solicitud";
-                $updateStmt = $conn->prepare($updateSql);
-                $nuevoEstado = 11; 
-                $updateStmt->bindParam(':nuevoEstado', $nuevoEstado, PDO::PARAM_INT);
-                $updateStmt->bindParam(':id_solicitud', $idSolicitud, PDO::PARAM_INT);
-
-                if ($updateStmt->execute()) {
-                    // Confirmar la transacción
-                    $conn->commit();
-                    echo json_encode(['success' => true, 'message' => 'Archivo y estado actualizados correctamente.']);
-                } else {
-                    // Revertir la transacción si la actualización falla
-                    $conn->rollBack();
-                    echo json_encode(['success' => false, 'message' => 'Error al actualizar el estado de la solicitud.']);
-                }
+                // Confirmar la transacción
+                $conn->commit();
+                echo json_encode(['success' => true, 'message' => 'Archivo y estado actualizados correctamente.']);
             } else {
-                echo json_encode(['success' => false, 'message' => 'Error al actualizar PLAN_ESTUDIOS.']);
+                // Revertir la transacción si la actualización falla
+                $conn->rollBack();
+                echo json_encode(['success' => false, 'message' => 'Error al actualizar los datos.']);
             }
         } catch (Exception $e) {
             // Revertir la transacción en caso de error
@@ -57,7 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo json_encode(['success' => false, 'message' => 'Datos incompletos o archivo no válido.']);
     }
 }
-
 
 
 

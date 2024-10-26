@@ -91,7 +91,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (solicitudId) {
         fetch(`list_files.php?id=${solicitudId}`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+                return response.json();
+            })
             .then(file => {
                 if (file.name && file.url) {
                     const fileListContainer = document.getElementById('file-list');
@@ -111,15 +116,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     // Crear la estructura del archivo
                     fileDiv.innerHTML = `
-                    <div class="file-icon"><i class="${icon}"></i></div> <!-- Ícono del archivo -->
-                    <span>${file.name}</span>
-                    <a href="${file.url}" download>Descargar archivo</a>`;
+                        <div class="file-icon"><i class="${icon}"></i></div> <!-- Ícono del archivo -->
+                        <span>${file.name}</span>
+                        <a href="${file.url}" download>Descargar archivo</a>`;
                     fileListContainer.appendChild(fileDiv);
+                } else if (file.error) {
+                    console.error('Error: ' + file.error);
+                } else {
+                    console.error('No se encontró ningún archivo.');
                 }
             })
             .catch(error => {
                 console.error('Error al cargar los archivos:', error);
             });
+    } else {
+        console.error('No se proporcionó el ID de la solicitud.');
     }
 });
 

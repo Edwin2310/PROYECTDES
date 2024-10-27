@@ -93,6 +93,36 @@ if (isset($_SESSION["IdUsuario"])) {
                             </a>
                         </div>
 
+                        <div class="col-md-4 col-lg-4 ml-auto " data-toggle="appear">
+                            <a href="../NuevoIngresoSolicitud/formulario2.php" class="modulo-link block block-link-shadow text-center" data-id-objeto="3" data-accion="accedio al modulo" href="javascript:void(0)">
+                                <div class="block-content block-content-full">
+                                    <div class="py-30 text-center">
+                                        <div class="item item-2x item-circle bg-warning text-white mx-auto">
+                                            <i class="si si-book-open text-default"></i>
+                                        </div>
+                                    </div>
+                                    <div class="block-content bg-body-light">
+                                        <p class=" h5 font-w600">Ingreso de Solicitudes</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="col-md-4 col-lg-4 ml-auto " data-toggle="appear">
+                            <a href="../NuevoIngresoSolicitud/formulario3.php" class="modulo-link block block-link-shadow text-center" data-id-objeto="3" data-accion="accedio al modulo" href="javascript:void(0)">
+                                <div class="block-content block-content-full">
+                                    <div class="py-30 text-center">
+                                        <div class="item item-2x item-circle bg-warning text-white mx-auto">
+                                            <i class="si si-book-open text-default"></i>
+                                        </div>
+                                    </div>
+                                    <div class="block-content bg-body-light">
+                                        <p class=" h5 font-w600">Ingreso de Solicitudes</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
 
 
                         <div class="col-sm-4 col-lg-4 mr-auto" data-toggle="appear">
@@ -109,6 +139,9 @@ if (isset($_SESSION["IdUsuario"])) {
                                 </div>
                             </a>
                         </div>
+
+
+                
                     </div>
 
 

@@ -1,6 +1,6 @@
 <?php
 require_once("../../config/conexion.php");
-if (isset($_SESSION["ID_USUARIO"])) {
+if (isset($_SESSION["IdUsuario"])) {
 
 ?>
     <!doctype html>
@@ -139,7 +139,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
 
                                 <!-- Form -->
                                 <form id="wizard-form" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" id="id_usuario" name="id_usuario" value="<?php echo $_SESSION['ID_USUARIO']; ?>">
+                                    <input type="hidden" id="IdUsuario" name="IdUsuario" value="<?php echo $_SESSION['IdUsuario']; ?>">
 
                                     <!-- Steps Content -->
                                     <div class="block-content block-content-full tab-content" style="min-height: 265px;">
@@ -298,7 +298,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
                                             <div class="form-group">
 
                                                 <!-- Campo oculto para el ID del usuario -->
-                                                <input type="hidden" id="id_usuario" name="id_usuario" value="<?php echo $_SESSION['ID_USUARIO']; ?>">
+                                                <input type="hidden" id="IdUsuario" name="IdUsuario" value="<?php echo $_SESSION['IdUsuario']; ?>">
                                                 <!-- Área de Dropzone para subir documentos -->
                                                 <div class="form-group">
                                                     <b>
@@ -411,7 +411,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
 
             this.on("sending", function(file, xhr, formData) {
                 // Añadir campos adicionales al enviar
-                formData.append("id_usuario", document.querySelector("#id_usuario").value);
+                formData.append("IdUsuario", document.querySelector("#IdUsuario").value);
                 totalFiles++; // Incrementar el contador de archivos al comenzar la subida
             });
 

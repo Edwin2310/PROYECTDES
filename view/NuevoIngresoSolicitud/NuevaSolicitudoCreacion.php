@@ -95,7 +95,7 @@ if (isset($_SESSION["ID_USUARIO"])) {
 
 
                         <div class="col-sm-4 col-lg-4 mr-auto" data-toggle="appear">
-                            <a href="index.php" class="block block-link-shadow text-center" href="javascript:void(0)">
+                            <a href="nuevacreacioncarrera.php" class="block block-link-shadow text-center" href="javascript:void(0)">
                                 <div class="block-content block-content-full">
                                     <div class="py-30 text-center">
                                         <div class="item item-2x item-circle bg-default text-white mx-auto">

@@ -118,7 +118,7 @@ if (isset($_SESSION["IdUsuario"])) {
             </nav>
             <main id="main-container">
                 <div class="content">
-                    <h2 class="content-heading">Creaciòn de Otros <small>Dirección de Educación Superior</small></h2>
+                    <h2 class="content-heading">Creación de Otros <small>Dirección de Educación Superior</small></h2>
                     <div class="row">
                         <div class="block-content">
                             <!-- Simple Wizard -->

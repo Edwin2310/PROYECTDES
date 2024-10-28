@@ -206,14 +206,13 @@ if (isset($_SESSION["IdUsuario"])) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <br>
-
 
 
 
                                                 <div class="row">
+
                                                     <div class="col-md-6">
-                                                        <label class="col-12" for="id_carrera">Carrera Nueva</label>
+                                                        <label class="col-12" for="id_modalidad">Nombre de la Carrera</label>
                                                         <div class="col-12">
                                                             <input type="text" class="form-control" id="Num_referencia" name="Num_referencia" placeholder="Ingenieria Mecatronica" required>
                                                         </div>
@@ -229,10 +228,13 @@ if (isset($_SESSION["IdUsuario"])) {
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-6">
-                                                        <label class="col-12" for="id_modalidad">Nombre de la Carrera</label>
+                                                    <div class="col-md-6" id="div-departamento1">
+                                                        <label class="col-12" for="Departamento1">Modalidad</label>
                                                         <div class="col-12">
-                                                            <input type="text" class="form-control" id="Num_referencia" name="Num_referencia" placeholder="Ingenieria Mecatronica" required>
+                                                            <select class="form-control" id="Departamento1" name="Departamento[]" required>
+                                                                <option value="0">Seleccione un Departamento</option>
+
+                                                            </select>
                                                         </div>
                                                     </div>
 
@@ -241,16 +243,6 @@ if (isset($_SESSION["IdUsuario"])) {
                                                         <div class="col-12">
                                                             <select class="form-control" id="Universidad" name="Universidad" required>
                                                                 <option value="" disabled selected style="display:none;">Seleccionar Universidad</option>
-
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6" id="div-departamento1">
-                                                        <label class="col-12" for="Departamento1">Modalidad</label>
-                                                        <div class="col-12">
-                                                            <select class="form-control" id="Departamento1" name="Departamento[]" required>
-                                                                <option value="0">Seleccione un Departamento</option>
 
                                                             </select>
                                                         </div>

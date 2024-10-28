@@ -118,7 +118,7 @@ if (isset($_SESSION["IdUsuario"])) {
             </nav>
             <main id="main-container">
                 <div class="content">
-                    <h2 class="content-heading">Creación de carrera <small>Dirección de Educación Superior</small></h2>
+                    <h2 class="content-heading">Creación de Carrera <small>Dirección de Educación Superior</small></h2>
                     <div class="row">
                         <div class="block-content">
                             <!-- Simple Wizard -->
@@ -139,155 +139,144 @@ if (isset($_SESSION["IdUsuario"])) {
 
                                 <!-- Form -->
                                 <form id="wizard-form" method="post" enctype="multipart/form-data">
+
                                     <input type="hidden" id="IdUsuario" name="IdUsuario" value="<?php echo $_SESSION['IdUsuario']; ?>">
+
 
                                     <!-- Steps Content -->
                                     <div class="block-content block-content-full tab-content" style="min-height: 265px;">
                                         <!-- Step 1 -->
 
                                         <div class="tab-pane active" id="wizard-simple-step1" role="tabpanel">
-                                            <div class="block-content block-content-sm block-content-full bg-body-light">
-                                                <div class="form-group row">
-                                                    <label class="col-12" for="NOMBRE_COMPLETO">Nombre Completo</label>
-                                                    <div class="col-12">
-                                                        <input type="text" class="form-control" id="NOMBRE_COMPLETO" name="NOMBRE_COMPLETO" placeholder="Coord. Curricular de la Carrera + Nombre completo" required oninput="validateForm(event)">
-                                                    </div>
-                                                </div>
 
-                                                <div class="form-group row">
-                                                    <label class="col-12" for="NOMBRE_COMPLETO">Telefono</label>
-                                                    <div class="col-12">
-                                                        <input type="number" class="form-control" id="Telefono" name="NOMBRE_COMPLETO" placeholder="99014545" required oninput="validateForm(event)">
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group row">
-                                                    <label class="col-12" for="EMAIL">Correo Electrónico</label>
-                                                    <div class="col-12">
-                                                        <input type="email" class="form-control" id="EMAIL" name="EMAIL" placeholder="correoinstitucional@unitec.com" required oninput="validateForm(event)">
-                                                    </div>
-                                                </div>
-
+                                            <div class="form-group row">
+                                                <label class="col-12" for="NOMBRE_COMPLETO">Nombre Completo</label>
                                                 <div class="col-12">
-                                                    <div class="form-control-plaintext">Nota: Al correo previamente escrito se le estará enviando las notificaciones de cambio de estados con respecto a la solicitud presentada.</div>
+                                                    <input type="text" class="form-control" id="NOMBRE_COMPLETO" name="NOMBRE_COMPLETO" placeholder="Coord. Curricular de la Carrera + Nombre completo" required oninput="validateForm(event)">
                                                 </div>
                                             </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-12" for="EMAIL">Correo Electrónico</label>
+                                                <div class="col-12">
+                                                    <input type="email" class="form-control" id="EMAIL" name="EMAIL" placeholder="correoinstitucional@unitec.com" required oninput="validateForm(event)">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12">
+                                                <div class="form-control-plaintext">Nota: Al correo previamente escrito se le estará enviando las notificaciones de cambio de estados con respecto a la solicitud presentada.</div>
+                                            </div>
+
                                         </div>
                                         <!-- END Step 1 -->
 
                                         <!-- Step 2 -->
                                         <div class="tab-pane" id="wizard-simple-step2" role="tabpanel">
                                             <div class="form-group">
-                                                <div class="block-content block-content-sm block-content-full bg-body-light">
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <label class="col-12" for="codigo-pago">Tipo de Solicitud</label>
-                                                            <div class="col-12">
-                                                                <select class="form-control" id="codigo-pago" name="codigo-pago">
 
-                                                                </select>
-                                                            </div>
-                                                        </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label class="col-12" for="codigo-pago">Tipo de Solicitud</label>
+                                                        <div class="col-12">
+                                                            <select class="form-control" id="codigo-pago" name="codigo-pago">
 
-                                                        <div class="col-md-6">
-                                                            <label class="col-12" for="id_categoria">Categoría de Solicitud</label>
-                                                            <div class="col-12">
-                                                                <select class="form-control" id="id_categoria" name="id_categoria" required></select>
-                                                            </div>
+                                                            </select>
                                                         </div>
                                                     </div>
 
-                                                    <div class="row">
-                                                        <div class="col-md-3">
-                                                            <label class="col-12" for="id_tipo_solicitud">Codigo de Pago</label>
-                                                            <div class="col-12">
-                                                                <input type="text" class="form-control" id="NOMBRE_COMPLETO" name="NOMBRE_COMPLETO" placeholder="830">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <label class="col-12" for="Num_referencia">Cdigo de Referencia</label>
-                                                            <div class="col-12">
-                                                                <input type="text" class="form-control" id="Num_referencia" name="Num_referencia" placeholder="73352" required>
-                                                            </div>
+                                                    <div class="col-md-6">
+                                                        <label class="col-12" for="id_categoria">Categoría de Solicitud</label>
+                                                        <div class="col-12">
+                                                            <select class="form-control" id="id_categoria" name="id_categoria" required></select>
                                                         </div>
                                                     </div>
-                                                    <br>
                                                 </div>
 
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <label class="col-12" for="id_tipo_solicitud">Codigo de Pago</label>
+                                                        <div class="col-12">
+                                                            <input type="text" class="form-control" id="NOMBRE_COMPLETO" name="NOMBRE_COMPLETO" placeholder="830">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label class="col-12" for="Num_referencia">Cdigo de Referencia</label>
+                                                        <div class="col-12">
+                                                            <input type="text" class="form-control" id="Num_referencia" name="Num_referencia" placeholder="73352" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <br>
 
-                                                <div class="block-content block-content-sm block-content-full bg-body-light">
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <label class="col-12" for="id_carrera">Carrera a Reformar</label>
-                                                            <div class="col-12">
-                                                                <input type="text" class="form-control" id="Num_referencia" name="Num_referencia" placeholder="Ingenieria Mecatronica" required>
-                                                            </div>
-                                                        </div>
 
-                                                        <div class="col-md-6">
-                                                            <label class="col-12" for="id_grado_acad">Grado Académico</label>
-                                                            <div class="col-12">
-                                                                <select class="form-control" id="id_grado_acad" name="id_grado_acad">
-                                                                    <option value="0">Seleccione un grado académico</option>
 
-                                                                </select>
-                                                            </div>
-                                                        </div>
 
-                                                        <div class="col-md-6">
-                                                            <label class="col-12" for="id_modalidad">Nombre de la Carrera</label>
-                                                            <div class="col-12">
-                                                                <input type="text" class="form-control" id="Num_referencia" name="Num_referencia" placeholder="Ingenieria Mecatronica" required>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-6">
-                                                            <label class="col-12" for="Universidad">Universidad/Centro/Institucion</label>
-                                                            <div class="col-12">
-                                                                <select class="form-control" id="Universidad" name="Universidad" required>
-                                                                    <option value="" disabled selected style="display:none;">Seleccionar Universidad</option>
-
-                                                                </select>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-6" id="div-departamento1">
-                                                            <label class="col-12" for="Departamento1">Modalidad</label>
-                                                            <div class="col-12">
-                                                                <select class="form-control" id="Departamento1" name="Departamento[]" required>
-                                                                    <option value="0">Seleccione un Departamento</option>
-
-                                                                </select>
-                                                            </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label class="col-12" for="id_carrera">Carrera a Reformar</label>
+                                                        <div class="col-12">
+                                                            <input type="text" class="form-control" id="Num_referencia" name="Num_referencia" placeholder="Ingenieria Mecatronica" required>
                                                         </div>
                                                     </div>
 
-                                                    <br>
+                                                    <div class="col-md-6">
+                                                        <label class="col-12" for="id_grado_acad">Grado Académico</label>
+                                                        <div class="col-12">
+                                                            <select class="form-control" id="id_grado_acad" name="id_grado_acad">
+                                                                <option value="0">Seleccione un grado académico</option>
+
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <label class="col-12" for="id_modalidad">Nombre de la Carrera</label>
+                                                        <div class="col-12">
+                                                            <input type="text" class="form-control" id="Num_referencia" name="Num_referencia" placeholder="Ingenieria Mecatronica" required>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <label class="col-12" for="Universidad">Universidad/Centro/Institucion</label>
+                                                        <div class="col-12">
+                                                            <select class="form-control" id="Universidad" name="Universidad" required>
+                                                                <option value="" disabled selected style="display:none;">Seleccionar Universidad</option>
+
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6" id="div-departamento1">
+                                                        <label class="col-12" for="Departamento1">Modalidad</label>
+                                                        <div class="col-12">
+                                                            <select class="form-control" id="Departamento1" name="Departamento[]" required>
+                                                                <option value="0">Seleccione un Departamento</option>
+
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6" id="div-departamento1">
+                                                        <label class="col-12" for="Departamento1">SEDE</label>
+                                                        <div class="col-12">
+                                                            <select class="form-control" id="Departamento1" name="Departamento[]" required>
+                                                                <option value="0">Seleccione un Departamento</option>
+
+                                                            </select>
+                                                        </div>
+                                                    </div>
                                                 </div>
 
-                                                <br>
 
-                                                <div class="block-content block-content-sm block-content-full bg-body-light">
 
-                                                    <div class="row">
-                                                        <div class="col-md-6" id="div-departamento1">
-                                                            <label class="col-12" for="Departamento1">SEDE</label>
-                                                            <div class="col-12">
-                                                                <select class="form-control" id="Departamento1" name="Departamento[]" required>
-                                                                    <option value="0">Seleccione un Departamento</option>
 
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
 
-                                                    <label class="col-12" for="Descripcion_solicitud">Descripción de la Solicitud</label>
-                                                    <div class="col-12">
-                                                        <textarea class="form-control" id="Descripcion_solicitud" name="Descripcion_solicitud" rows="6" placeholder="PRESENTACIÓN DE SOLICITUD DE REFORMA AL PLAN DE ESTUDIOS DE LA CARRERA DE INGENIERIA EN MECATRONICA, EN EL GRADO DE LICENCIATURA DE LA UNIVERSIDAD TECNOLOGICA CENTROAMERICANA, UNITEC." required oninput="validateTextarea(event)"></textarea>
-                                                    </div>
-
+                                                <label class="col-12" for="Descripcion_solicitud">Descripción de la Solicitud</label>
+                                                <div class="col-12">
+                                                    <textarea class="form-control" id="Descripcion_solicitud" name="Descripcion_solicitud" rows="6" placeholder="PRESENTACIÓN DE SOLICITUD DE REFORMA AL PLAN DE ESTUDIOS DE LA CARRERA DE INGENIERIA EN MECATRONICA, EN EL GRADO DE LICENCIATURA DE LA UNIVERSIDAD TECNOLOGICA CENTROAMERICANA, UNITEC." required oninput="validateTextarea(event)"></textarea>
                                                 </div>
+
+
 
 
                                             </div>

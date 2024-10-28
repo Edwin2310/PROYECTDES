@@ -72,30 +72,25 @@ if (isset($_SESSION["IdUsuario"])) {
                 <div class="content">
                     <h2 class="content-heading">Dirección de Educación Superior</h2>
 
-
-
-
-
                     <div class="row gutters-tiny">
-                        <div class="col-md-4 col-lg-4 ml-auto " data-toggle="appear">
-                            <a href="formulario2.php" class="block block-link-shadow text-center" href="javascript:void(0)">
+
+                        <div class="col-lg-4 ml-auto" data-toggle="appear">
+                            <a href="index.php" class="block block-link-shadow text-center" href="javascript:void(0)">
                                 <div class="block-content block-content-full">
                                     <div class="py-30 text-center">
                                         <div class="item item-2x item-circle bg-warning text-white mx-auto">
-                                            <i class="fa fa-plus-square-o text-default"></i>
+                                            <i class="si si-note text-default"></i>
                                         </div>
                                     </div>
                                     <div class="block-content bg-body-light">
-                                        <p class=" h5 font-w600">Formulario 2</p>
+                                        <p class=" h5 font-w600">Creación de Solicitud</p>
                                     </div>
                                 </div>
                             </a>
                         </div>
 
-
-
-                        <div class="col-sm-4 col-lg-4 mr-auto" data-toggle="appear">
-                            <a href="nuevacreacioncarrera.php" class="block block-link-shadow text-center" href="javascript:void(0)">
+                        <div class="col-lg-4 mr-auto" data-toggle="appear">
+                            <a href="CreacionCarrera.php" class="block block-link-shadow text-center" href="javascript:void(0)">
                                 <div class="block-content block-content-full">
                                     <div class="py-30 text-center">
                                         <div class="item item-2x item-circle bg-default text-white mx-auto">
@@ -103,14 +98,44 @@ if (isset($_SESSION["IdUsuario"])) {
                                         </div>
                                     </div>
                                     <div class="block-content bg-body-light">
-                                        <p class="h5 font-w600">Creación de carrera</p>
+                                        <p class="h5 font-w600">Creación de Carrera</p>
                                     </div>
                                 </div>
                             </a>
                         </div>
 
-                        <div class="col-md-4 col-lg-4 ml-auto " data-toggle="appear">
-                            <a href="formulario3.php" class="block block-link-shadow text-center" href="javascript:void(0)">
+                        <div class="col-lg-4 mr-auto" data-toggle="appear">
+                            <a href="CreacionReforma.php" class="block block-link-shadow text-center" href="javascript:void(0)">
+                                <div class="block-content block-content-full">
+                                    <div class="py-30 text-center">
+                                        <div class="item item-2x item-circle bg-warning text-white mx-auto">
+                                            <i class="si si-note text-default"></i>
+                                        </div>
+                                    </div>
+                                    <div class="block-content bg-body-light">
+                                        <p class="h5 font-w600">Creación de Reforma</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="col-lg-4 ml-auto" data-toggle="appear">
+                            <a href="CreacionCentro.php" class="block block-link-shadow text-center" href="javascript:void(0)">
+                                <div class="block-content block-content-full">
+                                    <div class="py-30 text-center">
+                                        <div class="item item-2x item-circle bg-default text-white mx-auto">
+                                            <i class="fa fa-plus-square-o text-warning"></i>
+                                        </div>
+                                    </div>
+                                    <div class="block-content bg-body-light">
+                                        <p class=" h5 font-w600">Creación de Centro</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="col-lg-4 mr-auto" data-toggle="appear">
+                            <a href="CreacionOtros.php" class="block block-link-shadow text-center" href="javascript:void(0)">
                                 <div class="block-content block-content-full">
                                     <div class="py-30 text-center">
                                         <div class="item item-2x item-circle bg-warning text-white mx-auto">
@@ -118,15 +143,15 @@ if (isset($_SESSION["IdUsuario"])) {
                                         </div>
                                     </div>
                                     <div class="block-content bg-body-light">
-                                        <p class=" h5 font-w600">Formulario 3</p>
+                                        <p class=" h5 font-w600">Creación de Otros</p>
                                     </div>
                                 </div>
                             </a>
                         </div>
+
                     </div>
 
-
-
+              
                 </div>
 
 

@@ -213,7 +213,7 @@ if (isset($_SESSION["IdUsuario"])) {
 
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <label class="col-12" for="id_carrera">Carrera a Reformar</label>
+                                                        <label class="col-12" for="id_carrera">Carrera</label>
                                                         <div class="col-12">
                                                             <input type="text" class="form-control" id="Num_referencia" name="Num_referencia" placeholder="Ingenieria Mecatronica" required>
                                                         </div>

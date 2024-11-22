@@ -159,7 +159,7 @@ if (isset($_SESSION["IdUsuario"])) {
                         </div>
 
                         <div class="col-md-4 col-lg-4 mr-auto" data-toggle="appear">
-                            <a href="../Seguridad/Bitacora.php" data-id-objeto="21" data-accion="accedio al modulo" class=" modulo-link block block-link-shadow text-center">
+                            <a href="../Seguridad/BitacorasS.php" data-id-objeto="21" data-accion="accedio al modulo" class=" modulo-link block block-link-shadow text-center">
                                 <div class="block-content block-content-full">
                                     <div class="py-30 text-center">
                                         <div class="item item-2x item-circle bg-default text-white mx-auto">
@@ -167,7 +167,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                         </div>
                                     </div>
                                     <div class="block-content bg-body-light">
-                                        <p class="h5 font-w600">Bitácora de Sistema</p>
+                                        <p class="h5 font-w600">Bitácoras de Sistema</p>
                                     </div>
                                 </div>
                             </a>

@@ -150,11 +150,11 @@ if (isset($_SESSION["IdUsuario"])) {
 
                                 <div class="form-group">
                                     <label for="Parametro">Parámetro</label>
-                                    <input type="text" class="form-control" id="Parametro" name="Parametro" required>
+                                    <input type="text" class="form-control" id="Parametro" name="Parametro" maxlength="30" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="Valor">Valor</label>
-                                    <input type="text" class="form-control" id="Valor" name="Valor" required>
+                                    <input type="text" class="form-control" id="Valor" name="Valor" maxlength="30" required>
                                 </div>
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-primary">Guardar</button>
@@ -182,11 +182,11 @@ if (isset($_SESSION["IdUsuario"])) {
                                 <input type="hidden" id="edit_IdParametro" name="IdParametro">
                                 <div class="form-group">
                                     <label for="edit_parametro">Parámetro</label>
-                                    <input type="text" class="form-control" id="edit_parametro" name="Parametro" required>
+                                    <input type="text" class="form-control" id="edit_parametro" name="Parametro" maxlength="30" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="edit_valor">Valor</label>
-                                    <input type="text" class="form-control" id="edit_valor" name="Valor" required>
+                                    <input type="text" class="form-control" id="edit_valor" name="Valor" maxlength="30" required>
                                 </div>
                                 <input type="hidden" id="edit_IdUsuario" name="IdUsuario">
                                 <input type="hidden" id="edit_creado_por" name="CreadoPor">

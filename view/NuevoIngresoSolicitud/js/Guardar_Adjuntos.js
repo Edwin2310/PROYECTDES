@@ -29,10 +29,10 @@ var dropzoneDocuments = new Dropzone("#dropzone-documents", {
 
       // Expresiones regulares para cada tipo de documento sin validación de fecha
       var regexList = [
-        /^DIAG_/, // Diagnóstico
-        /^PLAN_/, // Plan de Estudios
-        /^PDOC_/, // Planta Docente
-        /^SOLI_/, // Solicitud
+        /^DIAG/, // Diagnóstico
+        /^PLAN/, // Plan de Estudios
+        /^PDOC/, // Planta Docente
+        /^SOLI/, // Solicitud
       ];
 
       var valid = regexList.some(function (regex) {
@@ -42,7 +42,7 @@ var dropzoneDocuments = new Dropzone("#dropzone-documents", {
       if (!valid) {
         this.removeFile(file);
         alert(
-          "El nombre del archivo debe comenzar con DIAG_, PLAN_, PDOC_ o SOLI_."
+          "El nombre del archivo debe comenzar con DIAG, PLAN, PDOC o SOLI."
         );
       }
     });
@@ -143,8 +143,15 @@ document.addEventListener("DOMContentLoaded", function () {
           })
           .catch((error) => console.error("Error:", error));
       } else if (stepIndex === 2) {
-        // Paso 3 - Enviar archivos adjuntos
-        if (validateStep(stepIndex)) {
+        // Paso 3 - Validar si hay archivos adjuntados
+        if (dropzoneDocuments.getQueuedFiles().length === 0) {
+          // Mostrar alerta si no hay archivos
+          Swal.fire({
+            icon: "error",
+            title: "Sin Archivos Adjuntos",
+            text: "Por favor, adjunta al menos un archivo antes de continuar.",
+          });
+        } else if (validateStep(stepIndex)) {
           uploadFiles(); // Procesar la cola de archivos
         } else {
           Swal.fire({

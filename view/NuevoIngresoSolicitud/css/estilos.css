@@ -43,3 +43,15 @@
   background-color: #007bff;
   /* Color de fondo para la pestaña activa */
 }
+
+/* Estilo para dar apariencia de readonly */
+.readonly-select {
+  pointer-events: none;
+  /* Evita que se pueda interactuar */
+  background-color: #f8f9fa;
+  /* Fondo gris claro */
+  color: #495057;
+  /* Color del texto */
+  border: 1px solid #ced4da;
+  /* Bordes coherentes con Bootstrap */
+}

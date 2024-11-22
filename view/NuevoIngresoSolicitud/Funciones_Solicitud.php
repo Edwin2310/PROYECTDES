@@ -31,7 +31,6 @@ function obtenerCodigos($usuario)
     }
 }
 
-
 function obtenerGrados($usuario)
 {
     try {
@@ -178,5 +177,111 @@ function obtenerCarreras($usuario)
         return $opciones;
     } catch (PDOException $e) {
         return "Error: " . $e->getMessage();
+    }
+}
+
+function obtenerTipoSolicitud($usuario)
+{
+    try {
+        $conexion = new Conectar();
+        $conn = $conexion->Conexion();
+
+        // Llamada al procedimiento almacenado con parámetro
+        $sql = "CALL `proceso.splTipoSolicitudCentro`(:usuario)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':usuario', $usuario, PDO::PARAM_STR);
+        $stmt->execute();
+
+        // Obtener los resultados
+        $tipoSolicitudes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+
+        // Generar opciones HTML para el <select>
+        $opciones = "";
+        foreach ($tipoSolicitudes as $tiposolicitud) {
+            $idtiposolicitud = htmlspecialchars($tiposolicitud['IdTiposolicitud'], ENT_QUOTES, 'UTF-8');
+            $NombreTipoSolicitud = htmlspecialchars($tiposolicitud['NomTipoSolicitud'], ENT_QUOTES, 'UTF-8');
+            $opciones .= "<option value='$idtiposolicitud'>$NombreTipoSolicitud</option>";
+        }
+        return $opciones;
+    } catch (PDOException $e) {
+        return "Error: " . $e->getMessage();
+    }
+}
+
+function obtenerCategoriaSolicitud($usuario)
+{
+    try {
+        $conexion = new Conectar();
+        $conn = $conexion->Conexion();
+
+        // Llamada al procedimiento almacenado con parámetro
+        $sql = "CALL `proceso.splCategoriaSolicitudCentro`(:usuario)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':usuario', $usuario, PDO::PARAM_STR);
+        $stmt->execute();
+
+        // Obtener los resultados
+        $categoriaSolicitud = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+
+        // Generar opciones HTML para el <select>
+        $opciones = "";
+        foreach ($categoriaSolicitud as $tipocategoria) {
+            $idtipocategoria = htmlspecialchars($tipocategoria['IdCategoria'], ENT_QUOTES, 'UTF-8');
+            $NombreTipoCategoria = htmlspecialchars($tipocategoria['NomCategoria'], ENT_QUOTES, 'UTF-8');
+            $opciones .= "<option value='$idtipocategoria'>$NombreTipoCategoria</option>";
+        }
+        return $opciones;
+    } catch (PDOException $e) {
+        return "Error: " . $e->getMessage();
+    }
+}
+
+function obtenerTipoCentro($usuario)
+{
+    try {
+        $conexion = new Conectar();
+        $conn = $conexion->Conexion();
+
+        // Llamada al procedimiento almacenado con parámetro
+        $sql = "CALL `proceso.splCentroSolicitud`(:usuario)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':usuario', $usuario, PDO::PARAM_STR);
+        $stmt->execute();
+
+        // Obtener los resultados
+        $tipoCentro = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+
+        // Generar opciones HTML para el <select>
+        $opciones = "";
+        foreach ($tipoCentro as $tipocentro) {
+            $idtipoCentro = htmlspecialchars($tipocentro['IdTipoCentro'], ENT_QUOTES, 'UTF-8');
+            $NombreTipoCentro = htmlspecialchars($tipocentro['TipoCentro'], ENT_QUOTES, 'UTF-8');
+            $opciones .= "<option value='$idtipoCentro'>$NombreTipoCentro</option>";
+        }
+        return $opciones;
+    } catch (PDOException $e) {
+        return "Error: " . $e->getMessage();
+    }
+}
+
+function obtenerIdUniversidadUsuario($idUsuario)
+{
+    try {
+        $conexion = new Conectar();
+        $conn = $conexion->Conexion();
+
+        // Llamada al procedimiento almacenado
+        $sql = "CALL `proceso.splIdUniversidadUsuario`(:IdUsuario)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':IdUsuario', $idUsuario, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['IdUniversidad'] ?? null; // Retorna el IdUniversidad o null si no lo encuentra
+    } catch (PDOException $e) {
+        return null; // Manejo de errores
     }
 }

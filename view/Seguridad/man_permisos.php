@@ -86,7 +86,7 @@ if (isset($_SESSION["IdUsuario"])) {
             <div class="content">
                 <div class="block">
                     <div class="block-header block-header-default">
-                        <h3 class="block-title text-center font-weight-bold display-5 ">MANTENIMIENTO PERMISOS</h3>
+                        <h3 class="block-title text-center font-weight-bold display-5 ">MANTENIMIENTO DE ACCESOS</h3>
                     </div>
                     <br>
                     <form id="permisoForm" class="d-flex justify-content-center" method="POST" action="../Seguridad/Manpermisos/guardar_pantallas.php">

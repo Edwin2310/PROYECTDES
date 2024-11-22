@@ -84,7 +84,7 @@ if (isset($_SESSION["IdUsuario"])) {
 
                 <div class="row justify-content-center">
                     <div class="col-md-4" data-toggle="appear">
-                        <a href="../MantenimientoSolicitudes/AcuerdoAdmi_Agenda.php" data-id-objeto="37" data-accion="accedio al modulo" class="modulo-link block block-link-shadow text-center">
+                        <a href="../Seguridad/Bitacorasoli.php" data-id-objeto="45" data-accion="accedio al modulo" class="modulo-link block block-link-shadow text-center">
                             <div class="block-content block-content-full">
                                 <div class="py-30 text-center">
                                     <div class="item item-2x item-circle bg-warning text-white mx-auto">
@@ -99,7 +99,7 @@ if (isset($_SESSION["IdUsuario"])) {
                     </div>
 
                     <div class="col-md-4" data-toggle="appear">
-                        <a href="../Seguridad/Bitacora.php" data-id-objeto="38" data-accion="accedio al modulo" class="modulo-link block block-link-shadow text-center">
+                        <a href="../Seguridad/Bitacora.php" data-id-objeto="21" data-accion="accedio al modulo" class="modulo-link block block-link-shadow text-center">
                             <div class="block-content block-content-full">
                                 <div class="py-30 text-center">
                                     <div class="item item-2x item-circle bg-default text-white mx-auto">

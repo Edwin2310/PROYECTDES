@@ -61,19 +61,19 @@ if (isset($_SESSION["IdUsuario"])) {
                         $conn = $conexion->Conexion();
 
                         // Obtener el IdRol de la URL
-                        $id_rol = isset($_GET['id_rol']) ? intval($_GET['id_rol']) : 0;
+                        $id_rol = isset($_GET['IdRol']) ? intval($_GET['IdRol']) : 0;
 
                         // Inicializar la variable $nombre_rol
                         $nombre_rol = 'Desconocido';
 
                         // Consulta para obtener el nombre del rol
-                        $sql_rol = "SELECT nombre_rol FROM tbl_rol WHERE id_rol = :id_rol";
+                        $sql_rol = "SELECT NombreRol FROM `seguridad.tblmsroles` WHERE IdRol = :id_rol";
                         $stmt_rol = $conn->prepare($sql_rol);
                         $stmt_rol->bindParam(':id_rol', $id_rol, PDO::PARAM_INT);
                         if ($stmt_rol->execute()) {
                             $row_rol = $stmt_rol->fetch(PDO::FETCH_ASSOC);
                             if ($row_rol) {
-                                $nombre_rol = $row_rol['nombre_rol'];
+                                $nombre_rol = $row_rol['NombreRol'];
                             }
                         } else {
                             echo "Error al obtener el nombre del rol";
@@ -81,7 +81,7 @@ if (isset($_SESSION["IdUsuario"])) {
                         }
                         ?>
                         
-                        <h3 class="block-title text-center font-weight-bold display-5 ">Permisos del NombreRol <?php echo htmlspecialchars($nombre_rol); ?></h3>
+                        <h3 class="block-title text-center font-weight-bold display-5 ">Permisos del Rol <?php echo htmlspecialchars($nombre_rol); ?></h3>
                         
                     </div>
                     <div class="block-content block-content-full">
@@ -105,19 +105,19 @@ if (isset($_SESSION["IdUsuario"])) {
                                 $conn = $conexion->Conexion();
 
                                 // Obtener el IdRol de la URL
-                                $id_rol = isset($_GET['id_rol']) ? intval($_GET['id_rol']) : 0;
+                                $id_rol = isset($_GET['IdRol']) ? intval($_GET['IdRol']) : 0;
 
                                 // Depuración: Verificar que se captura el IdRol correctamente
                                 // echo "ID NombreRol: " . $id_rol;
 
-                                $sql = "SELECT r.id_rol, r.nombre_rol, o.IdObjeto, o.OBJETO, 
-                                              p.PERMISO_INSERCION,
-                                              p.PERMISO_ELIMINACION,
-                                              p.PERMISO_ACTUALIZACION,
-                                              p.PERMISO_CONSULTAR
+                                $sql = "SELECT r.IdRol, r.NombreRol, o.IdObjeto, o.OBJETO, 
+                                              p.PermisoInsercion,
+                                              p.PermisoEliminacion,
+                                              p.PermisoActualizacion,
+                                              p.PermisoConsultar
                                               FROM `seguridad.tblpermisos` p
-                                              INNER JOIN tbl_rol r ON p.IdRol = r.id_rol
-                                              INNER JOIN tbl_ms_objetos o ON o.IdObjeto = p.IdObjeto
+                                              INNER JOIN `seguridad.tblmsroles` r ON p.IdRol = r.IdRol
+                                              INNER JOIN `seguridad.tblobjetos` o ON o.IdObjeto = p.IdObjeto
                                               WHERE p.IdRol = :id_rol";
 
                                 $stmt = $conn->prepare($sql);
@@ -133,12 +133,12 @@ if (isset($_SESSION["IdUsuario"])) {
 
                                 if ($result) {
                                     foreach ($result as $row) {
-                                        echo "<tr data-id-rol='{$row['id_rol']}' data-id-objeto='{$row['IdObjeto']}'>";
+                                        echo "<tr data-id-rol='{$row['IdRol']}' data-id-objeto='{$row['IdObjeto']}'>";
                                         echo "<td>{$row['OBJETO']}</td>";
-                                        echo "<td class='text-center'><input type='checkbox' disabled " . ($row['PERMISO_INSERCION'] ? 'checked' : '') . "></td>";
-                                        echo "<td class='text-center'><input type='checkbox' disabled " . ($row['PERMISO_ELIMINACION'] ? 'checked' : '') . "></td>";
-                                        echo "<td class='text-center'><input type='checkbox' disabled " . ($row['PERMISO_ACTUALIZACION'] ? 'checked' : '') . "></td>";
-                                        echo "<td class='text-center'><input type='checkbox' disabled " . ($row['PERMISO_CONSULTAR'] ? 'checked' : '') . "></td>";
+                                        echo "<td class='text-center'><input type='checkbox' disabled " . ($row['PermisoInsercion'] ? 'checked' : '') . "></td>";
+                                        echo "<td class='text-center'><input type='checkbox' disabled " . ($row['PermisoEliminacion'] ? 'checked' : '') . "></td>";
+                                        echo "<td class='text-center'><input type='checkbox' disabled " . ($row['PermisoActualizacion'] ? 'checked' : '') . "></td>";
+                                        echo "<td class='text-center'><input type='checkbox' disabled " . ($row['PermisoConsultar'] ? 'checked' : '') . "></td>";
                                         echo "<td class='text-center'>
                                              <button type='button' class='btn btn-sm btn-info toggle-checkboxes'>
                                             <i class='si si-settings'></i> <!-- Icono de habilitar/deshabilitar -->

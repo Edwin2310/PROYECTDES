@@ -276,4 +276,4 @@ if ($id) {
 ?>
 
 
-<script src="../Seguridad//Bitacora//Bitacora.js"></script>
+<!-- <script src="../Seguridad//Bitacora//Bitacora.js"></script> -->

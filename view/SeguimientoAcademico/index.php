@@ -2,13 +2,44 @@
 session_start();
 require_once("../../config/conexion.php");
 require_once(__DIR__ . '/../Seguridad/Permisos/Funciones_Permisos.php');
+require_once(__DIR__ . '/../Seguridad/Bitacora/Funciones_Bitacoras.php');
 if (isset($_SESSION["IdUsuario"])) {
 
     // Obtener los valores necesarios para la verificación
+    $id_usuario = $_SESSION['IdUsuario'] ?? null;
     $id_rol = $_SESSION['IdRol'] ?? null;
-    $id_objeto = 21; // ID del objeto o módulo correspondiente a esta página
-    // Llama a la función para verificar los permisos
-    verificarPermiso($id_rol, $id_objeto);
+    $id_objeto = 7; // ID del objeto o módulo correspondiente a esta página
+
+    // Obtener la página actual y la última marca de acceso
+    $current_page = basename($_SERVER['PHP_SELF']);
+    $last_access_time = $_SESSION['last_access_time'][$current_page] ?? 0;
+
+    // Obtener el tiempo actual
+    $current_time = time();
+
+    // Verificar si han pasado al menos 10 segundos desde el último registro
+    if ($current_time - $last_access_time > 3) {
+        // Verificar permisos
+        if (verificarPermiso($id_rol, $id_objeto)) {
+            $accion = "Accedió al módulo.";
+
+            // Registrar en la bitácora
+            registrobitaevent($id_usuario, $id_objeto, $accion);
+        } else {
+            $accion = "acceso denegado.";
+
+            // Registrar en bitácora antes de redirigir
+            registrobitaevent($id_usuario, $id_objeto, $accion);
+
+            // Redirigir a la página de denegación
+            header("Location: ../Seguridad/Permisos/denegado.php");
+            exit();
+        }
+
+        // Actualizar la marca temporal en la sesión
+        $_SESSION['last_access_time'][$current_page] = $current_time;
+    }
+
 
 ?>
 
@@ -27,7 +58,7 @@ if (isset($_SESSION["IdUsuario"])) {
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json"></script>
         <script src="../Seguridad//Bitacora//borrar_bitacora.js"></script>
-        <script src="../Seguridad//Bitacora//Bitacora.js"></script>
+       <!--  <script src="../Seguridad//Bitacora//Bitacora.js"></script> -->
         <style>
             /* Asegúrate de que el contenedor tenga un desplazamiento horizontal cuando sea necesario */
             .table-container {

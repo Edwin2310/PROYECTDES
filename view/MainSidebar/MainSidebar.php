@@ -1,5 +1,3 @@
-
-
 <div class="sidebar-content">
     <!-- Contenido del sidebar -->
     <div class="sidebar-sticky">
@@ -37,7 +35,7 @@
                         </a>
                     </li>
                     <li class="list-inline-item">
-                        <a class="link-effect text-dual-primary-dark modulo-link"  data-id-objeto="49" data-accion="Cerro sesión" href="../Logout/logout.php">
+                        <a class="link-effect text-dual-primary-dark modulo-link" data-id-objeto="49" data-accion="Cerro sesión" href="../Logout/logout.php">
                             <i class="si si-logout"></i>
                         </a>
                     </li>

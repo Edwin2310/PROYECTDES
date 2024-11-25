@@ -90,7 +90,7 @@ if (isset($_SESSION["IdUsuario"])) {
                         </div>
 
                         <div class="col-lg-4 mr-auto" data-toggle="appear">
-                            <a href="CreacionCarrera.php" class="block block-link-shadow text-center" href="javascript:void(0)">
+                            <a href="CreacionCarrera1.php" class="block block-link-shadow text-center" href="javascript:void(0)">
                                 <div class="block-content block-content-full">
                                     <div class="py-30 text-center">
                                         <div class="item item-2x item-circle bg-default text-white mx-auto">
@@ -105,7 +105,7 @@ if (isset($_SESSION["IdUsuario"])) {
                         </div>
 
                         <div class="col-lg-4 mr-auto" data-toggle="appear">
-                            <a href="CreacionReforma.php" class="block block-link-shadow text-center" href="javascript:void(0)">
+                            <a href="CreacionReforma1.php" class="block block-link-shadow text-center" href="javascript:void(0)">
                                 <div class="block-content block-content-full">
                                     <div class="py-30 text-center">
                                         <div class="item item-2x item-circle bg-warning text-white mx-auto">
@@ -120,7 +120,7 @@ if (isset($_SESSION["IdUsuario"])) {
                         </div>
 
                         <div class="col-lg-4 ml-auto" data-toggle="appear">
-                            <a href="CreacionCentro.php" class="block block-link-shadow text-center" href="javascript:void(0)">
+                            <a href="CreacionCentro1.php" class="block block-link-shadow text-center" href="javascript:void(0)">
                                 <div class="block-content block-content-full">
                                     <div class="py-30 text-center">
                                         <div class="item item-2x item-circle bg-default text-white mx-auto">
@@ -135,7 +135,7 @@ if (isset($_SESSION["IdUsuario"])) {
                         </div>
 
                         <div class="col-lg-4 mr-auto" data-toggle="appear">
-                            <a href="CreacionOtros.php" class="block block-link-shadow text-center" href="javascript:void(0)">
+                            <a href="CreacionOtros1.php" class="block block-link-shadow text-center" href="javascript:void(0)">
                                 <div class="block-content block-content-full">
                                     <div class="py-30 text-center">
                                         <div class="item item-2x item-circle bg-warning text-white mx-auto">

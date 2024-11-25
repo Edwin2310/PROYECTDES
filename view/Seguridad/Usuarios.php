@@ -200,19 +200,19 @@ if (isset($_SESSION["IdUsuario"])) {
                             </div>
                             <div class="form-group">
                                 <label for="Direccion">Dirección</label>
-                                <input type="text" class="form-control" id="Direccion" name="Direccion" required>
+                                <input type="text" class="form-control" id="Direccion" name="Direccion" maxlength="50" required>
                             </div>
                             <div class="form-group">
                                 <label for="Usuario">Usuario</label>
-                                <input type="text" class="form-control" id="Usuario" name="Usuario" required>
+                                <input type="text" class="form-control" id="Usuario" name="Usuario" maxlength="50" required>
                             </div>
                             <div class="form-group">
                                 <label for="CorreoElectronico">Correo Electrónico</label>
-                                <input type="email" class="form-control" id="CorreoElectronico" name="CorreoElectronico" required>
+                                <input type="email" class="form-control" id="CorreoElectronico" name="CorreoElectronico" maxlength="50" required>
                             </div>
                             <div class="form-group">
                                 <label for="NombreUsuario">Nombre de Usuario</label>
-                                <input type="text" class="form-control" id="NombreUsuario" name="NombreUsuario" required>
+                                <input type="text" class="form-control" id="NombreUsuario" name="NombreUsuario" maxlength="50" required>
                             </div>
                             <div class="form-group">
                                 <label for="NumEmpleado">Número de Empleado</label>
@@ -271,19 +271,19 @@ if (isset($_SESSION["IdUsuario"])) {
                             </div>
                             <div class="form-group">
                                 <label for="edit_Direccion">Dirección</label>
-                                <input type="text" class="form-control" id="edit_Direccion" name="Direccion" required>
+                                <input type="text" class="form-control" id="edit_Direccion" name="Direccion" maxlength="50" required>
                             </div>
                             <div class="form-group">
                                 <label for="edit_Usuario">Usuario</label>
-                                <input type="text" class="form-control" id="edit_Usuario" name="Usuario" required>
+                                <input type="text" class="form-control" id="edit_Usuario" name="Usuario" maxlength="50" required>
                             </div>
                             <div class="form-group">
                                 <label for="edit_CorreoElectronico">Correo Electrónico</label>
-                                <input type="email" class="form-control" id="edit_CorreoElectronico" name="CorreoElectronico" required>
+                                <input type="email" class="form-control" id="edit_CorreoElectronico" name="CorreoElectronico" maxlength="50" required>
                             </div>
                             <div class="form-group">
                                 <label for="edit_NombreUsuario">Nombre de Usuario</label>
-                                <input type="text" class="form-control" id="edit_NombreUsuario" name="NombreUsuario" required>
+                                <input type="text" class="form-control" id="edit_NombreUsuario" name="NombreUsuario" maxlength="50" required>
                             </div>
                             <div class="form-group">
                                 <label for="edit_NumEmpleado">Número de Empleado</label>

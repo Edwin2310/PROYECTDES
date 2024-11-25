@@ -40,19 +40,19 @@ $id_rol = isset($_SESSION["IdRol"]) ? $_SESSION["IdRol"] : null;
             </li>
             <li>
                 <a id="reportes" href="../Reportes/" class="modulo-link" data-id-objeto="9" data-accion="accedio al modulo">
-                    <i class="fa fa-book"></i>
+                    <i class="si si-doc"></i>
                     <span class="sidebar-mini-hide">Reportes</span>
                 </a>
             </li>
             <li>
                 <a id="mantenimiento_sistema" href="../MantenimientoSistema/" class="modulo-link" data-id-objeto="10" data-accion="accedio al modulo">
-                    <i class="fa fa-cogs"></i>
+                    <i class="si si-settings"></i>
                     <span class="sidebar-mini-hide">Mantenimiento Sistema</span>
                 </a>
             </li>
             <li>
                 <a id="seguridad" href="../Seguridad/" class="modulo-link" data-id-objeto="11" data-accion="accedio al modulo">
-                    <i class="fa fa-shield"></i>
+                    <i class="si si-shield"></i>
                     <span class="sidebar-mini-hide">Seguridad</span>
                 </a>
             </li>

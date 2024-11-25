@@ -42,7 +42,7 @@
                                     <div class="form-group row">
                                         <div class="col-12">
                                             <div class="form-material floating">
-                                                <input type="password" class="form-control" id="nueva_contrasena" name="nueva_contrasena" required onpaste="return false;" onkeypress="return event.charCode != 60 && event.charCode != 62 && event.charCode != 32 && event.charCode != 34;">
+                                                <input type="password" class="form-control" id="nueva_contrasena" name="nueva_contrasena" required maxlength="20;" required onpaste="return false;" onkeypress="return event.charCode != 60 && event.charCode != 62 && event.charCode != 32 && event.charCode != 34;">
                                                 <label for="nueva_contrasena">Nueva Contraseña</label>
                                             </div>
                                         </div>
@@ -50,7 +50,7 @@
                                     <div class="form-group row">
                                         <div class="col-12">
                                             <div class="form-material floating">
-                                                <input type="password" class="form-control" id="confirmar_contrasena" name="confirmar_contrasena" required onpaste="return false;" onkeypress="return event.charCode != 60 && event.charCode != 62 && event.charCode != 32 && event.charCode != 34;">
+                                                <input type="password" class="form-control" id="confirmar_contrasena" name="confirmar_contrasena" required maxlength="20;" required onpaste="return false;" onkeypress="return event.charCode != 60 && event.charCode != 62 && event.charCode != 32 && event.charCode != 34;">
                                                 <label for="confirmar_contrasena">Confirmar Contraseña</label>
                                             </div>
                                         </div>

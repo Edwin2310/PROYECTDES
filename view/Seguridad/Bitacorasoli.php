@@ -117,10 +117,10 @@ if (isset($_SESSION["IdUsuario"])) {
                                 <thead>
                                     <tr>
                                         <th class="text-center">N*</th>
-                                        <th class="d-none d-sm-table-cell">Fecha y Hora</th>
-                                        <th class="d-none d-sm-table-cell">Usuario</th>
-                                        <th class="d-none d-sm-table-cell">PANTALLA</th>
-                                        <th class="d-none d-sm-table-cell">Acción</th>
+                                        <th class="d-none d-sm-table-cell">ID SOLICITUD</th>
+                                        <th class="d-none d-sm-table-cell">ID USUARIO</th>
+                                        <th class="d-none d-sm-table-cell">ID ESTADO</th>
+                                        <th class="d-none d-sm-table-cell">FECHA DE PROCESO</th>
                                         <!--  <th class="d-none d-sm-table-cell">Descripción</th> -->
                                     </tr>
                                     <tr>

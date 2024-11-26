@@ -22,6 +22,33 @@ class Usuario extends Conectar
             if ($num_intentos >= $max_intentos) {
                 $this->bloquear_usuario($correo);
                 $_SESSION["error"] = "Demasiados intentos. Contacte con soporte para que su usuario sea nuevamente habilitado o restablezca su contraseña.";
+
+                       //________________________________________________________________________________________________________
+                        //NO TOCAR ES DE BITACORA
+                        require_once(__DIR__ . '/../view/Seguridad/Bitacora/Funciones_Bitacoras.php');
+                        
+                            // Obtener los valores necesarios para la verificación
+                            $id_usuario =null;
+                            $id_objeto = 1; // ID del objeto o módulo correspondiente a esta página
+                        
+                            // Obtener la página actual y la última marca de acceso
+                            $current_page = basename($_SERVER['PHP_SELF']);
+                            $last_access_time = $_SESSION['last_access_time'][$current_page] ?? 0;
+                        
+                            // Obtener el tiempo actual
+                            $current_time = time();
+                        
+                            // Verificar si han pasado al menos 10 segundos desde el último registro
+                            if ($current_time - $last_access_time > 3) {
+                                    $accion = "Usuario bloqueado";
+                                    // Registrar en la bitácora
+                                    registrobitaevent($id_usuario, $id_objeto, $accion);
+                                } 
+                                // Actualizar la marca temporal en la sesión
+                                $_SESSION['last_access_time'][$current_page] = $current_time;
+                            //_______________________________________________________________________________________________________
+
+
                 header("Location:" . Conectar::ruta() . "index.php");
                 exit();
             } else {
@@ -87,11 +114,37 @@ class Usuario extends Conectar
                         $num_intentos_actualizados = $this->obtener_num_intentos($correo);
                         $intentos_restantes = $max_intentos - $num_intentos_actualizados;
                         $_SESSION["error"] = "El Usuario y/o Contraseña son incorrectos. Intentos restantes: $intentos_restantes de $max_intentos";
+
+                           //________________________________________________________________________________________________________
+                        //NO TOCAR ES DE BITACORA
+                        require_once(__DIR__ . '/../view/Seguridad/Bitacora/Funciones_Bitacoras.php');
+                        
+                            // Obtener los valores necesarios para la verificación
+                            $id_usuario =null;
+                            $id_objeto = 1; // ID del objeto o módulo correspondiente a esta página
+                        
+                            // Obtener la página actual y la última marca de acceso
+                            $current_page = basename($_SERVER['PHP_SELF']);
+                            $last_access_time = $_SESSION['last_access_time'][$current_page] ?? 0;
+                        
+                            // Obtener el tiempo actual
+                            $current_time = time();
+                        
+                            // Verificar si han pasado al menos 10 segundos desde el último registro
+                            if ($current_time - $last_access_time > 3) {
+                                    $accion = "Inicio de sesión fallida sospecho";
+                                    // Registrar en la bitácora
+                                    registrobitaevent($id_usuario, $id_objeto, $accion);
+                                } 
+                                // Actualizar la marca temporal en la sesión
+                                $_SESSION['last_access_time'][$current_page] = $current_time;
+                            //_______________________________________________________________________________________________________
+
                         header("Location:" . Conectar::ruta() . "index.php");
                         exit();
                     }
                 } else {
-                    $_SESSION["error"] = "El Usuario y/o Contraseña son incorrectos.";
+                    $_SESSION["error"] = "El Usuario y/o Contraseña son incorrectos.";       
                     header("Location:" . Conectar::ruta() . "index.php");
                     exit();
                 }

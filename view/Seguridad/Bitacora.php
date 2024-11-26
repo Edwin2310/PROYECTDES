@@ -139,16 +139,16 @@ if (isset($_SESSION["IdUsuario"])) {
                                     $sql = "SELECT
                                                  ROW_NUMBER() OVER (ORDER BY b.IdBitacora) AS NUMERACION,
                                                  b.FechaHora,
-                                                 p.NombreUsuario,
+                                                COALESCE(p.NombreUsuario, 'Usuario sospechoso') AS NombreUsuario,
                                                  O.Objeto,
                                                  b.Accion
                                             FROM
                                                  `seguridad.tblbitacora` b
-                                            INNER JOIN `seguridad.tblusuarios` u ON
+                                            LEFT JOIN `seguridad.tblusuarios` u ON
                                                        b.IdUsuario = u.IdUsuario
-                                            INNER JOIN `seguridad.tblobjetos` o ON
+                                            LEFT JOIN `seguridad.tblobjetos` o ON
                                                         b.IdObjeto = o.IdObjeto
-                                            INNER JOIN `seguridad.tbldatospersonales` p ON
+                                            LEFT JOIN `seguridad.tbldatospersonales` p ON
                                                        b.IdUsuario = p.IdUsuario
                                             ORDER BY
                                                      b.IdBitacora ASC;";

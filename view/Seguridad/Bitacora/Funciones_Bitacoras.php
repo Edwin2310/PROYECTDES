@@ -5,7 +5,7 @@ require_once(__DIR__ . '/../../../config/conexion.php');
 function registrobitaevent($id_usuario, $id_objeto, $accion)
 {
     try {
-       
+
         // Conectar a la base de datos
         $conexion = new Conectar();
         $conn = $conexion->Conexion();

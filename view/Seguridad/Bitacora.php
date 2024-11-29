@@ -125,7 +125,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                         <!--  <th class="d-none d-sm-table-cell">Descripción</th> -->
                                     </tr>
                                     <tr>
-                                        <th class="text-center"><input type="text" placeholder="Buscar por Id Bitacora" /></th>
+                                        <th class="text-center"><input  placeholder="Buscar por Id Bitacora" /></th>
                                         <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por Fecha y Hora" /></th>
                                         <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por Usuario" /></th>
                                         <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por Objeto" /></th>

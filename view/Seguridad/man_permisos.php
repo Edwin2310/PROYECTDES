@@ -238,7 +238,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                 <!-- Filtros -->
                                 <div class="row align-items-end">
                                     <div class="w-50">
-                                        <label for="filterRole">Filtrar por Nombre de NombreRol:</label>
+                                        <label for="filterRole">Filtrar por Nombre de Rol:</label>
                                         <select id="filterRole" name="filterRole" class="form-control">
                                             <option value="">Todos los Roles</option>
                                             <?php
@@ -289,6 +289,7 @@ if (isset($_SESSION["IdUsuario"])) {
                             </form>
 
                             <br>
+                            <input type="hidden" id="usuario-id" value="<?php echo $_SESSION['IdUsuario']; ?>">
                             <table id="permisosTable" class="table table-bordered table-striped table-vcenter">
                                 <thead>
                                     <tr>
@@ -329,9 +330,9 @@ if (isset($_SESSION["IdUsuario"])) {
                                                 echo "<td class='text-center'><input type='checkbox' disabled " . ($row['PermisoActualizacion'] ? 'checked' : '') . "></td>";
                                                 echo "<td class='text-center'><input type='checkbox' disabled " . ($row['PermisoConsultar'] ? 'checked' : '') . "></td>";
                                                 echo "<td class='text-center'>
-                                               <button type='button' class='btn btn-sm btn-danger delete-row accion-permiso' data-id-a-objeto='17' data-permiso='2'  data-id-rol='{$row['IdRol']}' data-id-objeto='{$row['IdObjeto']}'>
+                                                 <button type='button' class='btn btn-sm btn-danger delete-row accion-permiso' data-id-a-objeto='17' data-permiso='2'  data-id-rol='{$row['IdRol']}' data-id-objeto='{$row['IdObjeto']}'>
                                                   <i class='si si-trash'></i>
-                                               </button>
+                                                 </button>
                                                </td>";
                                                 echo "</tr>";
                                             }

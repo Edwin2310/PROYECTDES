@@ -14,39 +14,39 @@ if (!$conn) {
 
 // Verificar si se ha enviado el formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id_categoria = isset($_POST['id_categoria']) ? $_POST['id_categoria'] : '';
-    $cod_arbitrios = isset($_POST['cod_arbitrios']) ? $_POST['cod_arbitrios'] : '';
-    $categoria = isset($_POST['categoria']) ? $_POST['categoria'] : '';
-    $id_tipo_solicitud = isset($_POST['id_tipo_solicitud']) ? $_POST['id_tipo_solicitud'] : '';
-    $monto = isset($_POST['monto']) ? $_POST['monto'] : '';
+    $IdUniversidad = isset($_POST['IdUniversidad']) ? $_POST['IdUniversidad'] : '';
+    $NomUniversidad = isset($_POST['NomUniversidad']) ? trim($_POST['NomUniversidad']) : '';
 
-    if (empty($id_categoria) || empty($cod_arbitrios) || empty($categoria) || empty($id_tipo_solicitud) || empty($monto)) {
+    // Validar campos
+    if (empty($IdUniversidad) || empty($NomUniversidad)) {
         $_SESSION['error_message'] = "Todos los campos son obligatorios";
-        header("Location: ../../MantenimientoSistema/CategoriaDeSolicitudes.php?action=edit-error");
+        header("Location: ../../MantenimientoSistema/Universidades.php?action=edit-error");
         exit();
     }
 
-    $sql_update = "UPDATE tbl_categoria SET COD_ARBITRIOS = :cod_arbitrios, NOM_CATEGORIA = :categoria, ID_TIPO_SOLICITUD = :id_tipo_solicitud, MONTO = :monto WHERE ID_CATEGORIA = :id_categoria";
-    $stmt_update = $conn->prepare($sql_update);
-    $stmt_update->bindParam(':cod_arbitrios', $cod_arbitrios);
-    $stmt_update->bindParam(':categoria', $categoria);
-    $stmt_update->bindParam(':id_tipo_solicitud', $id_tipo_solicitud);
-    $stmt_update->bindParam(':monto', $monto);
-    $stmt_update->bindParam(':id_categoria', $id_categoria);
+    try {
+        $sql_update = "UPDATE `mantenimiento.tbluniversidades` SET NomUniversidad = :NomUniversidad WHERE IdUniversidad = :IdUniversidad";
+        $stmt_update = $conn->prepare($sql_update);
+        $stmt_update->bindParam(':NomUniversidad', $NomUniversidad);
+        $stmt_update->bindParam(':IdUniversidad', $IdUniversidad);
 
-    if ($stmt_update->execute()) {
-        $_SESSION['success_message'] = "Categoría editada exitosamente";
-        header("Location: ../../MantenimientoSistema/CategoriaDeSolicitudes.php?action=edit-success");
-    } else {
-        $_SESSION['error_message'] = "Error al editar categoría: " . implode(" ", $stmt_update->errorInfo());
-        header("Location: ../../MantenimientoSistema/CategoriaDeSolicitudes.php?action=edit-error");
+        if ($stmt_update->execute()) {
+            $_SESSION['success_message'] = "Universidad editada exitosamente";
+            header("Location: ../../MantenimientoSistema/Universidades.php?action=edit-success");
+        } else {
+            $_SESSION['error_message'] = "Error al editar Universidad: " . implode(" ", $stmt_update->errorInfo());
+            header("Location: ../../MantenimientoSistema/Universidades.php?action=edit-error");
+        }
+    } catch (PDOException $e) {
+        $_SESSION['error_message'] = "Error al ejecutar la consulta: " . $e->getMessage();
+        header("Location: ../../MantenimientoSistema/Universidades.php?action=edit-error");
     }
 
     $conn = null;
     exit();
 } else {
     $_SESSION['error_message'] = "Solicitud no válida";
-    header("Location: ../../MantenimientoSistema/CategoriaDeSolicitudes.php?action=edit-error");
+    header("Location: ../../MantenimientoSistema/Universidades.php?action=edit-error");
     exit();
 }
 ?>

@@ -72,21 +72,21 @@ if (isset($_SESSION["IdUsuario"])) {
     $conn = $conexion->Conexion();
 
     $sql = "SELECT
-    c.ID_CARRERA,
-    c.NOM_CARRERA,
-    uc.NOM_UNIVERSIDAD,
-    m.NOM_MODALIDAD,
-    g.NOM_GRADO,
-    c.ID_UNIVERSIDAD,
-    c.ID_MODALIDAD,
-    c.ID_GRADO
+    c.IdCarrera,
+    c.NomCarrera,
+    uc.NomUniversidad,
+    m.NomModalidad,
+    g.NomGrado,
+    c.IdUniversidad,
+    c.IdModalidad,
+    c.IdGrado
     FROM
-    tbl_carrera c
-    LEFT JOIN tbl_universidad_centro uc ON c.ID_UNIVERSIDAD = uc.ID_UNIVERSIDAD
-    LEFT JOIN tbl_modalidad m ON c.ID_MODALIDAD = m.ID_MODALIDAD
-    LEFT JOIN tbl_grado_academico g ON c.ID_GRADO = g.ID_GRADO
+    `mantenimiento.tblcarreras` c
+    LEFT JOIN `mantenimiento.tbluniversidades` uc ON c.IdUniversidad = uc.IdUniversidad
+    LEFT JOIN `mantenimiento.tblmodalidades` m ON c.IdModalidad = m.IdModalidad
+    LEFT JOIN `mantenimiento.tblgradosacademicos` g ON c.IdGrado = g.IdGrado
     ORDER BY
-    c.ID_CARRERA";
+    c.IdCarrera";
     $result = $conn->query($sql);
 
     if ($result !== false && $result->rowCount() > 0) {
@@ -118,7 +118,7 @@ if (isset($_SESSION["IdUsuario"])) {
             'C1' => 'UNIVERSIDAD',
             'D1' => 'MODALIDAD',
             'E1' => 'GRADO ACADÉMICO',
-            
+
         ];
 
         foreach ($headers as $cell => $text) {
@@ -130,12 +130,12 @@ if (isset($_SESSION["IdUsuario"])) {
         // Agregar datos
         $rowNum = 2;
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            $sheet->setCellValue('A' . $rowNum, $row['ID_CARRERA']);
-            $sheet->setCellValue('B' . $rowNum, $row['NOM_CARRERA']);
-            $sheet->setCellValue('C' . $rowNum, $row['NOM_UNIVERSIDAD']);
-            $sheet->setCellValue('D' . $rowNum, $row['NOM_MODALIDAD']);
-            $sheet->setCellValue('E' . $rowNum, $row['NOM_GRADO']);
-          
+            $sheet->setCellValue('A' . $rowNum, $row['IdCarrera']);
+            $sheet->setCellValue('B' . $rowNum, $row['NomCarrera']);
+            $sheet->setCellValue('C' . $rowNum, $row['NomUniversidad']);
+            $sheet->setCellValue('D' . $rowNum, $row['NomModalidad']);
+            $sheet->setCellValue('E' . $rowNum, $row['NomGrado']);
+
 
             // Aplicar alineación centrada a todas las celdas de datos
             $sheet->getStyle('A' . $rowNum . ':H' . $rowNum)->applyFromArray($centerAlignment);

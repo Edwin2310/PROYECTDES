@@ -1,3 +1,13 @@
+// Permite solo números
+function validarNumeros(input) {
+    input.value = input.value.replace(/[^0-9]/g, '');
+}
+
+// Permite solo letras y caracteres específicos
+function validarCategoria(input) {
+    input.value = input.value.replace(/[^a-zA-ZÁÉÍÓÚáéíóú\s().-]/g, '');
+}
+
 // Función para mostrar mensajes de alerta
 function showAlert(message, type) {
     Swal.fire({
@@ -9,24 +19,24 @@ function showAlert(message, type) {
     });
 }
 
-// Mostrar alerta en caso de éxito al agregar categoría
+// Mostrar alerta en caso de éxito al agregar categoria
 function handleAddCategorySuccess() {
-    showAlert('Categoría añadida exitosamente.', 'success');
+    showAlert('categoria añadida exitosamente.', 'success');
 }
 
-// Mostrar alerta en caso de éxito al editar categoría
+// Mostrar alerta en caso de éxito al editar categoria
 function handleEditCategorySuccess() {
-    showAlert('Categoría editada exitosamente.', 'success');
+    showAlert('categoria editada exitosamente.', 'success');
 }
 
-// Mostrar alerta en caso de éxito al eliminar categoría
+// Mostrar alerta en caso de éxito al eliminar categoria (al cambiar IdVisibilidad)
 function handleDeleteCategorySuccess() {
-    showAlert('Categoría eliminada exitosamente.', 'success');
+    showAlert('La categoria ha sido bloqueada exitosamente. Podrás encontrarla en la pestaña de categorias Bloqueadas.', 'success');
 }
 
 // Mostrar alerta si los datos ya existen
 function handleDuplicateCategory() {
-    showAlert('Ya existe una categoría con los mismos datos.', 'error');
+    showAlert('Ya existe una categoria con los mismos datos.', 'error');
 }
 
 // Mostrar alerta en caso de error
@@ -46,7 +56,7 @@ function handleURLParams() {
                 handleEditCategorySuccess();
                 break;
             case 'delete-success':
-                handleDeleteCategorySuccess();
+                handleDeleteCategorySuccess();  // Se muestra el mensaje de éxito de eliminación
                 break;
             case 'duplicate':
                 handleDuplicateCategory();

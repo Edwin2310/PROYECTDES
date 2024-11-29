@@ -12,25 +12,26 @@ if (!$conn) {
     die("Conexión fallida: " . implode(" ", $conn->errorInfo()));
 }
 
-// Verificar si se ha enviado la solicitud de eliminación
+// Verificar si se ha enviado la solicitud de actualización (en lugar de eliminación)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id_carrera = isset($_POST['id_carrera']) ? $_POST['id_carrera'] : '';
+    $IdCarrera = isset($_POST['IdCarrera']) ? $_POST['IdCarrera'] : '';
 
-    if (empty($id_carrera)) {
+    if (empty($IdCarrera)) {
         $_SESSION['error_message'] = "El ID de la carrera es obligatorio";
         header("Location: ../../MantenimientoSistema/Carreras.php?action=delete-error");
         exit();
     }
 
-    $sql_delete = "DELETE FROM tbl_carrera WHERE ID_CARRERA = :id_carrera";
-    $stmt_delete = $conn->prepare($sql_delete);
-    $stmt_delete->bindParam(':id_carrera', $id_carrera);
+    // Actualizar el campo IdVisibilidad a 2
+    $sql_update = "UPDATE `mantenimiento.tblcarreras` SET IdVisibilidad = 2 WHERE IdCarrera = :IdCarrera";
+    $stmt_update = $conn->prepare($sql_update);
+    $stmt_update->bindParam(':IdCarrera', $IdCarrera);
 
-    if ($stmt_delete->execute()) {
-        $_SESSION['success_message'] = "Carrera eliminada exitosamente";
+    if ($stmt_update->execute()) {
+        $_SESSION['success_message'] = "Carrera bloqueada exitosamente. Podrás encontrarla en la pestaña de Carreras Bloqueadas.";
         header("Location: ../../MantenimientoSistema/Carreras.php?action=delete-success");
     } else {
-        $_SESSION['error_message'] = "Error al eliminar carrera: " . implode(" ", $stmt_delete->errorInfo());
+        $_SESSION['error_message'] = "Error al bloquear carrera: " . implode(" ", $stmt_update->errorInfo());
         header("Location: ../../MantenimientoSistema/Carreras.php?action=delete-error");
     }
 

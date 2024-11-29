@@ -15,23 +15,23 @@ if (!$conn) {
 // Verificar si se ha enviado el formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Obtener datos del formulario
-    $cod_arbitrios = isset($_POST['cod_arbitrios']) ? $_POST['cod_arbitrios'] : '';
+    $CodArbitrios = isset($_POST['CodArbitrios']) ? $_POST['CodArbitrios'] : '';
     $categoria = isset($_POST['categoria']) ? $_POST['categoria'] : '';
-    $id_tipo_solicitud = isset($_POST['id_tipo_solicitud']) ? $_POST['id_tipo_solicitud'] : '';
-    $monto = isset($_POST['monto']) ? $_POST['monto'] : '';
+    $IdTiposolicitud = isset($_POST['IdTiposolicitud']) ? $_POST['IdTiposolicitud'] : '';
+    $Monto = isset($_POST['Monto']) ? $_POST['Monto'] : '';
 
     // Validar datos
-    if (empty($cod_arbitrios) || empty($categoria) || empty($id_tipo_solicitud) || empty($monto)) {
+    if (empty($CodArbitrios) || empty($categoria) || empty($IdTiposolicitud) || empty($Monto)) {
         header("Location: ../../MantenimientoSistema/CategoriaDeSolicitudes.php?action=error&message=Todos los campos son obligatorios");
         exit();
     }
 
     // Verificar si la categoría ya existe
-    $sql_check = "SELECT COUNT(*) FROM tbl_categoria WHERE COD_ARBITRIOS = :cod_arbitrios AND NOM_CATEGORIA = :categoria AND ID_TIPO_SOLICITUD = :id_tipo_solicitud";
+    $sql_check = "SELECT COUNT(*) FROM `mantenimiento.tblcategorias` WHERE CodArbitrios = :CodArbitrios AND NomCategoria = :categoria AND IdTiposolicitud = :IdTiposolicitud";
     $stmt_check = $conn->prepare($sql_check);
-    $stmt_check->bindParam(':cod_arbitrios', $cod_arbitrios);
+    $stmt_check->bindParam(':CodArbitrios', $CodArbitrios);
     $stmt_check->bindParam(':categoria', $categoria);
-    $stmt_check->bindParam(':id_tipo_solicitud', $id_tipo_solicitud);
+    $stmt_check->bindParam(':IdTiposolicitud', $IdTiposolicitud);
     $stmt_check->execute();
 
     if ($stmt_check->fetchColumn() > 0) {
@@ -39,14 +39,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Insertar el nuevo registro en la tabla tbl_categoria
-    $sql_insert = "INSERT INTO tbl_categoria (COD_ARBITRIOS, NOM_CATEGORIA, ID_TIPO_SOLICITUD, MONTO) 
-                   VALUES (:cod_arbitrios, :categoria, :id_tipo_solicitud, :monto)";
+    // Insertar el nuevo registro en la tabla `mantenimiento.tblcategorias`
+    $sql_insert = "INSERT INTO `mantenimiento.tblcategorias` (CodArbitrios, NomCategoria, IdTiposolicitud, Monto) 
+                   VALUES (:CodArbitrios, :categoria, :IdTiposolicitud, :Monto)";
     $stmt_insert = $conn->prepare($sql_insert);
-    $stmt_insert->bindParam(':cod_arbitrios', $cod_arbitrios);
+    $stmt_insert->bindParam(':CodArbitrios', $CodArbitrios);
     $stmt_insert->bindParam(':categoria', $categoria);
-    $stmt_insert->bindParam(':id_tipo_solicitud', $id_tipo_solicitud);
-    $stmt_insert->bindParam(':monto', $monto);
+    $stmt_insert->bindParam(':IdTiposolicitud', $IdTiposolicitud);
+    $stmt_insert->bindParam(':Monto', $Monto);
 
     if ($stmt_insert->execute()) {
         header("Location: ../../MantenimientoSistema/CategoriaDeSolicitudes.php?action=add-success");

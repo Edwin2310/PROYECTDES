@@ -72,20 +72,12 @@ if (isset($_SESSION["IdUsuario"])) {
     $conn = $conexion->Conexion();
 
     $sql = "SELECT 
-         u.ID_UNIVERSIDAD, 
-         u.NOM_UNIVERSIDAD, 
-         d.ID_DEPARTAMENTO, 
-         d.NOM_DEPTO, 
-         m.ID_MUNICIPIO, 
-         m.NOM_MUNICIPIO
+         IdUniversidad, 
+         NomUniversidad
          FROM 
-         tbl_universidad_centro u
-         JOIN 
-         tbl_deptos d ON u.ID_DEPARTAMENTO = d.ID_DEPARTAMENTO
-         JOIN 
-         tbl_municipios m ON u.ID_MUNICIPIO = m.ID_MUNICIPIO
+         tbl_universidad_centro 
          ORDER BY
-         u.ID_UNIVERSIDAD";
+         IdUniversidad";
     $result = $conn->query($sql);
 
     if ($result !== false && $result->rowCount() > 0) {
@@ -114,8 +106,6 @@ if (isset($_SESSION["IdUsuario"])) {
         $headers = [
             'A1' => 'ID UNIVERSIDAD',
             'B1' => 'NOMBRE UNIVERSIDAD',
-            'C1' => 'NOMBRE DEPARTAMENTO (SEDE PRINCIPAL)',
-            'D1' => 'NOMBRE MUNICIPIO (SEDE PRINCIPAL)',
          
         ];
 
@@ -128,13 +118,10 @@ if (isset($_SESSION["IdUsuario"])) {
         // Agregar datos
         $rowNum = 2;
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            $sheet->setCellValue('A' . $rowNum, $row['ID_UNIVERSIDAD']);
-            $sheet->setCellValue('B' . $rowNum, $row['NOM_UNIVERSIDAD']);
-            $sheet->setCellValue('C' . $rowNum, $row['NOM_DEPTO']);
-            $sheet->setCellValue('D' . $rowNum, $row['NOM_MUNICIPIO']);
-            
-           
+            $sheet->setCellValue('A' . $rowNum, $row['IdUniversidad']);
+            $sheet->setCellValue('B' . $rowNum, $row['NomUniversidad']);
 
+ 
             // Aplicar alineación centrada a todas las celdas de datos
             $sheet->getStyle('A' . $rowNum . ':F' . $rowNum)->applyFromArray($centerAlignment);
             $rowNum++;

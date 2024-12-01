@@ -202,7 +202,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                                 <div class="form-group row">
                                                     <label class="col-12" for="numero_registro">Número de registro</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="numero_registro" name="numero_registro" placeholder="RP-07-04-2003" required>
+                                                        <input type="text" class="form-control" id="numero_registro" name="numero_registro" placeholder="RP-07-04-2003"maxlength="50" required>
                                                     </div>
                                                 </div>
                                             </form>

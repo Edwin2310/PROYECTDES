@@ -55,7 +55,7 @@
                                     <div class="form-group row">
                                         <div class="col-12">
                                             <div class="form-material floating">
-                                                <input type="text" class="form-control" id="direccion_1" name="direccion_1" required>
+                                                <input maxlength="50" type="text" class="form-control" id="direccion_1" name="direccion_1" required>
                                                 <label for="direccion_1">Dirección</label>
                                             </div>
                                         </div>
@@ -63,7 +63,7 @@
                                     <div class="form-group row">
                                         <div class="col-12">
                                             <div class="form-material floating">
-                                                <input type="text" class="form-control" id="usuario" name="usuario" required>
+                                                <input maxlength="50" type="text" class="form-control" id="usuario" name="usuario" required>
                                                 <label for="usuario">Usuario</label>
                                             </div>
                                         </div>
@@ -71,7 +71,7 @@
                                     <div class="form-group row">
                                         <div class="col-12">
                                             <div class="form-material floating">
-                                                <input type="email" class="form-control" id="correo_electronico" name="correo_electronico" required>
+                                                <input maxlength="50" type="email" class="form-control" id="correo_electronico" name="correo_electronico" required>
                                                 <label for="edit_correo_electronico">Correo Electrónico</label>
                                                 <div class="invalid-feedback">
                                                     Por favor, ingrese un correo electrónico válido.
@@ -82,7 +82,7 @@
                                     <div class="form-group row">
                                         <div class="col-12">
                                             <div class="form-material floating">
-                                                <input type="text" class="form-control" id="nombre_usuario" name="nombre_usuario" required>
+                                                <input maxlength="50" type="text" class="form-control" id="nombre_usuario" name="nombre_usuario" required>
                                                 <label for="nombre_usuario">Nombre de Usuario</label>
                                             </div>
                                         </div>
@@ -94,25 +94,34 @@
                                             <select class="form-control" id="id_universidad" name="id_universidad" required>
                                                 <option value="" disabled selected style="display:none;"></option>
                                                 <?php
-                                                // Incluir el archivo de conexión a la base de datos y crear una instancia de la clase Conectar
                                                 require_once("../config/conexion.php");
-                                                $conexion = new Conectar();
-                                                $conn = $conexion->Conexion();
 
-                                                // Consulta a la base de datos para obtener las universidades
-                                                $sql_nombre_rol = "SELECT ID_UNIVERSIDAD, NOM_UNIVERSIDAD FROM tbl_universidad_centro";
-                                                $result_rol = $conn->query($sql_nombre_rol);
+                                                try {
+                                                    // Crear una instancia de la conexión
+                                                    $conexion = new Conectar();
+                                                    $conn = $conexion->Conexion();
 
-                                                // Verificar si hay resultados
-                                                if ($result_rol !== false && $result_rol->rowCount() > 0) {
-                                                    // Iterar sobre los resultados
-                                                    while ($row = $result_rol->fetch(PDO::FETCH_ASSOC)) {
-                                                        echo "<option value='" . $row["ID_UNIVERSIDAD"] . "'>" . $row["NOM_UNIVERSIDAD"] . "</option>";
+                                                    // Llamar al procedimiento almacenado
+                                                    $sql = "CALL `proceso.splUniversidadesListar`();";
+                                                    $stmt = $conn->prepare($sql);
+                                                    $stmt->execute();
+
+                                                    // Verificar si hay resultados y generar las opciones del select
+                                                    if ($stmt->rowCount() > 0) {
+                                                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                                            echo "<option value='" . htmlspecialchars($row["IdUniversidad"]) . "'>" . htmlspecialchars($row["NomUniversidad"]) . "</option>";
+                                                        }
+                                                    } else {
+                                                        echo "<option value='' disabled>No hay universidades disponibles</option>";
                                                     }
-                                                }
 
-                                                // Cerrar la conexión
-                                                $conn = null;
+                                                    // Cerrar el cursor
+                                                    $stmt->closeCursor();
+                                                } catch (PDOException $e) {
+                                                    echo "<script>Swal.fire('Error', 'Error al cargar universidades: " . $e->getMessage() . "', 'error');</script>";
+                                                } finally {
+                                                    $conn = null;
+                                                }
                                                 ?>
                                             </select>
                                         </div>
@@ -205,7 +214,7 @@
             });
 
             direccionInput.addEventListener('input', function() {
-                // Permitir solo letras, espacios y caracteres especiales no incluyendo <>
+                // Permitir solo letras, espacios y caracteres especiales no incluyendo < >
                 this.value = this.value.replace(/[^\w\s,.-]/g, '');
                 this.value = this.value.replace(/\s+/g, ' '); // Eliminar espacios adicionales
             });
@@ -261,16 +270,17 @@
 
                 fetch('./Agregar_Usuario.php', {
                         method: 'POST',
-                        body: new FormData(this)
+                        body: new FormData(this) // Asegúrate de que 'this' se refiere al formulario correcto
                     })
-                    .then(response => response.json())
+                    .then(response => response.json()) // Convierte la respuesta en JSON
                     .then(data => {
+                        console.log(data); // Muestra la respuesta en la consola del navegador
                         Swal.close();
 
                         if (data.success) {
                             Swal.fire({
                                 title: 'Usuario creado',
-                                text: 'El usuario ha sido creado exitosamente.',
+                                text: data.message,
                                 icon: 'success'
                             }).then(() => {
                                 location.reload();

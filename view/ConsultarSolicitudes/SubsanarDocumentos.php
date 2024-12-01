@@ -316,4 +316,4 @@ if (isset($_SESSION["IdUsuario"])) {
 ?>
 
 
-<script src="../Seguridad//Bitacora//Bitacora.js"></script>
+<!-- <script src="../Seguridad//Bitacora//Bitacora.js"></script> -->

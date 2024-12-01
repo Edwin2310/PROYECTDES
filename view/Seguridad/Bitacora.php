@@ -2,42 +2,45 @@
 session_start();
 require_once("../../config/conexion.php");
 require_once(__DIR__ . '/../Seguridad/Permisos/Funciones_Permisos.php');
+require_once(__DIR__ . '/../Seguridad/Bitacora/Funciones_Bitacoras.php');
 if (isset($_SESSION["IdUsuario"])) {
 
     // Obtener los valores necesarios para la verificación
+    $id_usuario = $_SESSION['IdUsuario'] ?? null;
     $id_rol = $_SESSION['IdRol'] ?? null;
     $id_objeto = 21; // ID del objeto o módulo correspondiente a esta página
-    // Llama a la función para verificar los permisos
-    verificarPermiso($id_rol, $id_objeto);
+
+    // Obtener la página actual y la última marca de acceso
+    $current_page = basename($_SERVER['PHP_SELF']);
+    $last_access_time = $_SESSION['last_access_time'][$current_page] ?? 0;
+
+    // Obtener el tiempo actual
+    $current_time = time();
+
+    // Verificar si han pasado al menos 10 segundos desde el último registro
+    if ($current_time - $last_access_time > 3) {
+        // Verificar permisos
+        if (verificarPermiso($id_rol, $id_objeto)) {
+            $accion = "Accedió al módulo.";
+
+            // Registrar en la bitácora
+            registrobitaevent($id_usuario, $id_objeto, $accion);
+        } else {
+            $accion = "acceso denegado.";
+
+            // Registrar en bitácora antes de redirigir
+            registrobitaevent($id_usuario, $id_objeto, $accion);
+
+            // Redirigir a la página de denegación
+            header("Location: ../Seguridad/Permisos/denegado.php");
+            exit();
+        }
+
+        // Actualizar la marca temporal en la sesión
+        $_SESSION['last_access_time'][$current_page] = $current_time;
+    }
 
 ?>
-
-    <?php
-    $id_rol = $_SESSION['IdRol'] ?? null;
-    $id_objeto = 21; // ID del objeto o módulo correspondiente a esta página
-
-    if (!$id_rol) {
-        header("Location: ../Seguridad/Permisos/denegado.php");
-        exit();
-    }
-
-    // Conectar a la base de datos
-    $conexion = new Conectar();
-    $conn = $conexion->Conexion();
-
-    // Verificar permiso en la base de datos
-    $sql = "SELECT * FROM `seguridad.tblpermisos` WHERE IdRol = :idRol AND IdObjeto = :idObjeto";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':idRol', $id_rol);
-    $stmt->bindParam(':idObjeto', $id_objeto);
-
-    if ($stmt->execute() && $stmt->rowCount() > 0) {
-        // Usuario tiene permiso, continuar con el contenido de la página
-    } else {
-        header("Location: ../Seguridad/Permisos/denegado.php");
-        exit();
-    }
-    ?>
 
 
     <!doctype html>
@@ -54,7 +57,7 @@ if (isset($_SESSION["IdUsuario"])) {
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json"></script>
         <script src="../Seguridad//Bitacora//borrar_bitacora.js"></script>
-        <script src="../Seguridad//Bitacora//Bitacora.js"></script>
+    <!--     <script src="../Seguridad//Bitacora//Bitacora.js"></script> -->
         <style>
             /* Asegúrate de que el contenedor tenga un desplazamiento horizontal cuando sea necesario */
             .table-container {
@@ -101,7 +104,7 @@ if (isset($_SESSION["IdUsuario"])) {
             <div class="content">
                 <div class="block">
                     <div class="block-header block-header-default">
-                        <h3 class="block-title">Registros de Bitacora</h3>
+                        <h3 class="block-title">Registros de Bitácora de eventos</h3>
                         <button id="borrarBitacora" class="btn btn-danger mx-2">Borrar Todos los Registros</button>
                         <a href="./Bitacora/exportar_bitacora.php" class="btn btn-success mx-2">Descargar Excel</a>
                     </div>
@@ -114,46 +117,50 @@ if (isset($_SESSION["IdUsuario"])) {
                             <table id="bitacoraTable" class="table table-bordered table-striped table-vcenter">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">Id Bitacora</th>
+                                        <th class="text-center">N*</th>
                                         <th class="d-none d-sm-table-cell">Fecha y Hora</th>
-                                        <th class="d-none d-sm-table-cell">Id Usuario</th>
-                                        <!--    <th class="d-none d-sm-table-cell">Usuario</th> -->
-                                        <th class="d-none d-sm-table-cell">Id Objeto</th>
+                                        <th class="d-none d-sm-table-cell">Usuario</th>
+                                        <th class="d-none d-sm-table-cell">PANTALLA</th>
                                         <th class="d-none d-sm-table-cell">Acción</th>
-                                        <th class="d-none d-sm-table-cell">Descripción</th>
+                                        <!--  <th class="d-none d-sm-table-cell">Descripción</th> -->
                                     </tr>
                                     <tr>
-                                        <th class="text-center"><input type="text" placeholder="Buscar por Id Bitacora" /></th>
+                                        <th class="text-center"><input  placeholder="Buscar por Id Bitacora" /></th>
                                         <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por Fecha y Hora" /></th>
-                                        <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por ID Usuario" /></th>
-                                        <!--        <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por Usuario" /></th> -->
-                                        <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por ID Objeto" /></th>
+                                        <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por Usuario" /></th>
+                                        <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por Objeto" /></th>
                                         <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por Acción" /></th>
-                                        <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por Descripción" /></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     $conexion = new Conectar();
                                     $conn = $conexion->Conexion();
-                                    $sql = "SELECT b.IdBitacora, b.FechaHora, 
-                                        b.IdUsuario,/*  U.NOMBRE_USUARIO AS NOMBRE_USUARIO, */ o.IdObjeto, 
-                                        b.Accion, b.Descripcion
-                                    FROM `seguridad.tblbitacora` b
-                                    INNER JOIN `seguridad.tblusuarios` u ON b.IdUsuario = u.IdUsuario
-                                    INNER JOIN `seguridad.tblobjetos` o ON b.IdObjeto = o.IdObjeto
-                                    ORDER BY b.IdBitacora ASC;";
+                                    $sql = "SELECT
+                                                 ROW_NUMBER() OVER (ORDER BY b.IdBitacora) AS NUMERACION,
+                                                 b.FechaHora,
+                                                COALESCE(p.NombreUsuario, 'Usuario sospechoso') AS NombreUsuario,
+                                                 O.Objeto,
+                                                 b.Accion
+                                            FROM
+                                                 `seguridad.tblbitacora` b
+                                            LEFT JOIN `seguridad.tblusuarios` u ON
+                                                       b.IdUsuario = u.IdUsuario
+                                            LEFT JOIN `seguridad.tblobjetos` o ON
+                                                        b.IdObjeto = o.IdObjeto
+                                            LEFT JOIN `seguridad.tbldatospersonales` p ON
+                                                       b.IdUsuario = p.IdUsuario
+                                            ORDER BY
+                                                     b.IdBitacora ASC;";
                                     $result = $conn->query($sql);
                                     if ($result !== false && $result->rowCount() > 0) {
                                         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                                             echo "<tr>";
-                                            echo "<td class='text-center'>{$row['IdBitacora']}</td>";
+                                            echo "<td class='text-center'>{$row['NUMERACION']}</td>";
                                             echo "<td>{$row['FechaHora']}</td>";
-                                            echo "<td>{$row['IdUsuario']}</td>";
-                                            /*     echo "<td>{$row['NOMBRE_USUARIO']}</td>"; */
-                                            echo "<td>{$row['IdObjeto']}</td>";
+                                            echo "<td>{$row['NombreUsuario']}</td>";
+                                            echo "<td>{$row['Objeto']}</td>";
                                             echo "<td>{$row['Accion']}</td>";
-                                            echo "<td>{$row['Descripcion']}</td>";
                                             echo "</tr>";
                                         }
                                     } else {

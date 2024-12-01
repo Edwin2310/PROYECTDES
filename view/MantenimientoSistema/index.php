@@ -112,7 +112,7 @@ if (isset($_SESSION["IdUsuario"])) {
             <main id="main-container">
 
                 <div class="content">
-                    <h2 class="content-heading">Bienvenido, UNITEC </h2>
+                    <h2 class="content-heading">Bienvenido, <?php echo $_SESSION["NombreUsuario"]; ?></h2>
 
 
 

@@ -4,6 +4,9 @@ require_once(__DIR__ . '/Funciones_Solicitud.php');
 require_once(__DIR__ . '/../Seguridad/Permisos/Funciones_Permisos.php');
 require_once(__DIR__ . '/../Seguridad/Bitacora/Funciones_Bitacoras.php');
 if (isset($_SESSION["IdUsuario"])) {
+    // Obtener el ID del usuario de la sesión
+    $idUsuario = $_SESSION['IdUsuario'] ?? null;
+    $idUniversidadUsuario = obtenerIdUniversidadUsuario($idUsuario); // Llamar a la nueva función para obtener el idUniversidad
 
     // Obtener los valores necesarios para la verificación
     $id_usuario = $_SESSION['IdUsuario'] ?? null;
@@ -41,6 +44,7 @@ if (isset($_SESSION["IdUsuario"])) {
     }
 
 ?>
+
 
     <!doctype html>
     <html lang="en" class="no-focus">
@@ -127,6 +131,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                 <!-- Form -->
                                 <form id="wizard-form" method="post" enctype="multipart/form-data">
                                     <input type="hidden" id="IdUsuario" name="IdUsuario" value="<?php echo $_SESSION['IdUsuario']; ?>">
+                                    <input type="hidden" id="IdUniversidadUsuario" value="<?php echo htmlspecialchars($idUniversidadUsuario, ENT_QUOTES, 'UTF-8'); ?>">
 
                                     <!-- Steps Content -->
                                     <div class="block-content block-content-full tab-content" style="min-height: 265px;">
@@ -135,14 +140,14 @@ if (isset($_SESSION["IdUsuario"])) {
                                             <div class="form-group row">
                                                 <label class="col-12" for="NombreCompleto">Nombre Completo</label>
                                                 <div class="col-12">
-                                                    <input type="text" class="form-control" id="NombreCompleto" name="NombreCompleto" placeholder="Coord. Curricular de la Carrera + Nombre completo" required oninput="validateForm(event)">
+                                                    <input type="text" class="form-control" id="NombreCompleto" name="NombreCompleto" maxlength="50" placeholder="Coord. Curricular de la Carrera + Nombre completo" required oninput="validateForm(event)">
                                                 </div>
                                             </div>
 
                                             <div class="form-group row">
                                                 <label class="col-12" for="CorreoElectronico">Correo Electrónico</label>
                                                 <div class="col-12">
-                                                    <input type="CorreoElectronico" class="form-control" id="CorreoElectronico" name="CorreoElectronico" placeholder="correoinstitucional@unitec.com" required oninput="validateForm(event)">
+                                                    <input type="CorreoElectronico" class="form-control" id="CorreoElectronico" name="CorreoElectronico" maxlength="50" placeholder="correoinstitucional@unitec.com" required oninput="validateForm(event)">
                                                 </div>
                                             </div>
 
@@ -158,38 +163,39 @@ if (isset($_SESSION["IdUsuario"])) {
                                                 <div class="row">
 
                                                     <div class="col-md-6">
-                                                        <label class="col-12" for="">Tipo de Solicitud</label>
+                                                        <label class="col-12" for="IdTiposolicitud">Tipo de Solicitud</label>
                                                         <div class="col-12">
-                                                            <select class="form-control" id="" name="" required>
-                                                                <option value="0">Seleccione el tipo de solicitud</option>
+                                                            <select class="form-control" id="IdTiposolicitud" name="IdTiposolicitud" required readonly>
+                                                                <?php echo obtenerTipoSolicitud($usuario); ?>
                                                             </select>
 
                                                         </div>
                                                     </div>
 
                                                     <div class="col-md-6">
-                                                        <label class="col-12" for="id_categoria">Categoría de Solicitud</label>
+                                                        <label class="col-12" for="IdCategoria">Categoría de Solicitud</label>
                                                         <div class="col-12">
-                                                            <select class="form-control" id="id_categoria" name="id_categoria" required>
-                                                                <option value="0">Seleccione la categoria de la solicitud</option>
+                                                            <select class="form-control" id="IdCategoria" name="IdCategoria" required>
+                                                                <option value="0">Seleccionar Categoría</option>
+                                                                <?php echo obtenerCategoriaSolicitud($usuario); ?>
                                                             </select>
                                                         </div>
                                                     </div>
 
                                                 </div>
-
                                                 <div class="row">
 
                                                     <div class="col-md-3">
-                                                        <label class="col-12" for="">Codigo de Pago</label>
+                                                        <label class="col-12" for="CodigoPago">Codigo de Pago</label>
                                                         <div class="col-12">
-                                                            <input type="text" class="form-control" id="" name="" placeholder="830" required>
+                                                            <input type="text" class="form-control" id="CodigoPago" name="CodigoPago" readonly required>
                                                         </div>
                                                     </div>
+
                                                     <div class="col-md-3">
-                                                        <label class="col-12" for="">Codigo de Referencia</label>
+                                                        <label class="col-12" for="CodigoReferencia">Codigo de Referencia</label>
                                                         <div class="col-12">
-                                                            <input type="text" class="form-control" id="" name="" placeholder="73352" required>
+                                                            <input type="number" class="form-control" id="CodigoReferencia" name="CodigoReferencia" placeholder="73352" required>
                                                         </div>
                                                     </div>
 
@@ -199,60 +205,60 @@ if (isset($_SESSION["IdUsuario"])) {
                                                 <div class="row">
 
                                                     <div class="col-md-6">
-                                                        <label class="col-12" for="">Nombre Centro</label>
+                                                        <label class="col-12" for="NombreCentro">Nombre Centro</label>
                                                         <div class="col-12">
-                                                            <input class="form-control" type="text" id="" name="" placeholder="Centro" required>
+                                                            <input class="form-control" type="text" id="NombreCentro" name="NombreCentro" placeholder="Centro" maxlength="70" required>
                                                             </input>
                                                         </div>
                                                     </div>
 
                                                     <div class="col-md-6">
-                                                        <label class="col-12" for="IdGrado">Universidad</label>
+                                                        <label class="col-12" for="IdUniversidad">Universidad</label>
                                                         <div class="col-12">
-                                                            <select class="form-control" id="IdGrado" name="IdGrado">
-                                                                <option value="0">UNITEC</option>
+                                                            <select class="form-control readonly-select" id="IdUniversidad" name="IdUniversidad" readonly>
+                                                                <option value="0" disabled selected style="display:none;">Seleccionar Universidad</option>
+                                                                <?php echo obtenerUniversidades($usuario); ?>
                                                             </select>
                                                         </div>
                                                     </div>
 
                                                     <div class="col-md-6">
-                                                        <label class="col-12" for="IdGrado">Tipo de Centro</label>
+                                                        <label class="col-12" for="IdTipoCentro">Tipo de Centro</label>
                                                         <div class="col-12">
-                                                            <select class="form-control" id="IdGrado" name="IdGrado">
-                                                                <option value="0">Seleccione el tipo de centro</option>
+                                                            <select class="form-control" id="IdTipoCentro" name="IdTipoCentro">
+                                                                <option value="0">Seleccionar Centro</option>
+                                                                <?php echo obtenerTipoCentro($usuario); ?>
                                                             </select>
                                                         </div>
                                                     </div>
                                                 </div>
 
-
                                                 <div class="row">
-
                                                     <div class="col-md-6" id="div-departamento1">
                                                         <label class="col-12" for="IdDepartamento">Departamento</label>
                                                         <div class="col-12">
-                                                            <select class="form-control" id="IdDepartamento" name="Departamento[]" required>
-                                                                <option value="0">Seleccione un Departamento</option>
+                                                            <select class="form-control" id="IdDepartamento" name="IdDepartamento" onchange="cargarMunicipios(this.value)" required>
+                                                                <option value="0">Seleccionar Departamento</option>
                                                                 <?php echo obtenerDepartamentos($usuario); ?>
                                                             </select>
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-6" id="div-departamento1">
-                                                        <label class="col-12" for="IdDepartamento">Municipio</label>
+                                                    <div class="col-md-6" id="div-municipio1">
+                                                        <label class="col-12" for="IdMunicipio">Municipio</label>
                                                         <div class="col-12">
-                                                            <select class="form-control" id="IdDepartamento" name="Departamento[]" required>
-                                                                <option value="0">Seleccione un municipio</option>
+                                                            <select class="form-control" id="IdMunicipio" name="IdMunicipio" required>
+                                                                <option value="0">Seleccionar Municipio</option>
                                                             </select>
                                                         </div>
                                                     </div>
-
                                                 </div>
 
+
                                                 <div class="form-group">
-                                                    <label class="col-12" for="Descripcion_solicitud">Descripción de la Solicitud</label>
+                                                    <label class="col-12" for="DescripcionSolicitud">Descripción de la Solicitud</label>
                                                     <div class="col-12">
-                                                        <textarea class="form-control" id="Descripcion_solicitud" name="Descripcion_solicitud" rows="6" placeholder="PRESENTACIÓN DE SOLICITUD DE REFORMA AL PLAN DE ESTUDIOS DE LA CARRERA DE INGENIERIA EN MECATRONICA, EN EL GRADO DE LICENCIATURA DE LA UNIVERSIDAD TECNOLOGICA CENTROAMERICANA, UNITEC." required oninput="validateTextarea(event)"></textarea>
+                                                        <textarea class="form-control" id="DescripcionSolicitud" name="DescripcionSolicitud" rows="6" maxlength="230" placeholder="PRESENTACIÓN DE SOLICITUD DE REFORMA AL PLAN DE ESTUDIOS DE LA CARRERA DE INGENIERIA EN MECATRONICA, EN EL GRADO DE LICENCIATURA DE LA UNIVERSIDAD TECNOLOGICA CENTROAMERICANA, UNITEC." required oninput="validateTextarea(event)"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -279,12 +285,12 @@ if (isset($_SESSION["IdUsuario"])) {
                                                 <!-- Nota de archivo -->
                                                 <div id="formato-nombre-archivo">
                                                     <center>
-                                                        <h4>Formato de Nombre de Archivo Requerido</h4>
+                                                        <h4>Formato de Nombre de Archivo</h4>
                                                     </center>
-                                                    <p>Por favor, asegúrate de seguir la siguiente nomenclatura al nombrar tus archivos. El nombre del archivo debe comenzar con uno de los prefijos especificados y luego incluir la fecha y un número secuencial. Aquí está el formato general:</p>
+                                                    <p>Se le asignará automaticamente la correspondiente nomenclatura al subir tus archivos, con el siguiente formato general:</p>
                                                     <p><strong>NOMBRE_YYYYMMDD_NNN</strong></p>
                                                     <ul>
-                                                        <li><strong>NOMBRE</strong>: Es un prefijo que indica el tipo de archivo. Debe ser uno de los siguientes:
+                                                        <li><strong>NOMBRE</strong>: Es un prefijo que indica el tipo de archivo. Los cuáles son los siguientes:
                                                             <ul>
                                                                 <li><code>DIAG</code> para Diagnóstico</li>
                                                                 <li><code>PLAN</code> para Plan de Estudios</li>
@@ -302,7 +308,6 @@ if (isset($_SESSION["IdUsuario"])) {
                                                         <li><code>PDOC_20240802_003</code></li>
                                                         <li><code>SOLI_20240802_004</code></li>
                                                     </ul>
-                                                    <p>Si el nombre del archivo no sigue este formato, se considerará inválido y no se procesará correctamente.</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -362,5 +367,8 @@ if (isset($_SESSION["IdUsuario"])) {
 <script src="../NuevoIngresoSolicitud/js/Guardar_Adjuntos.js"></script>
 <script src="../Seguridad//Bitacora/Bitacora.js"></script>
 <script src="../NuevoIngresoSolicitud/js/obtener_categoria.js"></script>
+<script src="../NuevoIngresoSolicitud/js/obtener_codarbitrio.js"></script>
+<script src="../NuevoIngresoSolicitud/js/obtener_idUniversidad.js"></script>
 <script src="../NuevoIngresoSolicitud/js/vali.js"></script>
 <script src="../NuevoIngresoSolicitud/js/ValidacionesInputs.js"></script>
+<script src="../NuevoIngresoSolicitud/js/municipios.js"></script>

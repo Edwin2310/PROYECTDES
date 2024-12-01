@@ -72,17 +72,17 @@ if (isset($_SESSION["IdUsuario"])) {
     $conn = $conexion->Conexion();
 
     $sql = "SELECT
-                c.ID_CATEGORIA,
-                c.COD_ARBITRIOS,
-                c.NOM_CATEGORIA,
-                t.NOM_TIPO,  -- Aquí seleccionamos el nombre del tipo de solicitud
-                c.MONTO
+                c.IdCategoria,
+                c.CodArbitrios,
+                c.NomCategoria,
+                t.NomTipoSolicitud,  -- Aquí seleccionamos el nombre del tipo de solicitud
+                c.Monto
             FROM
-                tbl_categoria c
+                `mantenimiento.tblcategorias` c
             LEFT JOIN
-                tbl_tipo_solicitud t ON c.ID_TIPO_SOLICITUD = t.ID_TIPO_SOLICITUD
+                `mantenimiento.tbltiposolicitudes` t ON c.IdTipoSolicitud = t.IdTipoSolicitud
             ORDER BY
-                c.ID_CATEGORIA";
+                c.IdCategoria";
     $result = $conn->query($sql);
 
     if ($result !== false && $result->rowCount() > 0) {
@@ -113,7 +113,7 @@ if (isset($_SESSION["IdUsuario"])) {
             'B1' => 'CODIGO ARBITRIOS',
             'C1' => 'NOMBRE CATEGORIA',
             'D1' => 'NOMBRE TIPO SOLICITUD',
-            'E1' => 'MONTO',
+            'E1' => 'Monto',
         ];
 
         foreach ($headers as $cell => $text) {
@@ -125,11 +125,11 @@ if (isset($_SESSION["IdUsuario"])) {
         // Agregar datos
         $rowNum = 2;
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            $sheet->setCellValue('A' . $rowNum, $row['ID_CATEGORIA']);
-            $sheet->setCellValue('B' . $rowNum, $row['COD_ARBITRIOS']);
-            $sheet->setCellValue('C' . $rowNum, $row['NOM_CATEGORIA']);
-            $sheet->setCellValue('D' . $rowNum, $row['NOM_TIPO']);
-            $sheet->setCellValue('E' . $rowNum, $row['MONTO']);
+            $sheet->setCellValue('A' . $rowNum, $row['IdCategoria']);
+            $sheet->setCellValue('B' . $rowNum, $row['CodArbitrios']);
+            $sheet->setCellValue('C' . $rowNum, $row['NomCategoria']);
+            $sheet->setCellValue('D' . $rowNum, $row['NomTipoSolicitud']);
+            $sheet->setCellValue('E' . $rowNum, $row['Monto']);
 
             // Aplicar alineación centrada a todas las celdas de datos
             $sheet->getStyle('A' . $rowNum . ':E' . $rowNum)->applyFromArray($centerAlignment);

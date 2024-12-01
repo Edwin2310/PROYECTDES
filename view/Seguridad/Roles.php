@@ -225,7 +225,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                 </div>
                                 <div class="form-group">
                                     <label for="NombreRol">Nombre Rol</label>
-                                    <input type="text" class="form-control" id="NombreRol" name="NombreRol" placeholder="Descripción del Rol" required>
+                                    <input type="text" class="form-control" id="NombreRol" name="NombreRol" placeholder="Descripción del Rol" maxlength="50" required>
                                 </div>
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-primary" id="btnAddRole">Guardar Rol</button>
@@ -258,7 +258,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                 </div>
                                 <div class="form-group">
                                     <label for="edit-descripcion">Descripción</label>
-                                    <input type="text" class="form-control" id="edit-descripcion" name="NombreRol" placeholder="Descripción del Rol">
+                                    <input type="text" class="form-control" id="edit-descripcion" name="NombreRol" placeholder="Descripción del Rol" maxlength="50">
                                 </div>
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-primary" id="btnAddRole">Guardar Rol</button>

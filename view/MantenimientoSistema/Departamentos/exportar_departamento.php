@@ -71,7 +71,7 @@ if (isset($_SESSION["IdUsuario"])) {
     $conexion = new Conectar();
     $conn = $conexion->Conexion();
 
-    $sql = "SELECT ID_DEPARTAMENTO, NOM_DEPTO FROM tbl_deptos ORDER BY ID_DEPARTAMENTO ASC;";
+    $sql = "SELECT IdDepartamento, NomDepto FROM `mantenimiento.tbldeptos` ORDER BY IdDepartamento ASC;";
     $result = $conn->query($sql);
 
     if ($result !== false && $result->rowCount() > 0) {
@@ -107,8 +107,8 @@ if (isset($_SESSION["IdUsuario"])) {
         // Agregar datos
         $rowNum = 2;
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            $sheet->setCellValue('A' . $rowNum, $row['ID_DEPARTAMENTO']);
-            $sheet->setCellValue('B' . $rowNum, $row['NOM_DEPTO']); // Asegúrate de que esto coincide con el nombre de la columna en tu base de datos
+            $sheet->setCellValue('A' . $rowNum, $row['IdDepartamento']);
+            $sheet->setCellValue('B' . $rowNum, $row['NomDepto']); // Asegúrate de que esto coincide con el nombre de la columna en tu base de datos
             
             // Aplicar alineación centrada a todas las celdas de datos
             $sheet->getStyle('A' . $rowNum . ':B' . $rowNum)->applyFromArray($centerAlignment);

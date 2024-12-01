@@ -14,19 +14,19 @@ if (!$conn) {
 
 // Verificar si se ha enviado el formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id_grado = isset($_POST['id_grado']) ? $_POST['id_grado'] : '';
-    $nombre_grado = isset($_POST['nom_grado']) ? $_POST['nom_grado'] : '';
+    $IdGrado = isset($_POST['IdGrado']) ? $_POST['IdGrado'] : '';
+    $nombre_grado = isset($_POST['NomGrado']) ? $_POST['NomGrado'] : '';
 
-    if (empty($id_grado) || empty($nombre_grado)) {
+    if (empty($IdGrado) || empty($nombre_grado)) {
         $_SESSION['error_message'] = "Todos los campos son obligatorios";
         header("Location: ../../MantenimientoSistema/GradosAcademicos.php?action=edit-error");
         exit();
     }
 
-    $sql_update = "UPDATE tbl_grado_academico SET NOM_GRADO = :nombre_grado WHERE ID_GRADO = :id_grado";
+    $sql_update = "UPDATE `mantenimiento.tblgradosacademicos` SET NomGrado = :nombre_grado WHERE IdGrado = :IdGrado";
     $stmt_update = $conn->prepare($sql_update);
     $stmt_update->bindParam(':nombre_grado', $nombre_grado);
-    $stmt_update->bindParam(':id_grado', $id_grado);
+    $stmt_update->bindParam(':IdGrado', $IdGrado);
 
     if ($stmt_update->execute()) {
         $_SESSION['success_message'] = "Grado Académico editado exitosamente";

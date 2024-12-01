@@ -14,31 +14,35 @@ if (!$conn) {
 
 // Verificar si se ha enviado la solicitud de eliminación
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id_categoria = isset($_POST['id_categoria']) ? $_POST['id_categoria'] : '';
+    // Obtener datos del formulario
+    $IdUniversidad = isset($_POST['IdUniversidad']) ? $_POST['IdUniversidad'] : '';
 
-    if (empty($id_categoria)) {
-        $_SESSION['error_message'] = "El ID de la categoría es obligatorio";
-        header("Location: ../../MantenimientoSistema/Categorias/CategoriaDeSolicitudes.php?action=delete-error");
+    // Validar datos
+    if (empty($IdUniversidad)) {
+        $_SESSION['error_message'] = "El ID de la Universidad es obligatorio";
+        header("Location: ../../MantenimientoSistema/Universidades.php?action=delete-error");
         exit();
     }
 
-    $sql_delete = "DELETE FROM tbl_categoria WHERE ID_CATEGORIA = :id_categoria";
+    // Preparar y ejecutar la consulta de eliminación
+    $sql_delete = "UPDATE `mantenimiento.tbluniversidades` SET IdVisibilidad = 2 WHERE IdUniversidad = :IdUniversidad";
     $stmt_delete = $conn->prepare($sql_delete);
-    $stmt_delete->bindParam(':id_categoria', $id_categoria);
+    $stmt_delete->bindParam(':IdUniversidad', $IdUniversidad);
 
     if ($stmt_delete->execute()) {
-        $_SESSION['success_message'] = "Categoría eliminada exitosamente";
-        header("Location: ../../MantenimientoSistema/CategoriaDeSolicitudes.php?action=delete-success");
+        $_SESSION['success_message'] = "Universidad eliminada exitosamente";
+        header("Location: ../../MantenimientoSistema/Universidades.php?action=delete-success");
     } else {
-        $_SESSION['error_message'] = "Error al eliminar categoría: " . implode(" ", $stmt_delete->errorInfo());
-        header("Location: ../../MantenimientoSistema/CategoriaDeSolicitudes.php?action=delete-error");
+        $_SESSION['error_message'] = "Error al eliminar Universidad: " . urlencode(implode(" ", $stmt_delete->errorInfo()));
+        header("Location: ../../MantenimientoSistema/Universidades.php?action=delete-error");
     }
 
+    // Cerrar la conexión
     $conn = null;
     exit();
 } else {
     $_SESSION['error_message'] = "Solicitud no válida";
-    header("Location: ../../MantenimientoSistema/CategoriaDeSolicitudes.php?action=delete-error");
+    header("Location: ../../MantenimientoSistema/Universidades.php?action=delete-error");
     exit();
 }
 ?>

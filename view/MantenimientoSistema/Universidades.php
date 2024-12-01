@@ -98,6 +98,14 @@ if (isset($_SESSION["IdUsuario"])) {
 
                     </div>
                     <div class="block-content block-content-full">
+                        <!-- Botón para cambiar a registros bloqueados -->
+                        <td class="text-center">
+                            <a href="Universidades_Bloqueadas.php">
+                                <button type="button" class="btn btn-sm btn-secondary" title="Universidades Bloqueadas">
+                                    <i class="fa fa-lock"></i>
+                                </button>
+                            </a>
+                        </td>
                         <td class="text-center">
                             <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#addUniversidadModal">Añadir Universidad</button>
                         </td>
@@ -107,11 +115,9 @@ if (isset($_SESSION["IdUsuario"])) {
                             <thead>
                                 <tr>
                                     <th class="text-center">ID UNIVERSIDAD</th>
-                                    <th class="d-none d-sm-table-cell">NOMBRE UNIVERSIDAD</th>
-                                    <th class="d-none d-sm-table-cell">DEPARTAMENTO(SEDE PRINCIPAL)</th>
-                                    <th class="d-none d-sm-table-cell">MUNICIPIO(SEDE PRINCIPAL)</th>
+                                    <th class="text-center">UNIVERSIDAD</th>
                                     <th class="text-center" style="width: 15%;">EDITAR UNIVERSIDAD</th>
-                                    <th class="text-center" style="width: 15%;">ELIMINAR UNIVERSIDAD</th>
+                                    <th class="text-center" style="width: 15%;">BLOQUEAR UNIVERSIDAD</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -120,42 +126,32 @@ if (isset($_SESSION["IdUsuario"])) {
                                 $conexion = new Conectar();
                                 $conn = $conexion->Conexion();
                                 $sql = "SELECT 
-                                u.ID_UNIVERSIDAD, 
-                                u.NOM_UNIVERSIDAD, 
-                                d.ID_DEPARTAMENTO, 
-                                d.NOM_DEPTO, 
-                                m.ID_MUNICIPIO, 
-                                m.NOM_MUNICIPIO
-                            FROM 
-                                tbl_universidad_centro u
-                            JOIN 
-                                tbl_deptos d ON u.ID_DEPARTAMENTO = d.ID_DEPARTAMENTO
-                            JOIN 
-                                tbl_municipios m ON u.ID_MUNICIPIO = m.ID_MUNICIPIO;
-                           ORDER BY
-                           u.ID_UNIVERSIDAD";
+                                        u.IdUniversidad, 
+                                        u.NomUniversidad
+                                        FROM 
+                                        `mantenimiento.tbluniversidades` u
+                                        LEFT JOIN `mantenimiento.tblestadosvisualizaciones` e ON u.IdVisibilidad = e.IdVisibilidad
+                                        WHERE e.IdVisibilidad IN (1)
+                                        ORDER BY
+                                        u.IdUniversidad";
 
                                 $result = $conn->query($sql);
                                 if ($result !== false && $result->rowCount() > 0) {
                                     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                                         echo "<tr>";
-                                        echo "<td class='text-center'>{$row['ID_UNIVERSIDAD']}</td>";
-                                        echo "<td>{$row['NOM_UNIVERSIDAD']}</td>";
-                                        echo "<td>{$row['NOM_DEPTO']}</td>";
-                                        echo "<td>{$row['NOM_MUNICIPIO']}</td>"; 
+                                        echo "<td class='text-center'>{$row['IdUniversidad']}</td>";
+                                        echo "<td class='text-center'>{$row['NomUniversidad']}</td>";
                                         echo "<td class='text-center'> 
                                 <button type='button' class='btn btn-sm btn-secondary' data-toggle='modal' data-target='#editUniversidadModal' 
-                                        data-id='" . $row["ID_UNIVERSIDAD"] . "' 
-                                        data-nom_universidad='" . $row["NOM_UNIVERSIDAD"] . "' 
-                                        data-nom_depto='" . $row["NOM_DEPTO"] . "' 
-                                        data-nom_municipio='" . $row["NOM_MUNICIPIO"] . "' 
+                                        data-id='" . $row["IdUniversidad"] . "' 
+                                        data-NomUniversidad='" . $row["NomUniversidad"] . "' 
                                         >
                                     <i class='si si-note'></i>
                                 </button>
                             </td>";
                                         echo "<td class='text-center'> 
                                 <button type='button' class='btn btn-sm btn-danger' data-toggle='modal' data-target='#confirmDeleteUniversidadModal' 
-                                        data-id='" . $row["ID_UNIVERSIDAD"] . "'>
+                                        data-id='" . $row["IdUniversidad"] . "'>
                                     <i class='si si-trash'></i>
                                 </button>
                             </td>";
@@ -176,7 +172,7 @@ if (isset($_SESSION["IdUsuario"])) {
             <?php require_once("../MainFooter/MainFooter.php"); ?>
 
             <!-- Modal para agregar universidades -->
-            <div class="modal fade" id="addUniversidadModal" tabindex="-1" role="dialog" aria-labelledby="addUniversidadModalLabel" aria-hidden="true">
+            <div class="modal fade" id="addUniversidadModal" tabindex="-1" role="dialog" aria-labelledby="addUniversidadModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -186,36 +182,11 @@ if (isset($_SESSION["IdUsuario"])) {
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form id="addUniversidadForm" method="POST" action="../MantenimientoSistema/Universidades/Agregar_Universidades.php">
+                            <form id="addUniversidadForm" method="POST" action="../MantenimientoSistema/Universidades/Agregar_Universidad.php">
                                 <div class="form-group">
-                                    <label for="nom_universidad">Nombre Universidad</label>
-                                    <input type="text" class="form-control" id="nom_universidad" name="nom_universidad" required>
+                                    <label for="NomUniversidad">Nombre Universidad</label>
+                                    <input type="text" class="form-control" id="NomUniversidad" name="NomUniversidad" maxlength="30" required oninput="validarNombreUniversidad(this)" style="text-transform:uppercase;">
                                 </div>
-                                <div class="form-group">
-                                    <label for="nom_depto">Departamento</label>
-                                    <select class="form-control" id="nom_depto" name="nom_depto" required>
-                                    <?php
-                                    // Cargar universidades desde tbl_deptos
-                                    $departamentos = $conn->query("SELECT * FROM tbl_deptos");
-                                    while ($depto = $departamentos->fetch(PDO::FETCH_ASSOC)) {
-                                        echo "<option value='{$uni['ID_DEPTO']}'>{$uni['NOM_DEPTO']}</option>";
-                                    }
-                                    ?>
-                                </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="nom_municipio">Municipio</label>
-                                <select class="form-control" id="nom_municipio" name="nom_municipio" required>
-                                    <?php
-                                    // Cargar departamentos desde tbl_deptos
-                                    $municipios = $conn->query("SELECT * FROM tbl_municipios");//PENDIENTE AÑADIR AJAX PARA CONSULTA EN TIEMPO REAL
-                                    while ($muni = $municipios->fetch(PDO::FETCH_ASSOC)) {
-                                        echo "<option value='{$uni['ID_MUNICIPIO']}'>{$uni['NOM_MUNICIPIO']}</option>";
-                                    }
-                                    ?>
-                                </select>
-                                </div>
-                                
 
                                 <div class="form-group text-center">
                                     <button type="submit" class="btn btn-primary">Añadir Universidad</button>
@@ -226,8 +197,8 @@ if (isset($_SESSION["IdUsuario"])) {
                 </div>
             </div>
 
-            <!-- Modal para editar categorías -->
-            <div class="modal fade" id="editUniversidadModal" tabindex="-1" role="dialog" aria-labelledby="editUniversidadModalLabel" aria-hidden="true">
+            <!-- Modal para editar univeridades -->
+            <div class="modal fade" id="editUniversidadModal" tabindex="-1" role="dialog" aria-labelledby="editUniversidadModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -237,37 +208,13 @@ if (isset($_SESSION["IdUsuario"])) {
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form id="editUniversidadForm" method="POST" action="../MantenimientoSistema/Universidad/Editar_Universidad.php">
-                                <input type="hidden" id="edit_id_universidad" name="id_universidad">
+                            <form id="editUniversidadForm" method="POST" action="../MantenimientoSistema/Universidades/Editar_Universidad.php">
+                                <input type="hidden" id="edit_IdUniversidad" name="IdUniversidad">
                                 <div class="form-group">
-                                <label for="nom_universidad">Nombre Universidad</label>
-                                <input type="text" class="form-control" id="nom_universidad" name="nom_universidad" required>
+                                    <label for="NomUniversidad">Nombre Universidad</label>
+                                    <input type="text" class="form-control" id="NomUniversidad" name="NomUniversidad" maxlength="30" required oninput="validarNombreUniversidad(this)" style="text-transform:uppercase;">
                                 </div>
-                                <div class="form-group">
-                                    <label for="edit_universidad">Categoría</label>
-                                    <select type="text" class="form-control" id="edit_universidad" name="universidad" required>
-                                        <?php
-                                        // Cargar departamentos desde tbl_deptos
-                                        $departamentos = $conn->query("SELECT * FROM tbl_deptos");
-                                        while ($depto = $departamentos->fetch(PDO::FETCH_ASSOC)) {
-                                            echo "<option value='{$uni['ID_DEPTO']}'>{$uni['NOM_DEPTO']}</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="edit_nom_municipio">Tipo de Solicitud</label>
-                                    <select class="form-control" id="edit_nom_municipio" name="nom_municipio" required>
-                                        <?php
-                                        // Cargar municipios desde tbl_municipios
-                                        $municipios = $conn->query("SELECT * FROM tbl_municipios");
-                                        while ($muni = $municipios->fetch(PDO::FETCH_ASSOC)) {
-                                            echo "<option value='{$uni['ID_MUNICIPIO']}'>{$uni['NOM_MUNICIPIO']}</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                               
+
                                 <div class="form-group text-center">
                                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                                 </div>
@@ -277,22 +224,22 @@ if (isset($_SESSION["IdUsuario"])) {
                 </div>
             </div>
 
-            <!-- Modal para confirmar eliminación de categoría -->
-            <div class="modal fade" id="confirmDeleteUniversidadModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteUniversidadModalLabel" aria-hidden="true">
+            <!-- Modal para confirmar eliminación de Universidad -->
+            <div class="modal fade" id="confirmDeleteUniversidadModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteUniversidadModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="confirmDeleteUniversidadModalLabel">Eliminar Categoría</h5>
+                            <h5 class="modal-title" id="confirmDeleteUniversidadModalLabel">Bloquear Universidad</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p>¿Estás seguro de que quieres eliminar esta universidad?</p>
+                            <p>¿Estás seguro de que quieres bloquear esta universidad?</p>
                             <form id="deleteUniversidadForm" method="POST" action="../MantenimientoSistema/Universidades/Eliminar_Universidad.php">
-                                <input type="hidden" id="delete_id_universidad" name="id_universidad">
+                                <input type="hidden" id="delete_IdUniversidad" name="IdUniversidad">
                                 <div class="form-group text-center">
-                                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                                    <button type="submit" class="btn btn-danger">Bloquear</button>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                                 </div>
                             </form>
@@ -310,21 +257,21 @@ if (isset($_SESSION["IdUsuario"])) {
             <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
             <script>
-                // Código JavaScript para manejar los modales de editar y eliminar categorías
+                // Código JavaScript para manejar los modales de editar y eliminar Universidads
                 $('#editUniversidadModal').on('show.bs.modal', function(event) {
                     var button = $(event.relatedTarget);
                     var id = button.data('id');
-                    var nom_universidad = button.data('nom_universidad');
-                    var departamento= button.data('nom_depto');
+                    var NomUniversidad = button.data('NomUniversidad');
+                    var departamento = button.data('nom_depto');
                     var municipio = button.data('nom_municipio');
-               
+
 
                     var modal = $(this);
-                    modal.find('#edit_id_universidad').val(id);
-                    modal.find('#edit_nom_universidad').val(nom_universidad);
+                    modal.find('#edit_IdUniversidad').val(id);
+                    modal.find('#edit_NomUniversidad').val(NomUniversidad);
                     modal.find('#edit_nom_depto').val(departamento);
                     modal.find('#edit_nom_municipio').val(municipio);
-                   
+
                 });
 
                 $('#confirmDeleteUniversidadModal').on('show.bs.modal', function(event) {
@@ -332,7 +279,7 @@ if (isset($_SESSION["IdUsuario"])) {
                     var id = button.data('id');
 
                     var modal = $(this);
-                    modal.find('#delete_id_universidad').val(id);
+                    modal.find('#delete_IdUniversidad').val(id);
                 });
             </script>
             <script src="Universidades/Script_Universidad.js"></script>

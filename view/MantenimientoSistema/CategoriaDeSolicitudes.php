@@ -51,7 +51,7 @@ if (isset($_SESSION["IdUsuario"])) {
         <?php require_once("../MainHead/MainHead.php"); ?>
         <title>Gestión de Categorias</title>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script src="Categoria/Script_Categoria.js"></script>
+        <script src="Categorias/Script_Categoria.js"></script>
     </head>
     </head>
 
@@ -98,6 +98,14 @@ if (isset($_SESSION["IdUsuario"])) {
 
                     </div>
                     <div class="block-content block-content-full">
+                        <!-- Botón para cambiar a registros bloqueados -->
+                        <td class="text-center">
+                            <a href="CategoriaDeSolicitudes_Bloqueadas.php">
+                                <button type="button" class="btn btn-sm btn-secondary" title="Categorias Bloqueadas">
+                                    <i class="fa fa-lock"></i>
+                                </button>
+                            </a>
+                        </td>
                         <td class="text-center">
                             <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#addCategoriaModal">Añadir Categoria</button>
                         </td>
@@ -107,12 +115,12 @@ if (isset($_SESSION["IdUsuario"])) {
                             <thead>
                                 <tr>
                                     <th class="text-center">ID CATEGORIA</th>
-                                    <th class="d-none d-sm-table-cell">CODIGO PLAN DE ARBITRIOS</th>
-                                    <th class="d-none d-sm-table-cell">CATEGORIA</th>
-                                    <th class="d-none d-sm-table-cell">TIPO DE SOLICITUD</th>
-                                    <th class="d-none d-sm-table-cell">MONTO</th>
+                                    <th class="text-center">CODIGO PLAN DE ARBITRIOS</th>
+                                    <th class="text-center">CATEGORIA</th>
+                                    <th class="text-center">TIPO DE SOLICITUD</th>
+                                    <th class="text-center">Monto</th>
                                     <th class="text-center" style="width: 15%;">EDITAR CATEGORIA</th>
-                                    <th class="text-center" style="width: 15%;">ELIMINAR CATEGORIA</th>
+                                    <th class="text-center" style="width: 15%;">BLOQUEAR CATEGORIA</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -121,40 +129,42 @@ if (isset($_SESSION["IdUsuario"])) {
                                 $conexion = new Conectar();
                                 $conn = $conexion->Conexion();
                                 $sql = "SELECT
-                        c.ID_CATEGORIA,
-                        c.COD_ARBITRIOS,
-                        c.NOM_CATEGORIA,
-                        t.NOM_TIPO,  -- Aquí seleccionamos el nombre del tipo de solicitud
-                        c.MONTO
+                        c.IdCategoria,
+                        c.CodArbitrios,
+                        c.NomCategoria,
+                        t.NomTipoSolicitud,  -- Aquí seleccionamos el nombre del tipo de solicitud
+                        c.Monto
                     FROM
-                        tbl_categoria c
+                        `mantenimiento.tblcategorias` c
                     LEFT JOIN
-                        tbl_tipo_solicitud t ON c.ID_TIPO_SOLICITUD = t.ID_TIPO_SOLICITUD
+                        `mantenimiento.tbltiposolicitudes` t ON c.IdTiposolicitud = t.IdTiposolicitud
+                    LEFT JOIN `mantenimiento.tblestadosvisualizaciones` e ON c.IdVisibilidad = e.IdVisibilidad
+                    WHERE e.IdVisibilidad IN (1)
                     ORDER BY
-                        c.ID_CATEGORIA";
+                        c.IdCategoria";
 
                                 $result = $conn->query($sql);
                                 if ($result !== false && $result->rowCount() > 0) {
                                     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                                         echo "<tr>";
-                                        echo "<td class='text-center'>{$row['ID_CATEGORIA']}</td>";
-                                        echo "<td>{$row['COD_ARBITRIOS']}</td>";
-                                        echo "<td>{$row['NOM_CATEGORIA']}</td>";
-                                        echo "<td>{$row['NOM_TIPO']}</td>";  // Aquí mostramos el nombre del tipo
-                                        echo "<td>{$row['MONTO']}</td>";
+                                        echo "<td class='text-center'>{$row['IdCategoria']}</td>";
+                                        echo "<td class='text-center'>{$row['CodArbitrios']}</td>";
+                                        echo "<td class='text-center'>{$row['NomCategoria']}</td>";
+                                        echo "<td class='text-center'>{$row['NomTipoSolicitud']}</td>";  // Aquí mostramos el nombre del tipo
+                                        echo "<td class='text-center'>{$row['Monto']}</td>";
                                         echo "<td class='text-center'> 
                                 <button type='button' class='btn btn-sm btn-secondary' data-toggle='modal' data-target='#editCategoriaModal' 
-                                        data-id='" . $row["ID_CATEGORIA"] . "' 
-                                        data-cod_arbitrios='" . $row["COD_ARBITRIOS"] . "' 
-                                        data-nom_categoria='" . $row["NOM_CATEGORIA"] . "' 
-                                        data-id_tipo_solicitud='" . $row["NOM_TIPO"] . "' 
-                                        data-monto='" . $row["MONTO"] . "'>
+                                        data-id='" . $row["IdCategoria"] . "' 
+                                        data-CodArbitrios='" . $row["CodArbitrios"] . "' 
+                                        data-NomCategoria='" . $row["NomCategoria"] . "' 
+                                        data-IdTiposolicitud='" . $row["NomTipoSolicitud"] . "' 
+                                        data-Monto='" . $row["Monto"] . "'>
                                     <i class='si si-note'></i>
                                 </button>
                             </td>";
                                         echo "<td class='text-center'> 
                                 <button type='button' class='btn btn-sm btn-danger' data-toggle='modal' data-target='#confirmDeleteCategoriaModal' 
-                                        data-id='" . $row["ID_CATEGORIA"] . "'>
+                                        data-id='" . $row["IdCategoria"] . "'>
                                     <i class='si si-trash'></i>
                                 </button>
                             </td>";
@@ -175,7 +185,7 @@ if (isset($_SESSION["IdUsuario"])) {
             <?php require_once("../MainFooter/MainFooter.php"); ?>
 
             <!-- Modal para agregar categorias -->
-            <div class="modal fade" id="addCategoriaModal" tabindex="-1" role="dialog" aria-labelledby="addCategoriaModalLabel" aria-hidden="true">
+            <div class="modal fade" id="addCategoriaModal" tabindex="-1" role="dialog" aria-labelledby="addCategoriaModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -187,28 +197,28 @@ if (isset($_SESSION["IdUsuario"])) {
                         <div class="modal-body">
                             <form id="addCategoriaForm" method="POST" action="../MantenimientoSistema/Categorias/Agregar_Categoria.php">
                                 <div class="form-group">
-                                    <label for="cod_arbitrios">Codigo del Plan de Arbitrios</label>
-                                    <input type="text" class="form-control" id="cod_arbitrios" name="cod_arbitrios" required>
+                                    <label for="CodArbitrios">Codigo del Plan de Arbitrios</label>
+                                    <input type="text" class="form-control" id="CodArbitrios" name="CodArbitrios" maxlength="3" oninput="validarNumeros(this)" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="categoria">Categoria</label>
-                                    <input type="text" class="form-control" id="categoria" name="categoria" required>
+                                    <input type="text" class="form-control" id="categoria" name="categoria" maxlength="75" oninput="validarCategoria(this)" style="text-transform:uppercase;" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="id_tipo_solicitud">Tipo de Solicitud</label>
-                                    <select class="form-control" id="id_tipo_solicitud" name="id_tipo_solicitud" required>
+                                    <label for="IdTiposolicitud">Tipo de Solicitud</label>
+                                    <select class="form-control" id="IdTiposolicitud" name="IdTiposolicitud" required>
                                         <?php
                                         // Cargar universidades desde tbl_universidad_centro
-                                        $tipo_solicitud = $conn->query("SELECT * FROM tbl_tipo_solicitud");
+                                        $tipo_solicitud = $conn->query("SELECT * FROM `mantenimiento.tbltiposolicitudes`");
                                         while ($tipo_sol = $tipo_solicitud->fetch(PDO::FETCH_ASSOC)) {
-                                            echo "<option value='{$tipo_sol['ID_TIPO_SOLICITUD']}'>{$tipo_sol['NOM_TIPO']}</option>";
+                                            echo "<option value='{$tipo_sol['IdTiposolicitud']}'>{$tipo_sol['NomTipoSolicitud']}</option>";
                                         }
                                         ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="monto">Monto</label>
-                                    <input type="text" class="form-control" id="monto" name="monto" required>
+                                    <label for="Monto">Monto</label>
+                                    <input type="text" class="form-control" id="Monto" name="Monto" oninput="validarNumeros(this)" required>
                                 </div>
 
                                 <div class="form-group text-center">
@@ -219,112 +229,113 @@ if (isset($_SESSION["IdUsuario"])) {
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Modal para editar categorías -->
-            <div class="modal fade" id="editCategoriaModal" tabindex="-1" role="dialog" aria-labelledby="editCategoriaModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editCategoriaModalLabel">Editar Categoría</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="editCategoriaForm" method="POST" action="../MantenimientoSistema/Categorias/Editar_Categoria.php">
-                                <input type="hidden" id="edit_id_categoria" name="id_categoria">
-                                <div class="form-group">
-                                    <label for="edit_cod_arbitrios">Código del Plan de Arbitrios</label>
-                                    <input type="text" class="form-control" id="edit_cod_arbitrios" name="cod_arbitrios" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="edit_categoria">Categoría</label>
-                                    <input type="text" class="form-control" id="edit_categoria" name="categoria" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="edit_id_tipo_solicitud">Tipo de Solicitud</label>
-                                    <select class="form-control" id="edit_id_tipo_solicitud" name="id_tipo_solicitud" required>
-                                        <?php
-                                        // Cargar tipos de solicitud desde tbl_tipo_solicitud
-                                        $tipo_solicitud = $conn->query("SELECT * FROM tbl_tipo_solicitud");
-                                        while ($tipo_sol = $tipo_solicitud->fetch(PDO::FETCH_ASSOC)) {
-                                            echo "<option value='{$tipo_sol['ID_TIPO_SOLICITUD']}'>{$tipo_sol['NOM_TIPO']}</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="edit_monto">Monto</label>
-                                    <input type="text" class="form-control" id="edit_monto" name="monto" required>
-                                </div>
-                                <div class="form-group text-center">
-                                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                                </div>
-                            </form>
-                        </div>
+        <!-- Modal para editar categorías -->
+        <div class="modal fade" id="editCategoriaModal" tabindex="-1" role="dialog" aria-labelledby="editCategoriaModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editCategoriaModalLabel">Editar Categoría</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editCategoriaForm" method="POST" action="../MantenimientoSistema/Categorias/Editar_Categoria.php">
+                            <input type="hidden" id="edit_IdCategoria" name="IdCategoria">
+                            <div class="form-group">
+                                <label for="edit_CodArbitrios">Código del Plan de Arbitrios</label>
+                                <input type="text" class="form-control" id="edit_CodArbitrios" name="CodArbitrios" maxlength="3" oninput="validarNumeros(this)" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_categoria">Categoría</label>
+                                <input type="text" class="form-control" id="edit_categoria" name="categoria" maxlength="75" oninput="validarCategoria(this)" style="text-transform:uppercase;" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_IdTiposolicitud">Tipo de Solicitud</label>
+                                <select class="form-control" id="edit_IdTiposolicitud" name="IdTiposolicitud" required>
+                                    <?php
+                                    // Cargar tipos de solicitud desde `mantenimiento.tbltiposolicitudes`
+                                    $tipo_solicitud = $conn->query("SELECT * FROM `mantenimiento.tbltiposolicitudes`");
+                                    while ($tipo_sol = $tipo_solicitud->fetch(PDO::FETCH_ASSOC)) {
+                                        echo "<option value='{$tipo_sol['IdTiposolicitud']}'>{$tipo_sol['NomTipoSolicitud']}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_Monto">Monto</label>
+                                <input type="text" class="form-control" id="edit_Monto" name="Monto" oninput="validarNumeros(this)" required>
+                            </div>
+                            <div class="form-group text-center">
+                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Modal para confirmar eliminación de categoría -->
-            <div class="modal fade" id="confirmDeleteCategoriaModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteCategoriaModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="confirmDeleteCategoriaModalLabel">Eliminar Categoría</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p>¿Estás seguro de que quieres eliminar esta categoría?</p>
-                            <form id="deleteCategoriaForm" method="POST" action="../MantenimientoSistema/Categorias/Eliminar_Categoria.php">
-                                <input type="hidden" id="delete_id_categoria" name="id_categoria">
-                                <div class="form-group text-center">
-                                    <button type="submit" class="btn btn-danger">Eliminar</button>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                </div>
-                            </form>
-                        </div>
+        <!-- Modal para confirmar eliminación de categoría -->
+        <div class="modal fade" id="confirmDeleteCategoriaModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteCategoriaModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmDeleteCategoriaModalLabel">Bloquear Categoría</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>¿Estás seguro de que quieres bloquear esta categoría?</p>
+                        <form id="deleteCategoriaForm" method="POST" action="../MantenimientoSistema/Categorias/Eliminar_Categoria.php">
+                            <input type="hidden" id="delete_IdCategoria" name="IdCategoria">
+                            <div class="form-group text-center">
+                                <button type="submit" class="btn btn-danger">Bloquear</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-            <?php require_once("../MainJs/MainJs.php"); ?>
+        </div>
+        <?php require_once("../MainJs/MainJs.php"); ?>
 
-            <!-- Incluye el script de JavaScript -->
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <!-- Incluye el script de JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-            <!-- Bootstrap JS y dependencias -->
-            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-            <script>
-                // Código JavaScript para manejar los modales de editar y eliminar categorías
-                $('#editCategoriaModal').on('show.bs.modal', function(event) {
-                    var button = $(event.relatedTarget);
-                    var id = button.data('id');
-                    var cod_arbitrios = button.data('cod_arbitrios');
-                    var categoria = button.data('nom_categoria');
-                    var id_tipo_solicitud = button.data('id_tipo_solicitud');
-                    var monto = button.data('monto');
+        <!-- Bootstrap JS y dependencias -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+            // Código JavaScript para manejar los modales de editar y eliminar categorías
+            $('#editCategoriaModal').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget);
+                var id = button.data('id');
+                var CodArbitrios = button.data('CodArbitrios');
+                var categoria = button.data('NomCategoria');
+                var IdTiposolicitud = button.data('IdTiposolicitud');
+                var Monto = button.data('Monto');
 
-                    var modal = $(this);
-                    modal.find('#edit_id_categoria').val(id);
-                    modal.find('#edit_cod_arbitrios').val(cod_arbitrios);
-                    modal.find('#edit_categoria').val(categoria);
-                    modal.find('#edit_id_tipo_solicitud').val(id_tipo_solicitud);
-                    modal.find('#edit_monto').val(monto);
-                });
+                var modal = $(this);
+                modal.find('#edit_IdCategoria').val(id);
+                modal.find('#edit_CodArbitrios').val(CodArbitrios);
+                modal.find('#edit_categoria').val(categoria);
+                modal.find('#edit_IdTiposolicitud').val(IdTiposolicitud);
+                modal.find('#edit_Monto').val(Monto);
+            });
 
-                $('#confirmDeleteCategoriaModal').on('show.bs.modal', function(event) {
-                    var button = $(event.relatedTarget);
-                    var id = button.data('id');
+            $('#confirmDeleteCategoriaModal').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget);
+                var id = button.data('id');
 
-                    var modal = $(this);
-                    modal.find('#delete_id_categoria').val(id);
-                });
-            </script>
-            <script src="Categoria/Script_Categoria.js"></script>
+                var modal = $(this);
+                modal.find('#delete_IdCategoria').val(id);
+            });
+        </script>
+        <script src="Categorias/Script_Categoria.js"></script>
 
     </body>
 

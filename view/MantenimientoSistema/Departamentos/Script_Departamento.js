@@ -1,3 +1,11 @@
+function validarNombreDepartamento(input) {
+    // Remueve cualquier carácter que no sea una letra (con o sin tilde) o un espacio
+    input.value = input.value.replace(/[^a-zA-ZÁÉÍÓÚáéíóú\s]/g, '');
+
+    // Convierte el texto a mayúsculas
+    input.value = input.value.toUpperCase();
+}
+
 // Función para mostrar mensajes de alerta
 function showAlert(message, type) {
     Swal.fire({
@@ -21,7 +29,7 @@ function handleEditDepartmentSuccess() {
 
 // Mostrar alerta en caso de éxito al eliminar departamento
 function handleDeleteDepartmentSuccess() {
-    showAlert('Departamento eliminado exitosamente.', 'success');
+    showAlert('El departamento ha sido bloqueada exitosamente. Podrás encontrarla en la pestaña de Departamentos Bloqueados.', 'success');
 }
 
 // Mostrar alerta si los datos ya existen

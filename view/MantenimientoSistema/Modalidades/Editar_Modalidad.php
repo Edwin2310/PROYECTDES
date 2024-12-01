@@ -14,19 +14,19 @@ if (!$conn) {
 
 // Verificar si se ha enviado el formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id_modalidad = isset($_POST['id_modalidad']) ? $_POST['id_modalidad'] : '';
-    $nombre_modalidad = isset($_POST['nom_modalidad']) ? $_POST['nom_modalidad'] : '';
+    $IdModalidad = isset($_POST['IdModalidad']) ? $_POST['IdModalidad'] : '';
+    $nombre_modalidad = isset($_POST['NomModalidad']) ? $_POST['NomModalidad'] : '';
 
-    if (empty($id_modalidad) || empty($nombre_modalidad)) {
+    if (empty($IdModalidad) || empty($nombre_modalidad)) {
         $_SESSION['error_message'] = "Todos los campos son obligatorios";
         header("Location: ../../MantenimientoSistema/Modalidades.php?action=edit-error");
         exit();
     }
 
-    $sql_update = "UPDATE tbl_modalidad SET NOM_MODALIDAD = :nombre_modalidad WHERE ID_MODALIDAD = :id_modalidad";
+    $sql_update = "UPDATE `mantenimiento.tblmodalidades` SET NomModalidad = :nombre_modalidad WHERE IdModalidad = :IdModalidad";
     $stmt_update = $conn->prepare($sql_update);
     $stmt_update->bindParam(':nombre_modalidad', $nombre_modalidad);
-    $stmt_update->bindParam(':id_modalidad', $id_modalidad);
+    $stmt_update->bindParam(':IdModalidad', $IdModalidad);
 
     if ($stmt_update->execute()) {
         $_SESSION['success_message'] = "Modalidad editada exitosamente";

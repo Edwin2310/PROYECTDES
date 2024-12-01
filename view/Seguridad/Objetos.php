@@ -201,15 +201,15 @@ if (isset($_SESSION["IdUsuario"])) {
                             <form id="addObjectForm" method="POST" action="../Seguridad/Objetos/Agregar_Objeto.php">
                                 <div class="form-group">
                                     <label for="objeto">Objeto</label>
-                                    <input type="text" class="form-control" id="objeto" name="Objeto" required>
+                                    <input type="text" class="form-control" id="objeto" name="Objeto" maxlength="50" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="tipo_objeto">Tipo Objeto</label>
-                                    <input type="text" class="form-control" id="tipo_objeto" name="TipoObjeto" required>
+                                    <input type="text" class="form-control" id="tipo_objeto" name="TipoObjeto" maxlength="50" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="descripcion">Descripcion</label>
-                                    <input type="text" class="form-control" id="descripcion" name="Descripcion" required>
+                                    <input type="text" class="form-control" id="descripcion" name="Descripcion" maxlength="100" required>
                                 </div>
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-primary">Guardar</button>
@@ -236,15 +236,15 @@ if (isset($_SESSION["IdUsuario"])) {
                                 <input type="hidden" id="edit-id_usuario" name="IdUsuario"> <!-- Campo oculto para id_usuario -->
                                 <div class="form-group">
                                     <label for="edit-objeto">Objeto</label>
-                                    <input type="text" class="form-control" id="edit-objeto" name="Objeto" required>
+                                    <input type="text" class="form-control" id="edit-objeto" name="Objeto" maxlength="50" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="edit-tipo_objeto">Tipo Objeto</label>
-                                    <input type="text" class="form-control" id="edit-tipo_objeto" name="TipoObjeto" required>
+                                    <input type="text" class="form-control" id="edit-tipo_objeto" name="TipoObjeto" maxlength="50" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="edit-descripcion">Descripcion</label>
-                                    <input type="text" class="form-control" id="edit-descripcion" name="Descripcion" required>
+                                    <input type="text" class="form-control" id="edit-descripcion" name="Descripcion" maxlength="100" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="edit-creado_por">Creado Por</label>

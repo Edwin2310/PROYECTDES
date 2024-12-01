@@ -1,3 +1,11 @@
+function validarCarrera(input) {
+    // Remueve caracteres que no sean letras, números o espacios
+    input.value = input.value.replace(/[^a-zA-ZÁÉÍÓÚáéíóú\s]/g, '');
+
+    // Convierte el texto a mayúsculas
+    input.value = input.value.toUpperCase();
+}
+
 // Función para mostrar mensajes de alerta
 function showAlert(message, type) {
     Swal.fire({
@@ -21,7 +29,7 @@ function handleEditCareerSuccess() {
 
 // Mostrar alerta en caso de éxito al eliminar carrera
 function handleDeleteCareerSuccess() {
-    showAlert('Carrera eliminada exitosamente.', 'success');
+    showAlert('La carrera ha sido bloqueada exitosamente. Podrás encontrarla en la pestaña de Carreras Bloqueadas.', 'success');
 }
 
 // Mostrar alerta si los datos ya existen

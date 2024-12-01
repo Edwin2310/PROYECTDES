@@ -1,0 +1,21 @@
+.bg-image {
+    height: 300px;
+    /* Ajusta la altura del contenedor */
+    position: relative;
+    text-align: center;
+}
+
+/* Imagen de perfil */
+#fotoPerfilPreview {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    object-fit: cover;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Botón de carga oculto */
+#fotoPerfilInput {
+    display: none;
+}

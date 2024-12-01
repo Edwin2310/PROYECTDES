@@ -15,26 +15,26 @@ if (!$conn) {
 // Verificar si se ha enviado el formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Obtener datos del formulario
-    $nombre_carrera = isset($_POST['nom_carrera']) ? $_POST['nom_carrera'] : '';
-    $id_universidad = isset($_POST['id_universidad']) ? $_POST['id_universidad'] : '';
-    $id_modalidad = isset($_POST['id_modalidad']) ? $_POST['id_modalidad'] : '';
-    $id_grado = isset($_POST['id_grado']) ? $_POST['id_grado'] : '';
+    $nombre_carrera = isset($_POST['NomCarrera']) ? $_POST['NomCarrera'] : '';
+    $IdUniversidad = isset($_POST['IdUniversidad']) ? $_POST['IdUniversidad'] : '';
+    $IdModalidad = isset($_POST['IdModalidad']) ? $_POST['IdModalidad'] : '';
+    $IdGrado = isset($_POST['IdGrado']) ? $_POST['IdGrado'] : '';
 
     // Validar datos
-    if (empty($nombre_carrera) || empty($id_universidad) || empty($id_modalidad) || empty($id_grado)) {
+    if (empty($nombre_carrera) || empty($IdUniversidad) || empty($IdModalidad) || empty($IdGrado)) {
         header("Location: ../../MantenimientoSistema/Carreras.php?action=error&message=Todos los campos son obligatorios");
         exit();
     }
 
     // Verificar si la carrera ya existe
-    $sql_check = "SELECT COUNT(*) FROM tbl_carrera WHERE NOM_CARRERA = :nombre_carrera 
-                  AND ID_UNIVERSIDAD = :id_universidad AND ID_MODALIDAD = :id_modalidad 
-                  AND ID_GRADO = :id_grado";
+    $sql_check = "SELECT COUNT(*) FROM `mantenimiento.tblcarreras` WHERE NomCarrera = :nombre_carrera 
+                  AND IdUniversidad = :IdUniversidad AND IdModalidad = :IdModalidad 
+                  AND IdGrado = :IdGrado";
     $stmt_check = $conn->prepare($sql_check);
     $stmt_check->bindParam(':nombre_carrera', $nombre_carrera);
-    $stmt_check->bindParam(':id_universidad', $id_universidad);
-    $stmt_check->bindParam(':id_modalidad', $id_modalidad);
-    $stmt_check->bindParam(':id_grado', $id_grado);
+    $stmt_check->bindParam(':IdUniversidad', $IdUniversidad);
+    $stmt_check->bindParam(':IdModalidad', $IdModalidad);
+    $stmt_check->bindParam(':IdGrado', $IdGrado);
     $stmt_check->execute();
 
     if ($stmt_check->fetchColumn() > 0) {
@@ -42,14 +42,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Insertar el nuevo registro en la tabla tbl_carrera
-    $sql_insert = "INSERT INTO tbl_carrera (NOM_CARRERA, ID_UNIVERSIDAD, ID_MODALIDAD, ID_GRADO) 
-                   VALUES (:nombre_carrera, :id_universidad, :id_modalidad, :id_grado)";
+    // Insertar el nuevo registro en la tabla `mantenimiento.tblcarreras`
+    $sql_insert = "INSERT INTO `mantenimiento.tblcarreras` (NomCarrera, IdUniversidad, IdModalidad, IdGrado) 
+                   VALUES (:nombre_carrera, :IdUniversidad, :IdModalidad, :IdGrado)";
     $stmt_insert = $conn->prepare($sql_insert);
     $stmt_insert->bindParam(':nombre_carrera', $nombre_carrera);
-    $stmt_insert->bindParam(':id_universidad', $id_universidad);
-    $stmt_insert->bindParam(':id_modalidad', $id_modalidad);
-    $stmt_insert->bindParam(':id_grado', $id_grado);
+    $stmt_insert->bindParam(':IdUniversidad', $IdUniversidad);
+    $stmt_insert->bindParam(':IdModalidad', $IdModalidad);
+    $stmt_insert->bindParam(':IdGrado', $IdGrado);
 
     if ($stmt_insert->execute()) {
         header("Location: ../../MantenimientoSistema/Carreras.php?action=add-success");

@@ -20,7 +20,7 @@ function verificarPermiso($id_rol, $id_objeto)
         $stmt->bindValue(':idRol', $id_rol, PDO::PARAM_INT);
         $stmt->bindValue(':idObjeto', $id_objeto, PDO::PARAM_INT);
         $stmt->execute();
-
+/* 
         // Verificar si hay resultados
         if ($stmt->rowCount() > 0) {
             // Usuario tiene permiso
@@ -29,7 +29,10 @@ function verificarPermiso($id_rol, $id_objeto)
             // Usuario no tiene permiso
             header("Location: ../Seguridad/Permisos/denegado.php");
             exit();
-        }
+        } */
+
+
+        return $stmt->rowCount() > 0;
     } catch (PDOException $e) {
         // Manejo de errores (puedes ajustar esto según tu necesidad)
         error_log("Error en verificarPermiso: " . $e->getMessage());

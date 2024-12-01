@@ -3,13 +3,44 @@ session_start();
 
 require_once("../../config/conexion.php");
 require_once(__DIR__ . '/../Seguridad/Permisos/Funciones_Permisos.php');
+require_once(__DIR__ . '/../Seguridad/Bitacora/Funciones_Bitacoras.php');
 if (isset($_SESSION["IdUsuario"])) {
 
     // Obtener los valores necesarios para la verificación
+    $id_usuario = $_SESSION['IdUsuario'] ?? null;
     $id_rol = $_SESSION['IdRol'] ?? null;
     $id_objeto = 11; // ID del objeto o módulo correspondiente a esta página
-    // Llama a la función para verificar los permisos
-    verificarPermiso($id_rol, $id_objeto);
+
+    // Obtener la página actual y la última marca de acceso
+    $current_page = basename($_SERVER['PHP_SELF']);
+    $last_access_time = $_SESSION['last_access_time'][$current_page] ?? 0;
+
+    // Obtener el tiempo actual
+    $current_time = time();
+
+    // Verificar si han pasado al menos 10 segundos desde el último registro
+    if ($current_time - $last_access_time > 3) {
+        // Verificar permisos
+        if (verificarPermiso($id_rol, $id_objeto)) {
+            $accion = "Accedió al módulo.";
+
+            // Registrar en la bitácora
+            registrobitaevent($id_usuario, $id_objeto, $accion);
+        } else {
+            $accion = "acceso denegado.";
+
+            // Registrar en bitácora antes de redirigir
+            registrobitaevent($id_usuario, $id_objeto, $accion);
+
+            // Redirigir a la página de denegación
+            header("Location: ../Seguridad/Permisos/denegado.php");
+            exit();
+        }
+
+        // Actualizar la marca temporal en la sesión
+        $_SESSION['last_access_time'][$current_page] = $current_time;
+    }
+
 
 ?>
 
@@ -105,7 +136,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                         </div>
                                     </div>
                                     <div class="block-content bg-body-light">
-                                        <p class="h5 font-w600">Permisos</p>
+                                        <p class="h5 font-w600">Accesos</p>
                                     </div>
                                 </div>
                             </a>
@@ -159,7 +190,7 @@ if (isset($_SESSION["IdUsuario"])) {
                         </div>
 
                         <div class="col-md-4 col-lg-4 mr-auto" data-toggle="appear">
-                            <a href="../Seguridad/Bitacora.php" data-id-objeto="21" data-accion="accedio al modulo" class=" modulo-link block block-link-shadow text-center">
+                            <a href="../Seguridad/BitacorasS.php" data-id-objeto="46" data-accion="accedio al modulo" class=" modulo-link block block-link-shadow text-center">
                                 <div class="block-content block-content-full">
                                     <div class="py-30 text-center">
                                         <div class="item item-2x item-circle bg-default text-white mx-auto">
@@ -167,7 +198,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                         </div>
                                     </div>
                                     <div class="block-content bg-body-light">
-                                        <p class="h5 font-w600">Bitácora de Sistema</p>
+                                        <p class="h5 font-w600">Bitácoras de Sistema</p>
                                     </div>
                                 </div>
                             </a>
@@ -195,4 +226,4 @@ if (isset($_SESSION["IdUsuario"])) {
 }
 ?>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="../Seguridad//Bitacora//Bitacora.js"></script>
+<!-- <script src="../Seguridad//Bitacora//Bitacora.js"></script> -->

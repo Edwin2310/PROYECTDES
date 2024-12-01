@@ -8,7 +8,7 @@ if (isset($_SESSION["IdUsuario"])) {
     // Obtener los valores necesarios para la verificación
     $id_usuario = $_SESSION['IdUsuario'] ?? null;
     $id_rol = $_SESSION['IdRol'] ?? null;
-    $id_objeto = 7; // ID del objeto o módulo correspondiente a esta página
+    $id_objeto = 45; // ID del objeto o módulo correspondiente a esta página
 
     // Obtener la página actual y la última marca de acceso
     $current_page = basename($_SERVER['PHP_SELF']);
@@ -42,8 +42,6 @@ if (isset($_SESSION["IdUsuario"])) {
 
 
 ?>
-
-
     <!doctype html>
     <html lang="en" class="no-focus">
 
@@ -105,7 +103,7 @@ if (isset($_SESSION["IdUsuario"])) {
             <div class="content">
                 <div class="block">
                     <div class="block-header block-header-default">
-                        <h3 class="block-title">Registros de Bitacora Solicitud</h3>
+                        <h3 class="block-title">Registros de Bitacora solicitudes</h3>
                         <button id="borrarBitacora" class="btn btn-danger mx-2">Borrar Todos los Registros</button>
                         <a href="./Bitacora/exportar_bitacora.php" class="btn btn-success mx-2">Descargar Excel</a>
                     </div>
@@ -118,46 +116,50 @@ if (isset($_SESSION["IdUsuario"])) {
                             <table id="bitacoraTable" class="table table-bordered table-striped table-vcenter">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">Id Bitacora</th>
-                                        <th class="d-none d-sm-table-cell">Fecha y Hora</th>
-                                        <th class="d-none d-sm-table-cell">Id Usuario</th>
-                                        <th class="d-none d-sm-table-cell">Usuario</th>
-                                        <th class="d-none d-sm-table-cell">Id Objeto</th>
-                                        <th class="d-none d-sm-table-cell">Acción</th>
-                                        <th class="d-none d-sm-table-cell">Descripción</th>
+                                        <th class="text-center">N*</th>
+                                        <th class="d-none d-sm-table-cell">ID SOLICITUD</th>
+                                        <th class="d-none d-sm-table-cell">ID USUARIO</th>
+                                        <th class="d-none d-sm-table-cell">ID ESTADO</th>
+                                        <th class="d-none d-sm-table-cell">FECHA DE PROCESO</th>
+                                        <!--  <th class="d-none d-sm-table-cell">Descripción</th> -->
                                     </tr>
                                     <tr>
                                         <th class="text-center"><input type="text" placeholder="Buscar por Id Bitacora" /></th>
                                         <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por Fecha y Hora" /></th>
-                                        <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por ID Usuario" /></th>
                                         <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por Usuario" /></th>
-                                        <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por ID Objeto" /></th>
+                                        <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por Objeto" /></th>
                                         <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por Acción" /></th>
-                                        <th class="d-none d-sm-table-cell"><input type="text" placeholder="Buscar por Descripción" /></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     $conexion = new Conectar();
                                     $conn = $conexion->Conexion();
-                                    $sql = "SELECT b.ID_BITACORA, b.FECHA_HORA, 
-                                        b.IdUsuario, U.NOMBRE_USUARIO AS NOMBRE_USUARIO, o.IdObjeto, 
-                                        b.ACCION, b.DESCRIPCION
-                                    FROM tbl_ms_bitacora b
-                                    INNER JOIN tbl_ms_usuario u ON b.IdUsuario = u.IdUsuario
-                                    INNER JOIN tbl_ms_objetos o ON b.IdObjeto = o.IdObjeto
-                                    ORDER BY b.ID_BITACORA ASC;";
+                                    $sql = "SELECT
+                                                 ROW_NUMBER() OVER (ORDER BY b.IdBitacora) AS NUMERACION,
+                                                 b.FechaHora,
+                                                 p.NombreUsuario,
+                                                 O.Objeto,
+                                                 b.Accion
+                                            FROM
+                                                 `seguridad.tblbitacora` b
+                                            INNER JOIN `seguridad.tblusuarios` u ON
+                                                       b.IdUsuario = u.IdUsuario
+                                            INNER JOIN `seguridad.tblobjetos` o ON
+                                                        b.IdObjeto = o.IdObjeto
+                                            INNER JOIN `seguridad.tbldatospersonales` p ON
+                                                       b.IdUsuario = p.IdUsuario
+                                            ORDER BY
+                                                     b.IdBitacora ASC;";
                                     $result = $conn->query($sql);
                                     if ($result !== false && $result->rowCount() > 0) {
                                         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                                             echo "<tr>";
-                                            echo "<td class='text-center'>{$row['ID_BITACORA']}</td>";
-                                            echo "<td>{$row['FECHA_HORA']}</td>";
-                                            echo "<td>{$row['IdUsuario']}</td>";
-                                            echo "<td>{$row['NOMBRE_USUARIO']}</td>";
-                                            echo "<td>{$row['IdObjeto']}</td>";
-                                            echo "<td>{$row['ACCION']}</td>";
-                                            echo "<td>{$row['DESCRIPCION']}</td>";
+                                            echo "<td class='text-center'>{$row['NUMERACION']}</td>";
+                                            echo "<td>{$row['FechaHora']}</td>";
+                                            echo "<td>{$row['NombreUsuario']}</td>";
+                                            echo "<td>{$row['Objeto']}</td>";
+                                            echo "<td>{$row['Accion']}</td>";
                                             echo "</tr>";
                                         }
                                     } else {

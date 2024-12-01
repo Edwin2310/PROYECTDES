@@ -7,7 +7,7 @@ if (isset($_SESSION["IdUsuario"])) {
     // Obtener los valores necesarios para la verificación
     $id_usuario = $_SESSION['IdUsuario'] ?? null;
     $id_rol = $_SESSION['IdRol'] ?? null;
-    $id_objeto = 33; // ID del objeto o módulo correspondiente a esta página
+    $id_objeto = 46; // ID del objeto o módulo correspondiente a esta página
 
     // Obtener la página actual y la última marca de acceso
     $current_page = basename($_SERVER['PHP_SELF']);
@@ -41,6 +41,8 @@ if (isset($_SESSION["IdUsuario"])) {
 
 
 ?>
+
+
 
 
 <!doctype html>
@@ -109,26 +111,26 @@ if (isset($_SESSION["IdUsuario"])) {
 
         <main id="main-container">
             <div class="content">
-                <h2 class="content-heading">Dictamen CTC</h2>
+                <h2 class="content-heading">Acuerdo de Admisión</h2>
 
                 <div class="row justify-content-center">
                     <div class="col-md-4" data-toggle="appear">
-                        <a href="../MantenimientoSolicitudes/DictamenCTC_Agenda.php" data-id-objeto="39" data-accion="accedio al modulo" class="modulo-link block block-link-shadow text-center">
+                        <a href="../Seguridad/Bitacorasoli.php" data-id-objeto="45" data-accion="accedio al modulo" class="modulo-link block block-link-shadow text-center">
                             <div class="block-content block-content-full">
                                 <div class="py-30 text-center">
                                     <div class="item item-2x item-circle bg-warning text-white mx-auto">
-                                        <i class="si si-book-open text-default"></i>
+                                        <i class="fa fa-pencil-square text-default"></i>
                                     </div>
                                 </div>
                                 <div class="block-content bg-body-light">
-                                    <p class="h5 font-w600">Agenda Solicitudes al CTC</p>
+                                    <p class="h5 font-w600">Bitácora solicitudes</p>
                                 </div>
                             </div>
                         </a>
                     </div>
 
                     <div class="col-md-4" data-toggle="appear">
-                        <a href="../MantenimientoSolicitudes/DictamenCTC_Asignar.php" data-id-objeto="40" data-accion="accedio al modulo" class="modulo-link block block-link-shadow text-center">
+                        <a href="../Seguridad/Bitacora.php" data-id-objeto="21" data-accion="accedio al modulo" class="modulo-link block block-link-shadow text-center">
                             <div class="block-content block-content-full">
                                 <div class="py-30 text-center">
                                     <div class="item item-2x item-circle bg-default text-white mx-auto">
@@ -136,7 +138,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                     </div>
                                 </div>
                                 <div class="block-content bg-body-light">
-                                    <p class="h5 font-w600">Asignar Dictamen CTC</p>
+                                    <p class="h5 font-w600">Bitácora eventos</p>
                                 </div>
                             </div>
                         </a>
@@ -165,5 +167,6 @@ if (isset($_SESSION["IdUsuario"])) {
     header("Location:" . Conectar::ruta() . "index.php");
 }
 ?>
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 <script src="../Seguridad/Permisos/acceso.js" defer></script>
 <!-- <script src="../Seguridad//Bitacora//Bitacora.js"></script> -->

@@ -21,10 +21,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             // Consulta para actualizar los permisos
             $sql = "UPDATE `seguridad.tblpermisos` p
-                    SET p.PERMISO_INSERCION = :permisoInsercion,
-                        p.PERMISO_ELIMINACION = :permisoEliminacion,
-                        p.PERMISO_ACTUALIZACION = :permisoActualizacion,
-                        p.PERMISO_CONSULTAR = :permisoConsultar
+                    SET p.PermisoInsercion = :permisoInsercion,
+                        p.PermisoEliminacion = :permisoEliminacion,
+                        p.PermisoActualizacion = :permisoActualizacion,
+                        p.PermisoConsultar = :permisoConsultar
                     WHERE IdRol = :idRol AND IdObjeto = :idObjeto";
 
             $stmt = $conn->prepare($sql);

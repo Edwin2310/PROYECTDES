@@ -1,41 +1,4 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <title>Acceso Denegado</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f8d7da;
-            color: #721c24;
-            font-family: Arial, sans-serif;
-        }
-
-        .error-message {
-            text-align: center;
-            border: 1px solid #f5c6cb;
-            background-color: #f8d7da;
-            padding: 20px;
-            border-radius: 5px;
-        }
-    </style>
-        <link rel="icon" type="image/png" sizes="192x192" href="public/assets/img/favicons/favicon-192x192.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="public/assets/img/favicons/apple-touch-icon-180x180.png">
-</head>
-
-<body>
-    <div class="error-message">
-        <h1>Acceso Denegado</h1>
-        <p>No tienes los permisos necesarios para acceder a esta página.</p>
-        <a href="javascript:history.back()" class="back-button modulo-link">Volver a la página anterior</a>
-    </div>
-</body>
-
-</html> -->
 
 <!doctype html>
 <!--[if lte IE 9]>     <html lang="en" class="no-focus lt-ie10 lt-ie10-msg"> <![endif]-->

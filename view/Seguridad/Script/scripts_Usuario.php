@@ -166,7 +166,9 @@ if (isset($_SESSION["IdUsuario"])) {
 
             usuario.addEventListener('input', function() {
                 this.value = this.value.replace(/\s/g, ''); // Elimina espacios en blanco
-                this.value = this.value.replace(/[<>]/g, ''); // No permite < ni >
+                this.value = this.value.replace(/[<>]/g, ''); // No permite < ni >     
+                this.value = this.value.replace(/[^a-zA-Z0-9._@-]/g, '');
+
             });
 
             correoElectronico.addEventListener('input', function() {
@@ -334,6 +336,14 @@ if (isset($_SESSION["IdUsuario"])) {
                 });
                 showMoreBtn.textContent = isShowingMore ? "Mostrar menos" : "Mostrar más";
             });
+        });
+    </script>
+
+    <script>
+        // Escucha el evento 'input' en el campo con id "Usuario"
+        document.getElementById('Usuario').addEventListener('input', function() {
+            // Reemplaza los caracteres no permitidos con una cadena vacía
+            this.value = this.value.replace(/[^a-zA-Z0-9._@-]/g, '');
         });
     </script>
 

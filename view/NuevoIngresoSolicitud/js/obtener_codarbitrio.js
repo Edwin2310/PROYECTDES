@@ -14,17 +14,13 @@ document.getElementById("IdCategoria").addEventListener("change", function () {
     })
       .then((response) => response.json())
       .then((data) => {
-        // Actualizar el campo Código de Pago
+        // Procesar la respuesta y mostrar los CodArbitrios
         if (data.success) {
-          document.getElementById("CodigoPago").value = data.CodArbitrios || "";
+          console.log("CodArbitrios obtenidos:", data.CodArbitrios); // Mostrar en la consola
         } else {
-          document.getElementById("CodigoPago").value = "";
-          alert(data.message || "No se pudo obtener el código de arbitrios.");
+          alert(data.message || "No se pudo obtener los CodArbitrios.");
         }
       })
       .catch((error) => console.error("Error:", error));
-  } else {
-    // Si no se selecciona una categoría válida, limpiar el campo
-    document.getElementById("CodigoPago").value = "";
   }
 });

@@ -143,19 +143,13 @@ if (isset($_SESSION["IdUsuario"])) {
                                                         <div class="col-12">
                                                             <select class="form-control" id="tipo_solicitud" name="tipo_solicitud">
                                                                 <?php
-                                                                // Consulta para obtener los tipos de solicitud
-                                                                $query_tipo = "SELECT TipoSolicitud FROM `proceso.tblsolicitudes`";
+                                                                $query_tipo = "SELECT IdTipoSolicitud, NomTipoSolicitud FROM `mantenimiento.tbltiposolicitudes`";
                                                                 $stmt_tipo = $conn->prepare($query_tipo);
                                                                 $stmt_tipo->execute();
-
-                                                                // Recorre cada tipo de solicitud y crea las opciones del select
-                                                                while ($tipo = $stmt_tipo->fetch(PDO::FETCH_ASSOC)) {
-                                                                    echo '<option value="' . htmlspecialchars($tipo['IdTiposolicitud'], ENT_QUOTES, 'UTF-8') . '"';
-                                                                    // Verifica que $row['TipoSolicitud'] esté definido y sea igual al IdTiposolicitud
-                                                                    if (isset($row['TipoSolicitud']) && $tipo['IdTiposolicitud'] == $row['TipoSolicitud']) {
-                                                                        echo ' selected'; // Marca como seleccionado si coinciden
-                                                                    }
-                                                                    echo '>' . htmlspecialchars($tipo['TipoSolicitud'], ENT_QUOTES, 'UTF-8') . '</option>';
+                                                                while ($tipo_solicitud = $stmt_tipo->fetch(PDO::FETCH_ASSOC)) {
+                                                                    echo '<option value="' . htmlspecialchars($tipo_solicitu['NomTipoSolicitud'], ENT_QUOTES, 'UTF-8') . '"';
+                                                                    if ($tipo_solicitud['NomTipoSolicitud'] == $row['NomTipoSolicitud']) echo ' selected';
+                                                                    echo '>' . htmlspecialchars($tipo_solicitud['NomTipoSolicitud'], ENT_QUOTES, 'UTF-8') . '</option>';
                                                                 }
                                                                 ?>
                                                             </select>

@@ -71,7 +71,7 @@ if (isset($_SESSION["IdUsuario"])) {
     $conexion = new Conectar();
     $conn = $conexion->Conexion();
 
-    $sql = "SELECT ID_MODALIDAD, NOM_MODALIDAD FROM tbl_modalidad ORDER BY ID_MODALIDAD";
+    $sql = "SELECT IdModalidad, NomModalidad FROM `mantenimiento.tblmodalidades` ORDER BY IdModalidad";
     $result = $conn->query($sql);
 
     if ($result !== false && $result->rowCount() > 0) {
@@ -111,8 +111,8 @@ if (isset($_SESSION["IdUsuario"])) {
         // Add data
         $rowNum = 2;
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            $sheet->setCellValue('A' . $rowNum, $row['ID_MODALIDAD']);
-            $sheet->setCellValue('B' . $rowNum, $row['NOM_MODALIDAD']);
+            $sheet->setCellValue('A' . $rowNum, $row['IdModalidad']);
+            $sheet->setCellValue('B' . $rowNum, $row['NomModalidad']);
 
             // Apply center alignment to all data cells
             $sheet->getStyle('A' . $rowNum . ':B' . $rowNum)->applyFromArray($centerAlignment);

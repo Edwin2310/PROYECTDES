@@ -12,158 +12,155 @@ if (isset($_SESSION["IdUsuario"])) {
 ?>
 
 
-<!doctype html>
-<html lang="en" class="no-focus">
+    <!doctype html>
+    <html lang="en" class="no-focus">
 
-<head>
+    <head>
 
-    <?php require_once("../MainHead/MainHead.php"); ?>
+        <?php require_once("../MainHead/MainHead.php"); ?>
 
-    <title>Tipos de Solicitudes </title>
+        <title>Tipos de Solicitudes </title>
 
-</head>
+    </head>
 
-<body >
+    <body>
 
-    <div id="page-container" class="sidebar-o side-scroll page-header-modern main-content-boxed">
+        <div id="page-container" class="sidebar-o side-scroll page-header-modern main-content-boxed">
 
-        <aside id="side-overlay">
+            <aside id="side-overlay">
 
-            <div id="side-overlay-scroll">
+                <div id="side-overlay-scroll">
 
-                <div class="content-header content-header-fullrow">
-                    <div class="content-header-section align-parent">
-                        <button type="button" class="btn btn-circle btn-dual-secondary align-v-r" data-toggle="layout" data-action="side_overlay_close">
-                            <i class="fa fa-times text-danger"></i>
-                        </button>
+                    <div class="content-header content-header-fullrow">
+                        <div class="content-header-section align-parent">
+                            <button type="button" class="btn btn-circle btn-dual-secondary align-v-r" data-toggle="layout" data-action="side_overlay_close">
+                                <i class="fa fa-times text-danger"></i>
+                            </button>
 
-                        <div class="content-header-item">
-                            <a class="img-link mr-5" href="be_pages_generic_profile.html">
-                                <img class="img-avatar img-avatar32" src="../../public/assets/img/avatars/avatar15.jpg" alt="">
-                            </a>
-                            <a class="align-middle link-effect text-primary-dark font-w600" href="be_pages_generic_profile.html"><!-- llamada del usuario   -->
-                            <span><?php echo $_SESSION["USUARIO"] ?> <?php echo $_SESSION["NOMBRE_USUARIO"] ?></span></a>
+                            <div class="content-header-item">
+                                <a class="img-link mr-5" href="be_pages_generic_profile.html">
+                                    <img class="img-avatar img-avatar32" src="../../public/assets/img/avatars/avatar15.jpg" alt="">
+                                </a>
+                                <a class="align-middle link-effect text-primary-dark font-w600" href="be_pages_generic_profile.html"><!-- llamada del usuario   -->
+                                    <span><?php echo $_SESSION["USUARIO"] ?> <?php echo $_SESSION["NOMBRE_USUARIO"] ?></span></a>
+                            </div>
+
                         </div>
+                    </div>
+
+
+
+                </div>
+
+            </aside>
+
+
+            <nav id="sidebar">
+
+                <div id="sidebar-scroll">
+
+                    <div class="sidebar-content">
+
+
+                        <?php require_once("../MainSidebar/MainSidebar.php"); ?>
+
+
+                        <?php require_once("../MainMenu/MainMenu.php"); ?>
 
                     </div>
-                </div>
-
-
-
-            </div>
-            
-        </aside>
-
-
-        <nav id="sidebar">
-
-            <div id="sidebar-scroll">
-
-                <div class="sidebar-content">
-
-
-                    <?php require_once("../MainSidebar/MainSidebar.php"); ?>
-
-
-                    <?php require_once("../MainMenu/MainMenu.php"); ?>
 
                 </div>
 
-            </div>
+            </nav>
 
-        </nav>
-
-        <?php require_once("../MainHeader/MainHeader.php"); ?>
+            <?php require_once("../MainHeader/MainHeader.php"); ?>
 
 
 
-        <!-- Inicio de la entrada de la universidad -->
+            <!-- Inicio de la entrada de la universidad -->
 
-        <main id="main-container">
+            <main id="main-container">
 
-            <div class="content">
-                <h2 class="content-heading">Bienvenido, UNITEC </h2>
-
-
-
-                <div class="block-header block-header-default">
-                        <h3 class="block-title">Tipos De Solicitudes <small></small></h3>
+                <div class="content">
+                    <div class="block-header block-header-default">
+                        <h3 class="block-title">Gestión de Municipios</h3>
                     </div>
 
                     <table class="table table-bordered table-striped table-vcenter js-dataTable-full">
-    <thead>
-        <tr>
-            <th class="text-center">Id Tipo Solicitud</th>
-            <th>Tipo de Solicitud</th>
-            <th class="text-center">Editar</th>
-            <th class="text-center">Eliminar</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-        require_once("../../config/conexion.php");
-        $conexion = new Conectar();
-        $conn = $conexion->Conexion();
-        
-        // Consulta a la base de datos para obtener los tipos de solicitud
-        $sql = "SELECT ID_TIPO_SOLICITUD, NOM_TIPO FROM tbl_tipo_solicitud";
-        $result = $conn->query($sql);
+                        <thead>
+                            <tr>
+                                <th class="text-center">Id Tipo Solicitud</th>
+                                <th class="text-center">Tipo de Solicitud</th>
+                                <th class="text-center">Editar</th>
+                                <th class="text-center">Bloquear</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            require_once("../../config/conexion.php");
+                            $conexion = new Conectar();
+                            $conn = $conexion->Conexion();
 
-        // Verificar si hay resultados
-        if ($result !== false && $result->rowCount() > 0) {
-            // Iterar sobre los resultados
-            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                echo "<tr>";
-                echo "<td class='text-center'>{$row['ID_TIPO_SOLICITUD']}</td>";
-                echo "<td>{$row['NOM_TIPO']}</td>";
-                echo "<td class='text-center'>
+                            // Consulta a la base de datos para obtener los tipos de solicitud
+                            $sql = "SELECT IdTiposolicitud, NomTipoSolicitud FROM `mantenimiento.tbltiposolicitudes`";
+                            $result = $conn->query($sql);
+
+                            // Verificar si hay resultados
+                            if ($result !== false && $result->rowCount() > 0) {
+                                // Iterar sobre los resultados
+                                while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                                    echo "<tr>";
+                                    echo "<td class='text-center'>{$row['IdTiposolicitud']}</td>";
+                                    echo "<td class='text-center'>{$row['NomTipoSolicitud']}</td>";
+                                    echo "<td class='text-center'>
                         <button type='button' class='btn btn-sm btn-secondary' data-toggle='modal' data-target='#editTipoSolicitudModal' 
-                                data-id='{$row['ID_TIPO_SOLICITUD']}' 
-                                data-tipo='{$row['NOM_TIPO']}'>
+                                data-id='{$row['IdTiposolicitud']}' 
+                                data-tipo='{$row['NomTipoSolicitud']}'>
                             <i class='si si-note'></i>
                         </button>
                       </td>";
-                echo "<td class='text-center'>
+                                    echo "<td class='text-center'>
                         <button type='button' class='btn btn-sm btn-danger' data-toggle='modal' data-target='#confirmDeleteModal' 
-                                data-id='{$row['ID_TIPO_SOLICITUD']}'>
+                                data-id='{$row['IdTiposolicitud']}'>
                             <i class='si si-trash'></i>
                         </button>
                       </td>";
-                echo "</tr>";
-            }
-        } else {
-            echo "<tr><td colspan='4' class='text-center'>No hay datos disponibles</td></tr>";
-        }
+                                    echo "</tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='4' class='text-center'>No hay datos disponibles</td></tr>";
+                            }
 
-        // Cerrar la conexión
-        $conn = null;
-        ?>
-    </tbody>
-</table>
-
-
-</script>
-
-</body>
-</html>
-
-</html>
-
-       </div>
-
-        </main>
+                            // Cerrar la conexión
+                            $conn = null;
+                            ?>
+                        </tbody>
+                    </table>
 
 
-        <?php require_once("../MainFooter/MainFooter.php"); ?>
+                    </script>
+
+    </body>
+
+    </html>
+
+    </html>
+
+    </div>
+
+    </main>
+
+
+    <?php require_once("../MainFooter/MainFooter.php"); ?>
 
 
     </div>
 
     <?php require_once("../MainJs/MainJs.php"); ?>
 
-</body>
+    </body>
 
-</html>
+    </html>
 <?php
     //validacion de segurida de inicio de sesion
     //si no hay una cuenta logueada no lo dejara entrar al sitio cambiadole la direccion

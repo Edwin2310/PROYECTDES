@@ -1,3 +1,11 @@
+function validarNombreModalidad(input) {
+    // Permite letras (con o sin tildes), espacios y elimina cualquier otro carácter
+    input.value = input.value.replace(/[^a-zA-ZÁÉÍÓÚáéíóú\s]/g, '');
+
+    // Convierte el texto a mayúsculas automáticamente
+    input.value = input.value.toUpperCase();
+}
+
 // Función para mostrar mensajes de alerta
 function showAlert(message, type) {
     Swal.fire({
@@ -19,9 +27,9 @@ function handleEditModalitySuccess() {
     showAlert('Modalidad editada exitosamente.', 'success');
 }
 
-// Mostrar alerta en caso de éxito al eliminar modalidad
+// Mostrar alerta en caso de éxito al eliminar modalidad (al cambiar IdVisibilidad)
 function handleDeleteModalitySuccess() {
-    showAlert('Modalidad eliminada exitosamente.', 'success');
+    showAlert('La modalidad ha sido bloqueada exitosamente. Podrás encontrarla en la pestaña de Modalidades Bloqueadas.', 'success');
 }
 
 // Mostrar alerta si los datos ya existen
@@ -46,7 +54,7 @@ function handleURLParams() {
                 handleEditModalitySuccess();
                 break;
             case 'delete-success':
-                handleDeleteModalitySuccess();
+                handleDeleteModalitySuccess();  // Se muestra el mensaje de éxito de eliminación
                 break;
             case 'duplicate':
                 handleDuplicateModality();

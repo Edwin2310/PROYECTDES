@@ -13,19 +13,19 @@ if (!$conn) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id_departamento = isset($_POST['id_departamento']) ? $_POST['id_departamento'] : '';
+    $IdDepartamento = isset($_POST['IdDepartamento']) ? $_POST['IdDepartamento'] : '';
     $nombre_departamento = isset($_POST['nom_departamento']) ? $_POST['nom_departamento'] : '';
 
-    if (empty($id_departamento) || empty($nombre_departamento)) {
+    if (empty($IdDepartamento) || empty($nombre_departamento)) {
         $_SESSION['error_message'] = "Todos los campos son obligatorios";
         header("Location: ../../MantenimientoSistema/Departamentos.php?action=edit-error");
         exit();
     }
 
-    $sql_update = "UPDATE tbl_deptos SET NOM_DEPTO = :nombre_departamento WHERE ID_DEPARTAMENTO = :id_departamento";
+    $sql_update = "UPDATE `mantenimiento.tbldeptos` SET NomDepto = :nombre_departamento WHERE IdDepartamento = :IdDepartamento";
     $stmt_update = $conn->prepare($sql_update);
     $stmt_update->bindParam(':nombre_departamento', $nombre_departamento);
-    $stmt_update->bindParam(':id_departamento', $id_departamento);
+    $stmt_update->bindParam(':IdDepartamento', $IdDepartamento);
 
     if ($stmt_update->execute()) {
         $_SESSION['success_message'] = "Departamento editado exitosamente";

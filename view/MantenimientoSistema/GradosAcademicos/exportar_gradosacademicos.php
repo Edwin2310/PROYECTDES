@@ -71,8 +71,8 @@ if (isset($_SESSION["IdUsuario"])) {
     $conexion = new Conectar();
     $conn = $conexion->Conexion();
 
-    // Adjusted the query to fetch ID_GRADO and NOM_GRADO from tbl_grado_academico
-    $sql = "SELECT ID_GRADO, NOM_GRADO FROM tbl_grado_academico ORDER BY ID_GRADO";
+    // Adjusted the query to fetch IdGrado and NomGrado from `mantenimiento.tblgradosacademicos`
+    $sql = "SELECT IdGrado, NomGrado FROM `mantenimiento.tblgradosacademicos` ORDER BY IdGrado";
     $result = $conn->query($sql);
 
     if ($result !== false && $result->rowCount() > 0) {
@@ -112,8 +112,8 @@ if (isset($_SESSION["IdUsuario"])) {
         // Add data
         $rowNum = 2;
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            $sheet->setCellValue('A' . $rowNum, $row['ID_GRADO']);
-            $sheet->setCellValue('B' . $rowNum, $row['NOM_GRADO']);
+            $sheet->setCellValue('A' . $rowNum, $row['IdGrado']);
+            $sheet->setCellValue('B' . $rowNum, $row['NomGrado']);
             
             // Apply center alignment to all data cells
             $sheet->getStyle('A' . $rowNum . ':B' . $rowNum)->applyFromArray($centerAlignment);

@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Verificar si el departamento ya existe
-    $sql_check = "SELECT COUNT(*) FROM tbl_deptos WHERE NOM_DEPTO = :nombre_departamento";
+    $sql_check = "SELECT COUNT(*) FROM `mantenimiento.tbldeptos` WHERE NomDepto = :nombre_departamento";
     $stmt_check = $conn->prepare($sql_check);
     $stmt_check->bindParam(':nombre_departamento', $nombre_departamento);
     $stmt_check->execute();
@@ -31,8 +31,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Insertar el nuevo departamento en la tabla tbl_deptos
-    $sql_insert = "INSERT INTO tbl_deptos (NOM_DEPTO) VALUES (:nombre_departamento)";
+    // Insertar el nuevo departamento en la tabla `mantenimiento.tbldeptos`
+    $sql_insert = "INSERT INTO `mantenimiento.tbldeptos` (NomDepto) VALUES (:nombre_departamento)";
     $stmt_insert = $conn->prepare($sql_insert);
     $stmt_insert->bindParam(':nombre_departamento', $nombre_departamento);
 

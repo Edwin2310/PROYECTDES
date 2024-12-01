@@ -62,8 +62,8 @@ if (isset($_POST["enviar"]) && $_POST["enviar"] == "si") {
                                     <div class="form-group row">
                                         <div class="col-12">
                                             <div class="form-material floating">
-                                                <input type="email" class="form-control" id="correo" name="correo" onpaste="return false;" onkeypress="return event.charCode != 60 && event.charCode != 62 && event.charCode != 32 && event.charCode != 34;">
-                                                <label for="login-username">Correo Electrónico</label>
+                                                <input type="text" class="form-control" id="correo" name="correo" onpaste="return false;" onkeypress="return event.charCode != 60 && event.charCode != 62 && event.charCode != 32 && event.charCode != 34;">
+                                                <label for="correo">Correo Electrónico o Usuario</label>
                                             </div>
                                         </div>
                                     </div>
@@ -74,15 +74,6 @@ if (isset($_POST["enviar"]) && $_POST["enviar"] == "si") {
                                                 <label for="login-password">Contraseña</label>
                                                 <span id="togglePassword" class="fa fa-eye"></span>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-12">
-                                            <label class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="login-remember-me" name="login-remember-me">
-                                                <span class="custom-control-indicator"></span>
-                                                <span class="custom-control-description">Recuérdame</span>
-                                            </label>
                                         </div>
                                     </div>
                                     <div class="form-group">

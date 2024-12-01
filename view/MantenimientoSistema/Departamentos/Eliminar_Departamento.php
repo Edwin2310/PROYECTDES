@@ -13,17 +13,17 @@ if (!$conn) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id_departamento = isset($_POST['id_departamento']) ? $_POST['id_departamento'] : '';
+    $IdDepartamento = isset($_POST['IdDepartamento']) ? $_POST['IdDepartamento'] : '';
 
-    if (empty($id_departamento)) {
+    if (empty($IdDepartamento)) {
         $_SESSION['error_message'] = "El ID del departamento es obligatorio";
         header("Location: ../../MantenimientoSistema/Departamentos.php?action=delete-error");
         exit();
     }
 
-    $sql_delete = "DELETE FROM tbl_deptos WHERE ID_DEPARTAMENTO = :id_departamento";
+    $sql_delete = "UPDATE `mantenimiento.tbldeptos` SET IdVisibilidad = 2 WHERE IdDepartamento = :IdDepartamento";
     $stmt_delete = $conn->prepare($sql_delete);
-    $stmt_delete->bindParam(':id_departamento', $id_departamento);
+    $stmt_delete->bindParam(':IdDepartamento', $IdDepartamento);
 
     if ($stmt_delete->execute()) {
         $_SESSION['success_message'] = "Departamento eliminado exitosamente";

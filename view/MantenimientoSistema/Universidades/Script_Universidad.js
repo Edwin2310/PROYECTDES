@@ -1,3 +1,11 @@
+function validarNombreUniversidad(input) {
+    // Permite letras (con o sin tildes), espacios y elimina cualquier otro carácter
+    input.value = input.value.replace(/[^a-zA-ZÁÉÍÓÚáéíóú\s]/g, '');
+
+    // Convierte el texto a mayúsculas automáticamente
+    input.value = input.value.toUpperCase();
+}
+
 // Función para mostrar mensajes de alerta
 function showAlert(message, type) {
     Swal.fire({
@@ -19,9 +27,9 @@ function handleEditUniversitySuccess() {
     showAlert('Universidad editada exitosamente.', 'success');
 }
 
-// Mostrar alerta en caso de éxito al eliminar universidad
+// Mostrar alerta en caso de éxito al eliminar universidad (al cambiar IdVisibilidad)
 function handleDeleteUniversitySuccess() {
-    showAlert('Universidad eliminada exitosamente.', 'success');
+    showAlert('La universidad ha sido bloqueado exitosamente. Podrás encontrarla en la pestaña de Universidades Bloqueadas.', 'success');
 }
 
 // Mostrar alerta si los datos ya existen

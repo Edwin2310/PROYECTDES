@@ -1,8 +1,5 @@
 <?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-
+session_start();
 include("../../../config/conexion.php");
 
 $conexion = new Conectar();
@@ -12,25 +9,26 @@ if (!$conn) {
     die("Conexión fallida: " . implode(" ", $conn->errorInfo()));
 }
 
-// Verificar si se ha enviado la solicitud de eliminación
+// Verificar si se ha enviado la solicitud para eliminar la Categoria
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id_categoria = isset($_POST['id_categoria']) ? $_POST['id_categoria'] : '';
+    $IdCategoria = isset($_POST['IdCategoria']) ? $_POST['IdCategoria'] : '';
 
-    if (empty($id_categoria)) {
-        $_SESSION['error_message'] = "El ID de la categoría es obligatorio";
-        header("Location: ../../MantenimientoSistema/Categorias/CategoriaDeSolicitudes.php?action=delete-error");
+    if (empty($IdCategoria)) {
+        $_SESSION['error_message'] = "El ID de la categoria es obligatorio";
+        header("Location: ../../MantenimientoSistema/CategoriaDeSolicitudes.php?action=delete-error");
         exit();
     }
 
-    $sql_delete = "DELETE FROM tbl_categoria WHERE ID_CATEGORIA = :id_categoria";
+    // Actualizar el IdVisibilidad para desactivar la Categoria (por ejemplo, cambiar a 0)
+    $sql_delete = "UPDATE `mantenimiento.tblcategorias` SET IdVisibilidad = 2 WHERE IdCategoria= :IdCategoria"; // Asumimos que 0 es el valor para desactivar
     $stmt_delete = $conn->prepare($sql_delete);
-    $stmt_delete->bindParam(':id_categoria', $id_categoria);
+    $stmt_delete->bindParam(':IdCategoria', $IdCategoria);
 
     if ($stmt_delete->execute()) {
-        $_SESSION['success_message'] = "Categoría eliminada exitosamente";
+        $_SESSION['success_message'] = "Categoria eliminada exitosamente";
         header("Location: ../../MantenimientoSistema/CategoriaDeSolicitudes.php?action=delete-success");
     } else {
-        $_SESSION['error_message'] = "Error al eliminar categoría: " . implode(" ", $stmt_delete->errorInfo());
+        $_SESSION['error_message'] = "Error al eliminar Categoria: " . implode(" ", $stmt_delete->errorInfo());
         header("Location: ../../MantenimientoSistema/CategoriaDeSolicitudes.php?action=delete-error");
     }
 
@@ -41,4 +39,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     header("Location: ../../MantenimientoSistema/CategoriaDeSolicitudes.php?action=delete-error");
     exit();
 }
-?>
+

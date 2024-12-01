@@ -77,7 +77,7 @@ session_start();
                     </span>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right min-width-150" aria-labelledby="page-header-user-dropdown">
-                    <a class="dropdown-item" href="be_pages_generic_profile.html">
+                    <a class="dropdown-item" href="../MntPerfil/perfil.php">
                         <i class="fa fa-file-o mr-5"></i> Su solicitud requiere subsanacion
                     </a>
                     <a class="dropdown-item d-flex align-items-center justify-content-between" href="be_pages_generic_inbox.html">
@@ -93,7 +93,7 @@ session_start();
                     <i class="fa fa-angle-down ml-5"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right min-width-150" aria-labelledby="page-header-user-dropdown">
-                    <a class="dropdown-item" href="be_pages_generic_profile.html">
+                    <a class="dropdown-item" href="../MntPerfil/perfil.php">
                         <i class="si si-user mr-5"></i> Perfil
                     </a>
                     <a class="dropdown-item d-flex align-items-center justify-content-between" href="be_pages_generic_inbox.html">

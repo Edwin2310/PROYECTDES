@@ -14,17 +14,17 @@ if (!$conn) {
 
 // Verificar si se ha enviado la solicitud de eliminación
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id_grado = isset($_POST['id_grado']) ? $_POST['id_grado'] : '';
+    $IdGrado = isset($_POST['IdGrado']) ? $_POST['IdGrado'] : '';
 
-    if (empty($id_grado)) {
+    if (empty($IdGrado)) {
         $_SESSION['error_message'] = "El ID deL Grado Académico es obligatorio";
         header("Location: ../../MantenimientoSistema/GradosAcademicos.php?action=delete-error");
         exit();
     }
 
-    $sql_delete = "DELETE FROM tbl_grado_academico WHERE ID_GRADO = :id_grado";
+    $sql_delete = "UPDATE `mantenimiento.tblgradosacademicos` SET IdVisibilidad = 2 WHERE IdGrado = :IdGrado";
     $stmt_delete = $conn->prepare($sql_delete);
-    $stmt_delete->bindParam(':id_grado', $id_grado);
+    $stmt_delete->bindParam(':IdGrado', $IdGrado);
 
     if ($stmt_delete->execute()) {
         $_SESSION['success_message'] = "Grado Académico eliminado exitosamente";

@@ -19,9 +19,9 @@ if (isset($_SESSION["IdUsuario"])) {
 
     <head>
         <?php require_once("../MainHead/MainHead.php"); ?>
-        <title>Gestión de Modalidades</title>
+        <title>Gestión de Departamentos</title>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        
+
         <script src="Departamentos/Script_Departamento.js"></script>
     </head>
 
@@ -47,13 +47,21 @@ if (isset($_SESSION["IdUsuario"])) {
                         <a href="./Departamentos/exportar_departamento.php" class="btn btn-success mx-2">Descargar Excel</a>
                     </div>
                     <div class="block-content block-content-full">
+                        <!-- Botón para cambiar a registros bloqueados -->
+                        <td class="text-center">
+                            <a href="Departamentos_Bloqueados.php">
+                                <button type="button" class="btn btn-sm btn-secondary" title="Departamentos Bloqueados">
+                                    <i class="fa fa-lock"></i>
+                                </button>
+                            </a>
+                        </td>
                         <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#addDepartamentoModal">Añadir Departamento</button>
                         <br><br>
                         <table class="table table-bordered table-striped table-vcenter">
                             <thead>
                                 <tr>
                                     <th class="text-center">ID DEPARTAMENTO</th>
-                                    <th class="d-none d-sm-table-cell">DEPARTAMENTOS</th>
+                                    <th class="text-center">DEPARTAMENTOS</th>
                                     <th class="text-center" style="width: 15%;">EDITAR DEPARTAMENTO</th>
                                     <th class="text-center" style="width: 15%;">ELIMINAR DEPARTAMENTO</th>
                                 </tr>
@@ -63,24 +71,29 @@ if (isset($_SESSION["IdUsuario"])) {
                                 require_once("../../config/conexion.php");
                                 $conexion = new Conectar();
                                 $conn = $conexion->Conexion();
-                                $sql = "SELECT ID_DEPARTAMENTO, NOM_DEPTO FROM tbl_deptos ORDER BY ID_DEPARTAMENTO";
+                                $sql = "SELECT d.IdDepartamento, 
+                                               d.NomDepto 
+                                        FROM `mantenimiento.tbldeptos` d
+                                        LEFT JOIN `mantenimiento.tblestadosvisualizaciones` e ON d.IdVisibilidad = e.IdVisibilidad
+                                        WHERE e.IdVisibilidad IN (1)
+                                        ORDER BY d.IdDepartamento";
 
                                 $result = $conn->query($sql);
                                 if ($result !== false && $result->rowCount() > 0) {
                                     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                                         echo "<tr>";
-                                        echo "<td class='text-center'>{$row['ID_DEPARTAMENTO']}</td>";
-                                        echo "<td>{$row['NOM_DEPTO']}</td>";
+                                        echo "<td class='text-center'>{$row['IdDepartamento']}</td>";
+                                        echo "<td class='text-center'>{$row['NomDepto']}</td>";
                                         echo "<td class='text-center'>
                                         <button type='button' class='btn btn-sm btn-secondary' data-toggle='modal' data-target='#editDepartamentoModal' 
-                                                data-id='" . $row["ID_DEPARTAMENTO"] . "' 
-                                                data-nom_departamento='" . $row["NOM_DEPTO"] . "'>
+                                                data-id='" . $row["IdDepartamento"] . "' 
+                                                data-nom_departamento='" . $row["NomDepto"] . "'>
                                             <i class='si si-note'></i>
                                         </button>
                                     </td>";
                                         echo "<td class='text-center'>
                                         <button type='button' class='btn btn-sm btn-danger' data-toggle='modal' data-target='#confirmDeleteDepartamentoModal' 
-                                                data-id='" . $row["ID_DEPARTAMENTO"] . "'>
+                                                data-id='" . $row["IdDepartamento"] . "'>
                                             <i class='si si-trash'></i>
                                         </button>
                                     </td>";
@@ -97,7 +110,7 @@ if (isset($_SESSION["IdUsuario"])) {
             </div>
 
             <!-- Modal para agregar departamentos -->
-            <div class="modal fade" id="addDepartamentoModal" tabindex="-1" role="dialog" aria-labelledby="addDepartamentoModalLabel" aria-hidden="true">
+            <div class="modal fade" id="addDepartamentoModal" tabindex="-1" role="dialog" aria-labelledby="addDepartamentoModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -110,7 +123,7 @@ if (isset($_SESSION["IdUsuario"])) {
                             <form id="addDepartamentoForm" method="POST" action="../MantenimientoSistema/Departamentos/Agregar_Departamento.php">
                                 <div class="form-group">
                                     <label for="nom_departamento">Nombre Departamento</label>
-                                    <input type="text" class="form-control" id="nom_departamento" name="nom_departamento" required>
+                                    <input type="text" class="form-control" id="nom_departamento" name="nom_departamento"  maxlength="25" required oninput="validarNombreDepartamento(this)" style="text-transform:uppercase;">
                                 </div>
                                 <div class="form-group text-center">
                                     <button type="submit" class="btn btn-primary">Añadir Departamento</button>
@@ -123,7 +136,7 @@ if (isset($_SESSION["IdUsuario"])) {
 
 
             <!-- Modal para editar departamentos -->
-            <div class="modal fade" id="editDepartamentoModal" tabindex="-1" role="dialog" aria-labelledby="editDepartamentoModalLabel" aria-hidden="true">
+            <div class="modal fade" id="editDepartamentoModal" tabindex="-1" role="dialog" aria-labelledby="editDepartamentoModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -134,10 +147,10 @@ if (isset($_SESSION["IdUsuario"])) {
                         </div>
                         <div class="modal-body">
                             <form id="editDepartamentoForm" method="POST" action="../MantenimientoSistema/Departamentos/Editar_Departamento.php">
-                                <input type="hidden" id="edit_id_departamento" name="id_departamento">
+                                <input type="hidden" id="edit_IdDepartamento" name="IdDepartamento">
                                 <div class="form-group">
                                     <label for="edit_nom_modalidad">Nombre Depatamento</label>
-                                    <input type="text" class="form-control" id="edit_nom_departamento" name="nom_departamento" required>
+                                    <input type="text" class="form-control" id="edit_nom_departamento" name="nom_departamento" maxlength="25" required oninput="validarNombreDepartamento(this)" style="text-transform:uppercase;">
                                 </div>
                                 <div class="form-group text-center">
                                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
@@ -149,21 +162,21 @@ if (isset($_SESSION["IdUsuario"])) {
             </div>
 
             <!-- Modal para confirmar eliminación de departamento -->
-            <div class="modal fade" id="confirmDeleteDepartamentoModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteDepartamentoModalLabel" aria-hidden="true">
+            <div class="modal fade" id="confirmDeleteDepartamentoModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteDepartamentoModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="confirmDeleteDepartamentoModalLabel">Eliminar Departamento</h5>
+                            <h5 class="modal-title" id="confirmDeleteDepartamentoModalLabel">Bloquear Departamento</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p>¿Estás seguro de que quieres eliminar esta departamento?</p>
+                            <p>¿Estás seguro de que quieres Bloquear esta departamento?</p>
                             <form id="deleteDepartamentoForm" method="POST" action="../MantenimientoSistema/Departamentos/Eliminar_Departamento.php">
-                                <input type="hidden" id="delete_id_departamento" name="id_departamento">
+                                <input type="hidden" id="delete_IdDepartamento" name="IdDepartamento">
                                 <div class="form-group text-center">
-                                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                                    <button type="submit" class="btn btn-danger">Bloquear</button>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                                 </div>
                             </form>
@@ -187,20 +200,20 @@ if (isset($_SESSION["IdUsuario"])) {
             $(document).ready(function() {
                 $('#editDepartamentoModal').on('show.bs.modal', function(event) {
                     var button = $(event.relatedTarget);
-                    var id_departamento = button.data('id');
+                    var IdDepartamento = button.data('id');
                     var nom_departamento = button.data('nom_departamento');
 
                     var modal = $(this);
-                    modal.find('#edit_id_departamento').val(id_departamento);
+                    modal.find('#edit_IdDepartamento').val(IdDepartamento);
                     modal.find('#edit_nom_departamento').val(nom_departamento);
                 });
 
                 $('#confirmDeleteDepartamentoModal').on('show.bs.modal', function(event) {
                     var button = $(event.relatedTarget);
-                    var id_departamento = button.data('id');
+                    var IdDepartamento = button.data('id');
 
                     var modal = $(this);
-                    modal.find('#delete_id_departamento').val(id_departamento);
+                    modal.find('#delete_IdDepartamento').val(IdDepartamento);
                 });
             });
         </script>

@@ -124,67 +124,67 @@ if (isset($_SESSION["IdUsuario"])) {
                             <form id="addModalidadForm" method="POST" action="../MantenimientoSistema/Modalidades/Agregar_Modalidad.php">
                                 <div class="form-group">
                                     <label for="NomModalidad">Nombre Modalidad</label>
-                                    <input type="text" class="form-control" id="NomModalidad" name="NomModalidad" maxlength="20" required oninput="validarNombreModalidad(this)" style="text-transform:uppercase;">
-                                    </div>
+                                    <input type="text" class="form-control" id="NomModalidad" name="NomModalidad" maxlength="40" required oninput="validarNombreModalidad(this)" style="text-transform:uppercase;">
                                 </div>
-                                <div class="form-group text-center">
-                                    <button type="submit" class="btn btn-primary">Añadir Modalidad</button>
-                                </div>
-                            </form>
                         </div>
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-primary">Añadir Modalidad</button>
+                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Modal para editar modalidades -->
-            <div class="modal fade" id="editModalidadModal" tabindex="-1" role="dialog" aria-labelledby="editModalidadModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editModalidadModalLabel">Editar Modalidad</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="editModalidadForm" method="POST" action="../MantenimientoSistema/Modalidades/Editar_Modalidad.php">
-                                <input type="hidden" id="edit_IdModalidad" name="IdModalidad">
-                                <div class="form-group">
-                                    <label for="edit_NomModalidad">Nombre Modalidad</label>
-                                    <input type="text" class="form-control" id="edit_NomModalidad" name="NomModalidad" maxlength="20" required oninput="validarNombreModalidad(this)" style="text-transform:uppercase;">
-                                </div>
-                                <div class="form-group text-center">
-                                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                                </div>
-                            </form>
-                        </div>
+        <!-- Modal para editar modalidades -->
+        <div class="modal fade" id="editModalidadModal" tabindex="-1" role="dialog" aria-labelledby="editModalidadModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalidadModalLabel">Editar Modalidad</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editModalidadForm" method="POST" action="../MantenimientoSistema/Modalidades/Editar_Modalidad.php">
+                            <input type="hidden" id="edit_IdModalidad" name="IdModalidad">
+                            <div class="form-group">
+                                <label for="edit_NomModalidad">Nombre Modalidad</label>
+                                <input type="text" class="form-control" id="edit_NomModalidad" name="NomModalidad" maxlength="20" required oninput="validarNombreModalidad(this)" style="text-transform:uppercase;">
+                            </div>
+                            <div class="form-group text-center">
+                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Modal para confirmar eliminación de modalidad -->
-            <div class="modal fade" id="confirmDeleteModalidadModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalidadModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="confirmDeleteModalidadModalLabel">bloquear Modalidad</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p>¿Estás seguro de que quieres bloquear esta modalidad?</p>
-                            <form id="deleteModalidadForm" method="POST" action="../MantenimientoSistema/Modalidades/Eliminar_Modalidad.php">
-                                <input type="hidden" id="delete_IdModalidad" name="IdModalidad">
-                                <div class="form-group text-center">
-                                    <button type="submit" class="btn btn-danger">Bloquear</button>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                </div>
-                            </form>
-                        </div>
+        <!-- Modal para confirmar eliminación de modalidad -->
+        <div class="modal fade" id="confirmDeleteModalidadModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalidadModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmDeleteModalidadModalLabel">bloquear Modalidad</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>¿Estás seguro de que quieres bloquear esta modalidad?</p>
+                        <form id="deleteModalidadForm" method="POST" action="../MantenimientoSistema/Modalidades/Eliminar_Modalidad.php">
+                            <input type="hidden" id="delete_IdModalidad" name="IdModalidad">
+                            <div class="form-group text-center">
+                                <button type="submit" class="btn btn-danger">Bloquear</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
+        </div>
 
         </div>
         <?php require_once("../MainJs/MainJs.php"); ?>

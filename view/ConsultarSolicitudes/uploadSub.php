@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Definir directorios base
         $directories = [
-            'SUBPLAN' => 'documentos/Solicitudes/' . $idSolicitud . '/PlanDeEstudios/',
+            'SUBPLAN' => 'documentos/Solicitudes/' . $idSolicitud . '/PlanEstudios/',
             'SUBSOLI' => 'documentos/Solicitudes/' . $idSolicitud . '/Solicitud/',
             'SUBPDOC' => 'documentos/Solicitudes/' . $idSolicitud . '/PlantaDocente/',
             'SUBDIAG' => 'documentos/Solicitudes/' . $idSolicitud . '/Diagnostico/'

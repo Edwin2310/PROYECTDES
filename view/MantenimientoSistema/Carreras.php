@@ -170,7 +170,7 @@ if (isset($_SESSION["IdUsuario"])) {
                             <form id="addCareerForm" method="POST" action="../MantenimientoSistema/Carreras/Agregar_Carrera.php">
                                 <div class="form-group">
                                     <label for="NomCarrera">Nombre Carrera</label>
-                                    <input type="text" class="form-control" id="NomCarrera" name="NomCarrera" maxlength="30" required oninput="validarCarrera(this)" style="text-transform:uppercase;">
+                                    <input type="text" class="form-control" id="NomCarrera" name="NomCarrera" maxlength="50" required oninput="validarCarrera(this)" style="text-transform:uppercase;">
                                 </div>
                                 <div class="form-group">
                                     <label for="IdUniversidad">Universidad</label>

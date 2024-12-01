@@ -18,7 +18,7 @@ if (isset($_SESSION["IdUsuario"])) {
                 LEFT JOIN `mantenimiento.tblcarreras` c ON s.IdCarrera = c.IdCarrera
                 LEFT JOIN `mantenimiento.tblgradosacademicos` g ON s.IdGrado = g.IdGrado
                 LEFT JOIN `mantenimiento.tblmodalidades` m ON s.IdModalidad = m.IdModalidad
-                LEFT JOIN `mantenimiento.tbluniversidadescentros` uc ON s.IdUniversidad = uc.IdUniversidad
+                LEFT JOIN `mantenimiento.tbluniversidades`  uc ON s.IdUniversidad = uc.IdUniversidad
                 LEFT JOIN `mantenimiento.tbldeptos` d ON s.IdDepartamento = d.IdDepartamento
                 LEFT JOIN `mantenimiento.tblmunicipios` mu ON s.IdMunicipio = mu.IdMunicipio
                 LEFT JOIN `seguridad.tbldatospersonales` u ON s.IdUsuario = u.IdUsuario
@@ -202,7 +202,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                                     <div class="col-md-6 justify-content-center">
                                                         <label class="col-12" for="carrera">Nombre de la Carrera</label>
                                                         <div class="col-12">
-                                                            <input type="text" class="form-control" id="carrera" name="carrera" value="<?php echo htmlspecialchars($row['NomCarrera'], ENT_QUOTES, 'UTF-8'); ?>">
+                                                            <input type="text" class="form-control" id="carrera" name="carrera" maxlength="50" value="<?php echo htmlspecialchars($row['NomCarrera'], ENT_QUOTES, 'UTF-8'); ?>" style="text-transform:uppercase;">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 justify-content-center">
@@ -244,7 +244,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                                         <div class="col-12">
                                                             <select class="form-control" id="universidad" name="universidad">
                                                                 <?php
-                                                                $query_universidad = "SELECT IdUniversidad, NomUniversidad FROM `mantenimiento.tbluniversidadescentros`";
+                                                                $query_universidad = "SELECT IdUniversidad, NomUniversidad FROM `mantenimiento.tbluniversidades` ";
                                                                 $stmt_universidad = $conn->prepare($query_universidad);
                                                                 $stmt_universidad->execute();
                                                                 while ($universidad = $stmt_universidad->fetch(PDO::FETCH_ASSOC)) {
@@ -294,7 +294,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                                 <div class="">
                                                     <label class="col-12" for="descripciones">Descripcion de la Solicitud</label>
                                                     <div class="col-12">
-                                                        <textarea class="form-control" id="descripcion" name="descripcion" rows="3"><?php echo htmlspecialchars($row['Descripcion'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+                                                        <textarea class="form-control" id="descripcion" name="descripcion" rows="3" maxlength="150" style="text-transform:uppercase"><?php echo htmlspecialchars($row['Descripcion'], ENT_QUOTES, 'UTF-8'); ?></textarea>
                                                     </div>
                                                 </div>
                                             </div>

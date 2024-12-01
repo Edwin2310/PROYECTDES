@@ -6,21 +6,21 @@ if (isset($_SESSION["IdUsuario"])) {
     if ($id) {
         $conexion = new Conectar();
         $conn = $conexion->Conexion();
-        $sql = "SELECT s.ID_SOLICITUD, tp.NOM_TIPO, cat.NOM_CATEGORIA, s.NUM_REFERENCIA, s.DESCRIPCION, s.NOMBRE_CARRERA, g.NOM_GRADO, m.NOM_MODALIDAD,
-                           uc.NOM_UNIVERSIDAD, d.NOM_DEPTO, mu.NOM_MUNICIPIO, u.NOMBRE_USUARIO, s.NOMBRE_COMPLETO, s.EMAIL, s.FECHA_INGRESO, 
-                           s.FECHA_MODIFICACION, cat.COD_ARBITRIOS, c.NOM_CARRERA, e.ESTADO_SOLICITUD
-                    FROM tbl_solicitudes s
-                    LEFT JOIN tbl_tipo_solicitud tp ON s.ID_TIPO_SOLICITUD = tp.ID_TIPO_SOLICITUD
-                    LEFT JOIN tbl_categoria cat ON s.ID_CATEGORIA = cat.ID_CATEGORIA
-                    LEFT JOIN tbl_carrera c ON s.ID_CARRERA = c.ID_CARRERA
-                    LEFT JOIN tbl_grado_academico g ON s.ID_GRADO = g.ID_GRADO
-                    LEFT JOIN tbl_modalidad m ON s.ID_MODALIDAD = m.ID_MODALIDAD
-                    LEFT JOIN tbl_universidad_centro uc ON s.ID_UNIVERSIDAD = uc.ID_UNIVERSIDAD
-                    LEFT JOIN tbl_deptos d ON s.ID_DEPARTAMENTO = d.ID_DEPARTAMENTO
-                    LEFT JOIN tbl_municipios mu ON s.ID_MUNICIPIO = mu.ID_MUNICIPIO
-                    LEFT JOIN tbl_ms_usuario u ON s.IdUsuario = u.IdUsuario
-                    LEFT JOIN tbl_estado_solicitud e ON s.ID_ESTADO = e.ID_ESTADO
-                    WHERE s.ID_SOLICITUD = :solicitud_id";
+        $sql = "SELECT s.IdSolicitud, ts.NomTipoSolicitud, cat.NomCategoria, s.NumReferencia, s.Descripcion, s.NombreCarrera, g.NomGrado, m.NomModalidad,
+                       uc.NomUniversidad, d.NomDepto, mu.NomMunicipio, u.NombreUsuario, s.NombreCompleto, s.CorreoElectronico, s.FechaIngreso, 
+                       s.FechaModificacion, cat.CodArbitrios, c.NomCarrera, e.EstadoSolicitud
+                FROM `proceso.tblSolicitudes` s
+                LEFT JOIN `mantenimiento.tblcategorias` cat ON s.IdCategoria = cat.IdCategoria
+                LEFT JOIN `mantenimiento.tblcarreras` c ON s.IdCarrera = c.IdCarrera
+                LEFT JOIN `mantenimiento.tblgradosacademicos` g ON s.IdGrado = g.IdGrado
+                LEFT JOIN `mantenimiento.tblmodalidades` m ON s.IdModalidad = m.IdModalidad
+                LEFT JOIN `mantenimiento.tbluniversidades` uc ON s.IdUniversidad = uc.IdUniversidad
+                LEFT JOIN `mantenimiento.tbldeptos` d ON s.IdDepartamento = d.IdDepartamento
+                LEFT JOIN `mantenimiento.tblmunicipios` mu ON s.IdMunicipio = mu.IdMunicipio
+                LEFT JOIN `seguridad.tbldatospersonales` u ON s.IdUsuario = u.IdUsuario
+                LEFT JOIN `mantenimiento.tblestadossolicitudes` e ON s.IdEstado = e.IdEstado
+                LEFT JOIN `mantenimiento.tbltiposolicitudes` ts ON cat.IdTipoSolicitud = ts.IdTipoSolicitud
+                WHERE s.IdSolicitud = :solicitud_id";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':solicitud_id', $id, PDO::PARAM_INT);
         $stmt->execute();
@@ -122,7 +122,7 @@ $(document).ready(function() {
                             <a class="img-link mr-5" href="be_pages_generic_profile.html">
                                 <img class="img-avatar img-avatar32" src="../../public/assets/img/avatars/avatar15.jpg" alt="">
                             </a>
-                            <a class="align-middle link-effect text-primary-dark font-w600" href="be_pages_generic_profile.html"><?php echo $_SESSION["NOMBRE_USUARIO"] ?></a>
+                            <a class="align-middle link-effect text-primary-dark font-w600" href="be_pages_generic_profile.html"><?php echo $_SESSION["NombreUsuario"] ?></a>
                         </div>
                     </div>
                 </div>
@@ -156,27 +156,27 @@ $(document).ready(function() {
                                         <div class="form-group row">
                                             <label class="col-12" for="carrera">Nombre de la Carrera</label>
                                             <div class="col-12">
-                                                <input type="text" class="form-control" id="carrera" name="carrera" value="<?php echo htmlspecialchars($row['NOMBRE_CARRERA'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                                                <input type="text" class="form-control" id="carrera" name="carrera" value="<?php echo htmlspecialchars($row['NombreCarrera'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
                                             <label class="col-12" for="modalidad">Modalidad</label>
                                             <div class="col-12">
-                                                <input type="text" class="form-control" id="modalidad" name="modalidad" value="<?php echo htmlspecialchars($row['NOM_MODALIDAD'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                                                <input type="text" class="form-control" id="modalidad" name="modalidad" value="<?php echo htmlspecialchars($row['NomModalidad'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-12" for="universidad">Universidad</label>
                                             <div class="col-12">
-                                                <input type="text" class="form-control" id="universidad" name="universidad" value="<?php echo htmlspecialchars($row['NOM_UNIVERSIDAD'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                                                <input type="text" class="form-control" id="universidad" name="universidad" value="<?php echo htmlspecialchars($row['NomUniversidad'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
                                             <label class="col-12" for="grado">Grado Académico</label>
                                             <div class="col-12">
-                                                <input type="text" class="form-control" id="grado" name="grado" value="<?php echo htmlspecialchars($row['NOM_GRADO'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                                                <input type="text" class="form-control" id="grado" name="grado" value="<?php echo htmlspecialchars($row['NomGrado'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -198,7 +198,7 @@ $(document).ready(function() {
                                                 </div>
                                             </div>
 
-                                            <input type="hidden" name="solicitud_id" value="<?php echo htmlspecialchars($row['ID_SOLICITUD'], ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="solicitud_id" value="<?php echo htmlspecialchars($row['IdSolicitud'], ENT_QUOTES, 'UTF-8'); ?>">
 
                                             <button type="submit" class="btn btn-primary">Guardar</button>
                                             
@@ -221,14 +221,14 @@ $(document).ready(function() {
                                             <div class="form-group row">
                                                 <label class="col-12" for="nombre-completo">Nombre Completo</label>
                                                 <div class="col-12">
-                                                    <input type="text" class="form-control" id="nombre_completo" name="nombre_completo" value="<?php echo htmlspecialchars($row['NOMBRE_COMPLETO'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                                                    <input type="text" class="form-control" id="nombre_completo" name="nombre_completo" value="<?php echo htmlspecialchars($row['NombreCompleto'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
                                                 </div>
                                             </div>
 
                                             <div class="form-group row">
                                                 <label class="col-12" for="email">Correo Electrónico</label>
                                                 <div class="col-12">
-                                                    <input type="text" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($row['EMAIL'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                                                    <input type="text" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($row['CorreoElectronico'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
                                                 </div>
                                             </div>
                                         </form>

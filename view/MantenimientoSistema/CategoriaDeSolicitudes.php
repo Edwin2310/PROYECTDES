@@ -219,7 +219,7 @@ if (isset($_SESSION["IdUsuario"])) {
                             </div>
                             <div class="form-group">
                                 <label for="edit_categoria">Categoría</label>
-                                <input type="text" class="form-control" id="edit_categoria" name="categoria" maxlength="75" oninput="validarCategoria(this)" style="text-transform:uppercase;" required>
+                                <input type="text" class="form-control" id="edit_categoria" name="categoria" maxlength="80" oninput="validarCategoria(this)" style="text-transform:uppercase;" required>
                             </div>
                             <div class="form-group">
                                 <label for="edit_IdTiposolicitud">Tipo de Solicitud</label>

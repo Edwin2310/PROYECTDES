@@ -31,10 +31,10 @@ if (isset($_GET['solicitud_id'])) {
 
         // Define los directorios donde se encuentran los archivos
         $directories = [
-            "DIAGNOSTICO" => "../../view/NuevoIngresoSolicitud/documentos/diagnostico/",
-            "PLAN_ESTUDIOS" => "../../view/NuevoIngresoSolicitud/documentos/plan_estudios/",
-            "PLANTA_DOCENTE" => "../../view/NuevoIngresoSolicitud/documentos/planta_docente/",
-            "SOLICITUD" => "../../view/NuevoIngresoSolicitud/documentos/solicitud/"
+            "Diagnostico" => "../../view/NuevoIngresoSolicitud/documentos/diagnostico/",
+            "PlanEstudios" => "../../view/NuevoIngresoSolicitud/documentos/plan_estudios/",
+            "PlantaDocente" => "../../view/NuevoIngresoSolicitud/documentos/planta_docente/",
+            "Solicitud" => "../../view/NuevoIngresoSolicitud/documentos/solicitud/"
         ];
 
         // Nombre del archivo ZIP

@@ -337,6 +337,11 @@ if (isset($_SESSION["IdUsuario"])) {
         });
     </script>
 
+    <script>
+        document.getElementById('Usuario').addEventListener('input', function() {
+            this.value = this.value.replace(/\s/g, '');
+        });
+    </script>
 
 <?php
 } else {

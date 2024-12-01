@@ -22,6 +22,32 @@ class Usuario extends Conectar
                 if ($num_intentos >= $max_intentos) {
                     $this->bloquear_usuario($identificador);
                     $_SESSION["error"] = "Demasiados intentos. Contacte con soporte para que su usuario sea nuevamente habilitado o restablezca su contraseña.";
+
+                    //________________________________________________________________________________________________________
+                    //NO TOCAR ES DE BITACORA
+                    require_once(__DIR__ . '/../view/Seguridad/Bitacora/Funciones_Bitacoras.php');
+
+                    // Obtener los valores necesarios para la verificación
+                    $id_usuario = null;
+                    $id_objeto = 1; // ID del objeto o módulo correspondiente a esta página
+
+                    // Obtener la página actual y la última marca de acceso
+                    $current_page = basename($_SERVER['PHP_SELF']);
+                    $last_access_time = $_SESSION['last_access_time'][$current_page] ?? 0;
+
+                    // Obtener el tiempo actual
+                    $current_time = time();
+
+                    // Verificar si han pasado al menos 10 segundos desde el último registro
+                    if ($current_time - $last_access_time > 3) {
+                        $accion = "Usuario bloqueado";
+                        // Registrar en la bitácora
+                        registrobitaevent($id_usuario, $id_objeto, $accion);
+                    }
+                    // Actualizar la marca temporal en la sesión
+                    $_SESSION['last_access_time'][$current_page] = $current_time;
+                    //_______________________________________________________________________________________________________
+
                     header("Location:" . Conectar::ruta() . "index.php");
                     exit();
                 } else {
@@ -59,6 +85,31 @@ class Usuario extends Conectar
                                 $_SESSION["NombreUsuario"] = $resultado_personal["NombreUsuario"];
                             }
 
+                            //________________________________________________________________________________________________________
+                            //NO TOCAR ES DE BITACORA
+                            require_once(__DIR__ . '/../view/Seguridad/Bitacora/Funciones_Bitacoras.php');
+
+                            // Obtener los valores necesarios para la verificación
+                            $id_usuario = $_SESSION['IdUsuario'] ?? null;
+                            $id_objeto = 1; // ID del objeto o módulo correspondiente a esta página
+
+                            // Obtener la página actual y la última marca de acceso
+                            $current_page = basename($_SERVER['PHP_SELF']);
+                            $last_access_time = $_SESSION['last_access_time'][$current_page] ?? 0;
+
+                            // Obtener el tiempo actual
+                            $current_time = time();
+
+                            // Verificar si han pasado al menos 10 segundos desde el último registro
+                            if ($current_time - $last_access_time > 3) {
+                                $accion = "Inicio sesión";
+                                // Registrar en la bitácora
+                                registrobitaevent($id_usuario, $id_objeto, $accion);
+                            }
+                            // Actualizar la marca temporal en la sesión
+                            $_SESSION['last_access_time'][$current_page] = $current_time;
+                            //_______________________________________________________________________________________________________
+
                             header("Location:" . Conectar::ruta() . "view/home/");
                             exit();
                         } else {
@@ -68,10 +119,88 @@ class Usuario extends Conectar
 
                             if ($intentos_restantes == 1) {
                                 $_SESSION["error"] = "El Usuario y/o Contraseña son incorrectos. Intentos restantes 1.";
+
+                                //________________________________________________________________________________________________________
+                                //NO TOCAR ES DE BITACORA
+                                require_once(__DIR__ . '/../view/Seguridad/Bitacora/Funciones_Bitacoras.php');
+
+                                // Obtener los valores necesarios para la verificación
+                                $id_usuario = null;
+                                $id_objeto = 1; // ID del objeto o módulo correspondiente a esta página
+
+                                // Obtener la página actual y la última marca de acceso
+                                $current_page = basename($_SERVER['PHP_SELF']);
+                                $last_access_time = $_SESSION['last_access_time'][$current_page] ?? 0;
+
+                                // Obtener el tiempo actual
+                                $current_time = time();
+
+                                // Verificar si han pasado al menos 10 segundos desde el último registro
+                                if ($current_time - $last_access_time > 3) {
+                                    $accion = "Inicio de sesión fallida sospecho";
+                                    // Registrar en la bitácora
+                                    registrobitaevent($id_usuario, $id_objeto, $accion);
+                                }
+                                // Actualizar la marca temporal en la sesión
+                                $_SESSION['last_access_time'][$current_page] = $current_time;
+                                //_______________________________________________________________________________________________________
+
                             } elseif ($intentos_restantes == 0) {
                                 $_SESSION["error"] = "El Usuario y/o Contraseña son incorrectos. Ya no le quedan más intentos.";
+
+                                //________________________________________________________________________________________________________
+                                //NO TOCAR ES DE BITACORA
+                                require_once(__DIR__ . '/../view/Seguridad/Bitacora/Funciones_Bitacoras.php');
+
+                                // Obtener los valores necesarios para la verificación
+                                $id_usuario = null;
+                                $id_objeto = 1; // ID del objeto o módulo correspondiente a esta página
+
+                                // Obtener la página actual y la última marca de acceso
+                                $current_page = basename($_SERVER['PHP_SELF']);
+                                $last_access_time = $_SESSION['last_access_time'][$current_page] ?? 0;
+
+                                // Obtener el tiempo actual
+                                $current_time = time();
+
+                                // Verificar si han pasado al menos 10 segundos desde el último registro
+                                if ($current_time - $last_access_time > 3) {
+                                    $accion = "Inicio de sesión fallida sospecho";
+                                    // Registrar en la bitácora
+                                    registrobitaevent($id_usuario, $id_objeto, $accion);
+                                }
+                                // Actualizar la marca temporal en la sesión
+                                $_SESSION['last_access_time'][$current_page] = $current_time;
+                                //_______________________________________________________________________________________________________
+
                             } else {
                                 $_SESSION["error"] = "El Usuario y/o Contraseña son incorrectos.";
+
+
+                                //________________________________________________________________________________________________________
+                                //NO TOCAR ES DE BITACORA
+                                require_once(__DIR__ . '/../view/Seguridad/Bitacora/Funciones_Bitacoras.php');
+
+                                // Obtener los valores necesarios para la verificación
+                                $id_usuario = null;
+                                $id_objeto = 1; // ID del objeto o módulo correspondiente a esta página
+
+                                // Obtener la página actual y la última marca de acceso
+                                $current_page = basename($_SERVER['PHP_SELF']);
+                                $last_access_time = $_SESSION['last_access_time'][$current_page] ?? 0;
+
+                                // Obtener el tiempo actual
+                                $current_time = time();
+
+                                // Verificar si han pasado al menos 10 segundos desde el último registro
+                                if ($current_time - $last_access_time > 3) {
+                                    $accion = "Inicio de sesión fallida sospecho";
+                                    // Registrar en la bitácora
+                                    registrobitaevent($id_usuario, $id_objeto, $accion);
+                                }
+                                // Actualizar la marca temporal en la sesión
+                                $_SESSION['last_access_time'][$current_page] = $current_time;
+                                //___________________________________________________________cambiar siempre en la tabla bitacora que el id usuario pueda ser null.
                             }
 
                             header("Location:" . Conectar::ruta() . "index.php");

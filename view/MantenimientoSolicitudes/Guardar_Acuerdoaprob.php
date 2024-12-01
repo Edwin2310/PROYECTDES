@@ -12,17 +12,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conn->beginTransaction();
 
         // Verificar si el registro ya existe
-        $stmt = $conn->prepare("SELECT COUNT(*) FROM tbl_acuerdo_ces_aprob WHERE ID_SOLICITUD = :id_solicitud");
+        $stmt = $conn->prepare("SELECT COUNT(*) FROM `proceso.tblacuerdoscesaprob` WHERE IdSolicitud = :id_solicitud");
         $stmt->bindParam(':id_solicitud', $id_solicitud);
         $stmt->execute();
         $count = $stmt->fetchColumn();
 
         if ($count > 0) {
             // Actualizar el registro existente
-            $stmt = $conn->prepare("UPDATE tbl_acuerdo_ces_aprob SET ACUERDO_APROBACION = :numeroSesion WHERE ID_SOLICITUD = :id_solicitud");
+            $stmt = $conn->prepare("UPDATE `proceso.tblacuerdoscesaprob` SET AcuerdoAprobacion = :numeroSesion WHERE IdSolicitud = :id_solicitud");
         } else {
             // Insertar un nuevo registro
-            $stmt = $conn->prepare("INSERT INTO tbl_acuerdo_ces_aprob (ID_SOLICITUD, ACUERDO_APROBACION) VALUES (:id_solicitud, :numeroSesion)");
+            $stmt = $conn->prepare("INSERT INTO `proceso.tblacuerdoscesaprob` (IdSolicitud, AcuerdoAprobacion) VALUES (:id_solicitud, :numeroSesion)");
         }
 
         $stmt->bindParam(':numeroSesion', $numeroSesion);
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
 
         // Actualizar el estado de la solicitud a 15 en tbl_solicitudes
-        $stmtUpdate = $conn->prepare("UPDATE tbl_solicitudes SET ID_ESTADO = 15 WHERE ID_SOLICITUD = :id_solicitud");
+        $stmtUpdate = $conn->prepare("UPDATE `proceso.tblsolicitudes` SET IdEstado = 15 WHERE IdSolicitud = :id_solicitud");
         $stmtUpdate->bindParam(':id_solicitud', $id_solicitud);
         $stmtUpdate->execute();
 

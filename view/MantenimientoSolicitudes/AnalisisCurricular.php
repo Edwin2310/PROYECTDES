@@ -118,8 +118,8 @@ if (isset($_SESSION["IdUsuario"])) {
 
 
 
-                    <div class="row gutters-tiny">
-                        <div class="col-md-4 col-lg-4 ml-auto " data-toggle="appear">
+                    <div class="row justify-content-center">
+                        <div class="col-md-4" data-toggle="appear">
                             <a href="AnalisisCurricular_Emitir.php" data-id-objeto="41" data-accion="accedio al modulo" class="modulo-link block block-link-shadow text-center" href="javascript:void(0)">
                                 <div class="block-content block-content-full">
                                     <div class="py-30 text-center">
@@ -136,7 +136,7 @@ if (isset($_SESSION["IdUsuario"])) {
 
 
 
-                        <div class="col-sm-4 col-lg-4 mr-auto" data-toggle="appear">
+                        <div class="col-md-4" data-toggle="appear">
                             <a href="AnalisisCurricular_RYAOR.php" data-id-objeto="42" data-accion="accedio al modulo" class="modulo-link block block-link-shadow text-center" href="javascript:void(0)">
                                 <div class="block-content block-content-full">
                                     <div class="py-30 text-center">
@@ -145,7 +145,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                         </div>
                                     </div>
                                     <div class="block-content bg-body-light">
-                                        <p class="h5 font-w600">Revisar y Aprobar Opinión Razonada</p>
+                                        <p class="h5 font-w600">Aprobar Opinión Razonada</p>
                                     </div>
                                 </div>
                             </a>

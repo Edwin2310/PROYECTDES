@@ -63,7 +63,7 @@ $(document).ready(function() {
                         confirmButtonText: 'Aceptar'
                     }).then(() => {
                         // Redirigir a la página deseada después de guardar
-                        window.location.href = '../ConsultarSolicitudes/index.php';
+                        window.location.href = 'AcuerdoAdmi_Asignar.php';
                     });
                 } else {
                     Swal.fire({

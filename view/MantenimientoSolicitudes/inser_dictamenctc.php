@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($stmt->execute()) {
         // Obtener el correo del usuario que hizo la solicitud
-        $userSql = "SELECT CorreoElectronico FROM `proceso.tblsolicitudes` WHERE IdSolicitud = (SELECT IdSolicitud FROM `proceso.tblsesionesctc` WHERE IdSesioCtc = :id_sesion)";
+        $userSql = "SELECT CorreoElectronico FROM `proceso.tblsolicitudes` WHERE IdSolicitud = (SELECT IdSolicitud FROM `proceso.tblsesionesctc` WHERE IdSesionCtc = :id_sesion)";
         $userStmt = $conn->prepare($userSql);
         $userStmt->bindParam(':id_sesion', $id_sesion);
         $userStmt->execute();

@@ -233,7 +233,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                     confirmButtonText: 'Aceptar'
                                 }).then(() => {
                                     // Redirigir después de aceptar
-                                    window.location.href = '../ConsultarSolicitudes/index.php';
+                                    window.location.href = 'AcuerdoApro_Asignar.php';
                                 });
 
                             } else {

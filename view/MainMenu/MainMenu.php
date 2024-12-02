@@ -26,12 +26,12 @@ $id_rol = isset($_SESSION["IdRol"]) ? $_SESSION["IdRol"] : null;
                     <span class="sidebar-mini-hide">Consultar Solicitudes</span>
                 </a>
             </li>
-            <li>
+            <!-- <li>
                 <a href="../SeguimientoAcademico/" class="modulo-link" data-id-objeto="7" data-accion="accedio al modulo">
                     <i class="si si-list"></i>
                     <span class="sidebar-mini-hide">Seguimiento Académico</span>
                 </a>
-            </li>
+            </li> -->
             <li>
                 <a id="mantenimiento_solicitud" href="../MantenimientoSolicitudes/" class="modulo-link" data-id-objeto="8" data-accion="accedio al modulo">
                     <i class="si si-wrench"></i>

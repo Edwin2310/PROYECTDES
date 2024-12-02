@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $dbh->beginTransaction();
 
         foreach ($solicitudes as $idSolicitud) {
-            $sql = "INSERT INTO tbl_sesionctc (SESION, ID_SOLICITUD) VALUES (:numeroSesion, :idSolicitud)";
+            $sql = "INSERT INTO `proceso.tblsesionesctc` (SESION, IdSolicitud) VALUES (:numeroSesion, :idSolicitud)";
             $stmt = $dbh->prepare($sql);
             $stmt->bindParam(':numeroSesion', $numeroSesion);
             $stmt->bindParam(':idSolicitud', $idSolicitud);
@@ -52,27 +52,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         $dbh->beginTransaction();
 
-        // Insertar en tbl_sesionctc
+        // Insertar en `proceso.tblsesionesctc`
         foreach ($solicitudes as $idSolicitud) {
-            $sql = "INSERT INTO tbl_sesionctc (SESION, ID_SOLICITUD) VALUES (:numeroSesion, :idSolicitud)";
+            $sql = "INSERT INTO `proceso.tblsesionesctc` (SesionCTC, IdSolicitud) VALUES (:numeroSesion, :idSolicitud)";
             $stmt = $dbh->prepare($sql);
             $stmt->bindParam(':numeroSesion', $numeroSesion);
             $stmt->bindParam(':idSolicitud', $idSolicitud);
             $stmt->execute();
 
-            // Actualizar estado en tbl_solicitudes
-            $updateSql = "UPDATE tbl_solicitudes SET ID_ESTADO = 7 WHERE ID_SOLICITUD = :idSolicitud";
+            // Actualizar estado en `proceso.tblsolicitudes`
+            $updateSql = "UPDATE `proceso.tblsolicitudes` SET IdEstado = 7 WHERE IdSolicitud = :idSolicitud";
             $updateStmt = $dbh->prepare($updateSql);
             $updateStmt->bindParam(':idSolicitud', $idSolicitud);
             $updateStmt->execute();
 
             // Obtener el correo del usuario que hizo la solicitud
-            $userSql = "SELECT email FROM tbl_solicitudes WHERE ID_SOLICITUD = :idSolicitud";
+            $userSql = "SELECT CorreoElectronico FROM `proceso.tblsolicitudes` WHERE IdSolicitud = :idSolicitud";
             $userStmt = $dbh->prepare($userSql);
             $userStmt->bindParam(':idSolicitud', $idSolicitud);
             $userStmt->execute();
             $user = $userStmt->fetch(PDO::FETCH_ASSOC);
-            $userEmail = $user['email'];
+            $userEmail = $user['CorreoElectronico '];
 
             // Enviar correo
             $mail = new PHPMailer();

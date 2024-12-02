@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Insertar en la base de datos
                 $conexion = new Conectar();
                 $conn = $conexion->Conexion();
-                $query = "INSERT INTO tbl_adjuntoctc (IdUsuario, FECHA_ADJUNTOCTC, DICTAMENADJU, ID_SOLICITUD) VALUES (:id_usuario, NOW(), :dictamen, :id_solicitud)";
+                $query = "INSERT INTO `documentos.tbladjuntosctc` (IdUsuario, FECHA_ADJUNTOCTC, DICTAMENADJU, ID_SOLICITUD) VALUES (:id_usuario, NOW(), :dictamen, :id_solicitud)";
                 $stmt = $conn->prepare($query);
                 $stmt->bindParam(':id_usuario', $id_usuario);
                 $stmt->bindParam(':dictamen', $fileNameNew);
@@ -78,16 +78,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $conn->beginTransaction();
                 
                 try {
-                    // Insertar en tbl_adjuntoctc
-                    $query = "INSERT INTO tbl_adjuntoctc (IdUsuario, FECHA_ADJUNTOCTC, DICTAMENADJU, ID_SOLICITUD) VALUES (:id_usuario, NOW(), :dictamen, :id_solicitud)";
+                    // Insertar en `documentos.tbladjuntosctc`
+                    $query = "INSERT INTO `documentos.tbladjuntosctc` (IdUsuario, FechaAdjuntoCTC, DictamenAdjunto, IdSolicitud) VALUES (:id_usuario, NOW(), :dictamen, :id_solicitud)";
                     $stmt = $conn->prepare($query);
                     $stmt->bindParam(':id_usuario', $id_usuario);
                     $stmt->bindParam(':dictamen', $fileNameNew);
                     $stmt->bindParam(':id_solicitud', $id_solicitud);
                     
                     if ($stmt->execute()) {
-                        // Actualizar estado en tbl_solicitudes
-                        $updateSql = "UPDATE tbl_solicitudes SET ID_ESTADO = 8 WHERE ID_SOLICITUD = :idSolicitud";
+                        // Actualizar estado en `proceso.tblsolicitudes`
+                        $updateSql = "UPDATE `proceso.tblsolicitudes` SET IdEstado = 8 WHERE IdSolicitud = :idSolicitud";
                         $updateStmt = $conn->prepare($updateSql);
                         $updateStmt->bindParam(':idSolicitud', $id_solicitud);
                         $updateStmt->execute();

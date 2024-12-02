@@ -11,24 +11,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $conn->beginTransaction();
 
-        // Verificar si el número de acuerdo ya existe para la solicitud
-        $stmtCheck = $conn->prepare("SELECT COUNT(*) FROM tbl_acuerdo_ces_admin WHERE ID_SOLICITUD = :idSolicitud");
+        // Verificar si ya existe un acuerdo de admisión para la solicitud
+        $stmtCheck = $conn->prepare("SELECT COUNT(*) FROM `proceso.tblacuerdoscesadmin` WHERE IdSolicitud = :idSolicitud");
         $stmtCheck->bindParam(':idSolicitud', $idSolicitud);
         $stmtCheck->execute();
         $exists = $stmtCheck->fetchColumn();
 
+        if ($exists > 0) {
+            // Si el acuerdo ya existe, hacer un UPDATE
+            $stmtUpdate = $conn->prepare("UPDATE `proceso.tblacuerdoscesadmin` SET AcuerdoAdmision = :acuerdoAdmision WHERE IdSolicitud = :idSolicitud");
+            $stmtUpdate->bindParam(':acuerdoAdmision', $acuerdoAdmision);
+            $stmtUpdate->bindParam(':idSolicitud', $idSolicitud);
+            $stmtUpdate->execute();
+        } 
         
-
-        // Insertar el número de acuerdo de admisión
-        $stmtInsert = $conn->prepare("INSERT INTO tbl_acuerdo_ces_admin (ID_SOLICITUD, ACUERDO_ADMISION) VALUES (:idSolicitud, :acuerdoAdmision)");
-        $stmtInsert->bindParam(':acuerdoAdmision', $acuerdoAdmision);
-        $stmtInsert->bindParam(':idSolicitud', $idSolicitud);
-        $stmtInsert->execute();
-
         // Actualizar el estado de la solicitud a 6
-        $stmtUpdate = $conn->prepare("UPDATE tbl_solicitudes SET ID_ESTADO = 6 WHERE ID_SOLICITUD = :idSolicitud");
-        $stmtUpdate->bindParam(':idSolicitud', $idSolicitud);
-        $stmtUpdate->execute();
+        $stmtUpdateStatus = $conn->prepare("UPDATE `proceso.tblsolicitudes` SET IdEstado = 6 WHERE IdSolicitud = :idSolicitud");
+        $stmtUpdateStatus->bindParam(':idSolicitud', $idSolicitud);
+        $stmtUpdateStatus->execute();
 
         $conn->commit();
         echo json_encode(['message' => 'Número de acuerdo guardado y estado actualizado correctamente.', 'success' => true]);

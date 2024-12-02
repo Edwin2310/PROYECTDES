@@ -1,10 +1,17 @@
 function validarNombreModalidad(input) {
-    // Permite letras (con o sin tildes), espacios y elimina cualquier otro carácter
+    // Remueve caracteres no permitidos (excepto letras con tildes y espacios)
     input.value = input.value.replace(/[^a-zA-ZÁÉÍÓÚáéíóú\s]/g, '');
+
+    // Reemplaza múltiples espacios consecutivos por un solo espacio
+    input.value = input.value.replace(/\s+/g, ' ');
+
+    // Elimina los espacios al principio o al final del texto
+    input.value = input.value.trim();
 
     // Convierte el texto a mayúsculas automáticamente
     input.value = input.value.toUpperCase();
 }
+
 
 // Función para mostrar mensajes de alerta
 function showAlert(message, type) {

@@ -147,38 +147,38 @@ if (isset($_SESSION["IdUsuario"])) {
                                         // Consulta ajustada para usar NOMBRE_CARRERA de tbl_solicitudes
                                         $sql = "SELECT
                                         s.IdSolicitud,
-                                        s.TipoSolicitud,
-                                        cat.NomCategoria,
                                         s.NumReferencia,
                                         s.Descripcion,
+                                        s.NombreCompleto,
+                                        s.FechaIngreso,
+                                        s.FechaModificacion,
+                                        ts.NomTipoSolicitud,
+                                        cat.NomCategoria,
                                         c.NomCarrera,
                                         g.NomGrado,
                                         m.NomModalidad,
                                         uc.NomUniversidad,
                                         d.NomDepto,
                                         mu.NomMunicipio,
-                                        u.NOMBRE_USUARIO,
-                                        s.NOMBRE_COMPLETO,
-                                        s.EMAIL,
-                                        s.FECHA_INGRESO,
-                                        s.FECHA_MODIFICACION,
-                                        cat.COD_ARBITRIOS,
-                                        s.NOMBRE_CARRERA,
-                                        e.ESTADO_SOLICITUD
-                                        FROM
-                                        `proceso.tblsolicitudes` s
-                                        LEFT JOIN `mantenimiento.tbltiposolicitudes` tp ON s.ID_TIPO_SOLICITUD = tp.ID_TIPO_SOLICITUD
-                                        LEFT JOIN `mantenimiento.tblcategorias` cat ON s.IdCategoria = cat.IdCategoria
-                                        LEFT JOIN `mantenimiento.tblcarreras` c ON s.IdCarrera = c.IdCarrera
-                                        LEFT JOIN `mantenimiento.tblgradosacademicos` g ON s.IdGrado = g.IdGrado
-                                        LEFT JOIN `mantenimiento.tblmodalidades` m ON s.IdModalidad = m.IdModalidad
-                                        LEFT JOIN `proceso.tbldictamenesuniversidades` uc ON s.IdUniversidad = uc.IdUniversidad
-                                        LEFT JOIN `mantenimiento.tbldeptos` d ON s.IdDepartamento = d.IdDepartamento
-                                        LEFT JOIN `mantenimiento.tblmunicipios` mu ON s.IdMunicipio = mu.IdMunicipio
-                                        LEFT JOIN `seguridad.tblusuarios` u ON s.IdUsuario = u.IdUsuario
-                                        LEFT JOIN `mantenimiento.tblestadossolicitudes` e ON s.IdEstado = e.IdEstado
-                                        WHERE e.IdEstado IN (6)
-                                        ORDER BY e.IdEstado";
+                                        u.NombreUsuario,
+                                        s.CorreoElectronico,
+                                        cat.CodArbitrios,
+                                        s.NombreCarrera,
+                                        e.EstadoSolicitud
+                                    FROM
+                                        `proceso.tblSolicitudes` s
+                                    LEFT JOIN `mantenimiento.tblcategorias` cat ON s.IdCategoria = cat.IdCategoria
+                                    LEFT JOIN `mantenimiento.tblcarreras` c ON s.IdCarrera = c.IdCarrera
+                                    LEFT JOIN `mantenimiento.tblgradosacademicos` g ON s.IdGrado = g.IdGrado
+                                    LEFT JOIN `mantenimiento.tblmodalidades` m ON s.IdModalidad = m.IdModalidad
+                                    LEFT JOIN `mantenimiento.tbluniversidades` uc ON s.IdUniversidad = uc.IdUniversidad
+                                    LEFT JOIN `mantenimiento.tbldeptos` d ON s.IdDepartamento = d.IdDepartamento
+                                    LEFT JOIN `mantenimiento.tblmunicipios` mu ON s.IdMunicipio = mu.IdMunicipio
+                                    LEFT JOIN `seguridad.tbldatospersonales` u ON s.IdUsuario = u.IdUsuario
+                                    LEFT JOIN `mantenimiento.tblestadossolicitudes` e ON s.IdEstado = e.IdEstado
+                                    LEFT JOIN `mantenimiento.tbltiposolicitudes` ts ON cat.IdTipoSolicitud = ts.IdTipoSolicitud -- Relación con tipos de solicitud
+                                    WHERE e.IdEstado IN (6)
+                                    ORDER BY e.IdEstado;";
 
                                         $stmt = $dbh->prepare($sql);
                                         $stmt->execute();
@@ -186,26 +186,26 @@ if (isset($_SESSION["IdUsuario"])) {
                                         $codigo_tramite = 1;
                                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                             echo "<tr>";
-                                            echo "<td class='text-center'>{$row['ID_SOLICITUD']}</td>";
-                                            echo "<td class='text-center'>{$row['NOM_TIPO']}</td>";
-                                            echo "<td class='text-center'>{$row['NOM_CATEGORIA']}</td>";
-                                            echo "<td class='text-center'>{$row['NUM_REFERENCIA']}</td>";
-                                            echo "<td class='text-center'>{$row['DESCRIPCION']}</td>";
-                                            echo "<td class='text-center hidden-column'>{$row['NOM_CARRERA']}</td>";
-                                            echo "<td class='text-center hidden-column'>{$row['NOM_GRADO']}</td>";
-                                            echo "<td class='text-center hidden-column'>{$row['NOM_MODALIDAD']}</td>";
-                                            echo "<td class='text-center hidden-column'>{$row['NOM_UNIVERSIDAD']}</td>";
-                                            echo "<td class='text-center hidden-column'>{$row['NOM_DEPTO']}</td>";
-                                            echo "<td class='text-center hidden-column'>{$row['NOM_MUNICIPIO']}</td>";
-                                            echo "<td class='text-center hidden-column'>{$row['NOMBRE_USUARIO']}</td>";
-                                            echo "<td class='text-center hidden-column'>{$row['NOMBRE_COMPLETO']}</td>";
-                                            echo "<td class='text-center hidden-column'>{$row['EMAIL']}</td>";
-                                            echo "<td class='text-center hidden-column'>{$row['FECHA_INGRESO']}</td>";
-                                            echo "<td class='text-center hidden-column'>{$row['FECHA_MODIFICACION']}</td>";
-                                            echo "<td class='text-center hidden-column'>{$row['COD_ARBITRIOS']}</td>";
-                                            echo "<td class='text-center hidden-column'>{$row['NOMBRE_CARRERA']}</td>";
-                                            echo "<td class='text-center'>{$row['ESTADO_SOLICITUD']}</td>";
-                                            echo "<td class='text-center'><input type='checkbox' name='selectRow' value='" . htmlspecialchars($row['ID_SOLICITUD']) . "'></td>";
+                                            echo "<td class='text-center'>{$row['IdSolicitud']}</td>";
+                                            echo "<td class='text-center'>{$row['NomTipoSolicitud']}</td>";
+                                            echo "<td class='text-center'>{$row['NomCategoria']}</td>";
+                                            echo "<td class='text-center'>{$row['NumReferencia']}</td>";
+                                            echo "<td class='text-center'>{$row['Descripcion']}</td>";
+                                            echo "<td class='text-center hidden-column'>{$row['NomCarrera']}</td>";
+                                            echo "<td class='text-center hidden-column'>{$row['NomGrado']}</td>";
+                                            echo "<td class='text-center hidden-column'>{$row['NomModalidad']}</td>";
+                                            echo "<td class='text-center hidden-column'>{$row['NomUniversidad']}</td>";
+                                            echo "<td class='text-center hidden-column'>{$row['NomDepto']}</td>";
+                                            echo "<td class='text-center hidden-column'>{$row['NomMunicipio']}</td>";
+                                            echo "<td class='text-center hidden-column'>{$row['NombreUsuario']}</td>";
+                                            echo "<td class='text-center hidden-column'>{$row['NombreCompleto']}</td>";
+                                            echo "<td class='text-center hidden-column'>{$row['CorreoElectronico']}</td>";
+                                            echo "<td class='text-center hidden-column'>{$row['FechaIngreso']}</td>";
+                                            echo "<td class='text-center hidden-column'>{$row['FechaModificacion']}</td>";
+                                            echo "<td class='text-center hidden-column'>{$row['CodArbitrios']}</td>";
+                                            echo "<td class='text-center hidden-column'>{$row['NombreCarrera']}</td>";
+                                            echo "<td class='text-center'>{$row['EstadoSolicitud']}</td>";
+                                            echo "<td class='text-center'><input type='checkbox' name='selectRow' value='" . htmlspecialchars($row['IdSolicitud']) . "'></td>";
                                             echo "</tr>";
                                             $codigo_tramite++;
                                         }

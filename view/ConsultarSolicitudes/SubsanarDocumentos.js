@@ -67,7 +67,7 @@ var myDropzone = new Dropzone("#dropzone-documents", {
                     icon: 'error',
                     title: 'Nombre de archivo no válido',
                     text: `El nombre del archivo debe comenzar con alguno de los siguientes prefijos, seguido de la fecha en formato YYYYMMDD y un número secuencial de tres dígitos:
-                    \nEjemplos permitidos: SUBSOLI_${dateStr}001.docx, SUBPLAN_${dateStr}002.pdf`,
+                    \nEjemplos permitidos: SUBSOLI_${dateStr}001.docx, SUBPLAN_${dateStr}002.pdf, SUBPDOC_${dateStr}003.docx, SUBDIAG_${dateStr}004.pdf`,
                     confirmButtonText: 'Entendido'
                 });
                 return;

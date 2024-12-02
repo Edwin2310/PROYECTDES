@@ -69,7 +69,7 @@ session_start();
             </div>
         </div>
         <div class="content-header-section">
-            <div class="btn-group" role="group">
+            <!-- <div class="btn-group" role="group">
                 <button type="button" class="btn btn-rounded btn-dual-secondary" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="badge badge-primary">
                         <span class="fa fa-bell-o" class="fa fa-angle-down"> 3</span>
@@ -84,7 +84,7 @@ session_start();
                         <span><i class="fa fa-users mr-5"></i> Su solicitud fue agendada al CES</span>
                     </a>
                 </div>
-            </div>
+            </div> -->
             <input type="hidden" id="user_idx" value="<?php echo isset($_SESSION["IdUsuario"]) ? $_SESSION["IdUsuario"] : ''; ?>"> <!-- ID del Usuario -->
             <div class="btn-group" role="group">
                 <button type="button" class="btn btn-rounded btn-dual-secondary" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -96,14 +96,14 @@ session_start();
                     <a class="dropdown-item" href="../MntPerfil/perfil.php">
                         <i class="si si-user mr-5"></i> Perfil
                     </a>
-                    <a class="dropdown-item d-flex align-items-center justify-content-between" href="be_pages_generic_inbox.html">
+                    <!-- <a class="dropdown-item d-flex align-items-center justify-content-between" href="be_pages_generic_inbox.html">
                         <span><i class="fa fa-bell-o mr-5"></i> Notificaciones</span>
                         <span class="badge badge-primary"> 3</span>
                     </a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="javascript:void(0)" data-toggle="layout" data-action="side_overlay_toggle">
                         <i class="si si-wrench mr-5"></i> Configuracion
-                    </a>
+                    </a> -->
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="../Logout/logout.php">
                         <i class="si si-logout mr-5"></i> Cerrar Sesion

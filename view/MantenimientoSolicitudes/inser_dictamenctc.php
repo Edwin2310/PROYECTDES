@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Insertar los datos en la tabla
-    $sql = "INSERT INTO tbl_dictamen_ctc (ID_SESION, NUM_DICTAMEN_CTC, ID_ESTADO_DICTAMEN, OBSERVACIONES_DICTAMEN, ID_UNIVERSIDAD)
+    $sql = "INSERT INTO `documentos.tbldictamenesctc` (IdSesionCtc , NumDictamenCTC, IdEstadoDictamen, 	ObervacionesDictamen, 	IdUniversidad )
             VALUES (:id_sesion, :dictamen, :estado, :observaciones, :centro)";
     $stmt = $conn->prepare($sql);
 
@@ -48,12 +48,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($stmt->execute()) {
         // Obtener el correo del usuario que hizo la solicitud
-        $userSql = "SELECT EMAIL FROM tbl_solicitudes WHERE ID_SOLICITUD = (SELECT ID_SOLICITUD FROM tbl_sesionctc WHERE ID_SESION = :id_sesion)";
+        $userSql = "SELECT CorreoElectronico FROM `proceso.tblsolicitudes` WHERE IdSolicitud = (SELECT IdSolicitud FROM `proceso.tblsesionesctc` WHERE IdSesioCtc = :id_sesion)";
         $userStmt = $conn->prepare($userSql);
         $userStmt->bindParam(':id_sesion', $id_sesion);
         $userStmt->execute();
         $user = $userStmt->fetch(PDO::FETCH_ASSOC);
-        $userEmail = $user['EMAIL'];
+        $userEmail = $user['CorreoElectronico'];
 
         // Enviar correo
         $mail = new PHPMailer();

@@ -12,7 +12,7 @@ if ($id) {
         $sql = "SELECT DocObservacion 
                 FROM `documentos.tblobservaciones` 
                 WHERE IdSolicitud = :id
-                ORDER BY ID_OBSERVACION DESC
+                ORDER BY IdObservacion DESC
                 LIMIT 1";
         
         $stmt = $conn->prepare($sql);

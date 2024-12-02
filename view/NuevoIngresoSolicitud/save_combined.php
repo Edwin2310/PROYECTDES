@@ -41,145 +41,82 @@ if ($step === 'step1') {
         exit;
     }
 
-    $idUsuario = $_SESSION['IdUsuario'];
     $idSolicitud = $_SESSION['IdSolicitud'];
-    $idEstado = 1; // Valor fijo para ID_ESTADO
-    $nombreCompleto = isset($_POST['NombreCompleto']) ? $_POST['NombreCompleto'] : null;
-    $correoElectronico = isset($_POST['CorreoElectronico']) ? $_POST['CorreoElectronico'] : null;
-    $idTiposolicitud = isset($_POST['IdTiposolicitud']) ? $_POST['IdTiposolicitud'] : null;
-    $idCategoria = isset($_POST['IdCategoria']) ? $_POST['IdCategoria'] : null;
     $codigoPago = isset($_POST['CodigoPago']) ? $_POST['CodigoPago'] : null;
-    $codigoReferencia = isset($_POST['CodigoReferencia']) ? $_POST['CodigoReferencia'] : null;
-    $nombreCentro = isset($_POST['NombreCentro']) ? $_POST['NombreCentro'] : null;
-    $idTipoCentro = isset($_POST['IdTipoCentro']) ? $_POST['IdTipoCentro'] : null;
-    $idUniversidad = isset($_POST['IdUniversidad']) ? $_POST['IdUniversidad'] : null;
-    $idDepartamento = isset($_POST['IdDepartamento']) ? $_POST['IdDepartamento'] : null;
-    $idMunicipio = isset($_POST['IdMunicipio']) ? $_POST['IdMunicipio'] : null;
-    $descripcionSolicitud = isset($_POST['DescripcionSolicitud']) ? $_POST['DescripcionSolicitud'] : null;
+    $idCategoria = isset($_POST['IdCategoria']) ? $_POST['IdCategoria'] : null;
+    $idTipoSolicitud = isset($_POST['IdTiposolicitud']) ? $_POST['IdTiposolicitud'] : null;
+    $numReferencia = isset($_POST['NumReferencia']) ? $_POST['NumReferencia'] : null;
+    $nombreCarrera = isset($_POST['IdCarrera']) ? $_POST['IdCarrera'] : null;
+    $idGradoAcad = isset($_POST['IdGrado']) ? $_POST['IdGrado'] : null;
+    $idModalidad = isset($_POST['IdModalidad']) ? $_POST['IdModalidad'] : null;
+    $universidad = isset($_POST['IdUniversidad']) ? $_POST['IdUniversidad'] : null;
+    $departamentos = isset($_POST['IdDepartamento']) ? $_POST['IdDepartamento'] : null;
+    $municipios = isset($_POST['IdMunicipio']) ? $_POST['IdMunicipio'] : null;
+    $descripciones = isset($_POST['Descripcion']) ? $_POST['Descripcion'] : null;
+    $idUsuario = $_SESSION['IdUsuario']; // Obtener el ID del usuario de la sesión
+    $idEstado = 1; // Valor fijo para IdEstado
 
     try {
-        $conn->beginTransaction();
+        // Inserta los datos en la tabla tbl_carreras
+        $sqlCarrera = "INSERT INTO `mantenimiento.tblcarreras` (NomCarrera, IdUniversidad, IdModalidad, IdGrado) 
+                       VALUES (:nombreCarrera, :universidad, :idModalidad, :idGradoAcad)";
+        $stmtCarrera = $conn->prepare($sqlCarrera);
+        $stmtCarrera->bindParam(':nombreCarrera', $nombreCarrera);
+        $stmtCarrera->bindParam(':universidad', $universidad);
+        $stmtCarrera->bindParam(':idModalidad', $idModalidad);
+        $stmtCarrera->bindParam(':idGradoAcad', $idGradoAcad);
 
-        // **Paso 1: Actualizar la solicitud en tblSolicitudes**
-        $sqlUpdateSolicitud = "UPDATE `proceso.tblsolicitudes`
-            SET CodigoPago = :CodigoPago,
-                IdCategoria = :idCategoria,
-                CodigoReferencia = :codigoReferencia,
-                IdUniversidad = :idUniversidad,
-                DescripcionSolicitud = :descripcionSolicitud,
-                IdUsuario = :idUsuario,
-                IdEstado = :idEstado
-            WHERE IdSolicitud = :idSolicitud";
+        if ($stmtCarrera->execute()) {
+            // Obtén el IdCarrera recién insertado
+            $idCarrera = $conn->lastInsertId();
 
-        $stmtUpdateSolicitud = $conn->prepare($sqlUpdateSolicitud);
-        $stmtUpdateSolicitud->bindParam(':idCategoria', $idCategoria);
-        $stmtUpdateSolicitud->bindParam(':CodigoPago', $codigoPago);
-        $stmtUpdateSolicitud->bindParam(':codigoReferencia', $codigoReferencia);
-        $stmtUpdateSolicitud->bindParam(':idUniversidad', $idUniversidad);
-        $stmtUpdateSolicitud->bindParam(':descripcionSolicitud', $descripcionSolicitud);
-        $stmtUpdateSolicitud->bindParam(':idUsuario', $idUsuario);
-        $stmtUpdateSolicitud->bindParam(':idEstado', $idEstado);
-        $stmtUpdateSolicitud->bindParam(':idSolicitud', $idSolicitud);
+            // Actualiza la tabla tbl_solicitudes
+            $sqlUpdateSolicitud = "UPDATE `proceso.tblsolicitudes` 
+                                   SET CodigoPago = :codigoPago,
+                                       IdCategoria = :idCategoria,
+                                       IdTiposolicitud = :idTipoSolicitud,
+                                       NumReferencia = :numReferencia,
+                                       IdCarrera = :idCarrera,  
+                                       IdGrado = :idGradoAcad,
+                                       IdModalidad = :idModalidad,
+                                       IdUniversidad = :universidad,
+                                       IdDepartamento = :departamentos,
+                                       IdMunicipio = :municipios,
+                                       Descripcion = :Descripcion,
+                                       IdUsuario = :idUsuario,
+                                       IdEstado = :idEstado
+                                   WHERE IdSolicitud = :idSolicitud";
 
-        if (!$stmtUpdateSolicitud->execute()) {
-            throw new Exception("Error en UPDATE de proceso.tblSolicitudes");
-        }
+            $stmtUpdate = $conn->prepare($sqlUpdateSolicitud);
+            $stmtUpdate->bindParam(':codigoPago', $codigoPago);
+            $stmtUpdate->bindParam(':idCategoria', $idCategoria);
+            $stmtUpdate->bindParam(':idTipoSolicitud', $idTipoSolicitud);
+            $stmtUpdate->bindParam(':numReferencia', $numReferencia);
+            $stmtUpdate->bindParam(':idCarrera', $idCarrera);
+            $stmtUpdate->bindParam(':idGradoAcad', $idGradoAcad);
+            $stmtUpdate->bindParam(':idModalidad', $idModalidad);
+            $stmtUpdate->bindParam(':universidad', $universidad);
+            $stmtUpdate->bindParam(':departamentos', $departamentos);
+            $stmtUpdate->bindParam(':municipios', $municipios);
+            $stmtUpdate->bindParam(':Descripcion', $descripciones); // Asegurando coincidencia
+            $stmtUpdate->bindParam(':idUsuario', $idUsuario);
+            $stmtUpdate->bindParam(':idEstado', $idEstado);
+            $stmtUpdate->bindParam(':idSolicitud', $idSolicitud);
 
-        // **Paso 2: Insertar o actualizar en tblDetallesCentros**
-        $sqlCheck = "SELECT COUNT(*) FROM `proceso.tblDetallesCentros` WHERE IdSolicitud = :idSolicitud";
-        $stmtCheck = $conn->prepare($sqlCheck);
-        $stmtCheck->bindParam(':idSolicitud', $idSolicitud);
-        $stmtCheck->execute();
-        $exists = $stmtCheck->fetchColumn();
-
-        if ($exists > 0) {
-            $sqlDetalles = "UPDATE `proceso.tblDetallesCentros`
-                SET IdTiposolicitud = :idTiposolicitud,
-                    NombreCentro = :nombreCentro,
-                    IdTipoCentro = :idTipoCentro,
-                    IdUniversidad = :idUniversidad,
-                    IdDepartamento = :idDepartamento,
-                    IdMunicipio = :idMunicipio
-                WHERE IdSolicitud = :idSolicitud";
+            // Ejecuta la consulta y verifica el resultado
+            if ($stmtUpdate->execute()) {
+                echo 'success';
+            } else {
+                echo 'error_solicitud';
+            }
         } else {
-            $sqlDetalles = "INSERT INTO `proceso.tblDetallesCentros` (
-                IdSolicitud, IdTiposolicitud, NombreCentro, IdTipoCentro,
-                IdUniversidad, IdDepartamento, IdMunicipio
-            ) VALUES (
-                :idSolicitud, :idTiposolicitud, :nombreCentro, :idTipoCentro,
-                :idUniversidad, :idDepartamento, :idMunicipio
-            )";
+            echo 'error_carrera';
         }
-
-        $stmtDetalles = $conn->prepare($sqlDetalles);
-        $stmtDetalles->bindParam(':idSolicitud', $idSolicitud);
-        $stmtDetalles->bindParam(':idTiposolicitud', $idTiposolicitud);
-        $stmtDetalles->bindParam(':nombreCentro', $nombreCentro);
-        $stmtDetalles->bindParam(':idTipoCentro', $idTipoCentro);
-        $stmtDetalles->bindParam(':idUniversidad', $idUniversidad);
-        $stmtDetalles->bindParam(':idDepartamento', $idDepartamento);
-        $stmtDetalles->bindParam(':idMunicipio', $idMunicipio);
-
-        if (!$stmtDetalles->execute()) {
-            throw new Exception("Error en tblDetallesCentros");
-        }
-
-        // **Paso 3: Obtener el NombreCentro de proceso.tblDetallesCentros**
-        $sqlGetNombreCentro = "SELECT NombreCentro FROM `proceso.tblDetallesCentros` WHERE IdSolicitud = :idSolicitud";
-        $stmtGetNombreCentro = $conn->prepare($sqlGetNombreCentro);
-        $stmtGetNombreCentro->bindParam(':idSolicitud', $idSolicitud);
-        $stmtGetNombreCentro->execute();
-        $nombreCentro = $stmtGetNombreCentro->fetchColumn();
-
-        if (!$nombreCentro) {
-            throw new Exception("Error: No se encontró NombreCentro para la solicitud proporcionada.");
-        }
-
-        // Asignar el valor obtenido a TipoCentro
-        $tipoCentro = $nombreCentro;
-
-        // Establecer valor predeterminado para IdVisibilidad
-        $idVisibilidad = 2;
-
-
-        // **Paso 3: Insertar o actualizar en mantenimiento.tbltiposcentros**
-        $sqlCheck = "SELECT COUNT(*) FROM `mantenimiento.tbltiposcentros` WHERE IdSolicitud = :idSolicitud";
-        $stmtCheck = $conn->prepare($sqlCheck);
-        $stmtCheck->bindParam(':idSolicitud', $idSolicitud);
-        $stmtCheck->execute();
-        $exists = $stmtCheck->fetchColumn();
-
-        if ($exists > 0) {
-            $sqlTiposCentros = "UPDATE `mantenimiento.tbltiposcentros`
-                SET TipoCentro = :tipoCentro,
-                    IdVisibilidad = :idVisibilidad
-                WHERE IdSolicitud = :idSolicitud";
-        } else {
-            $sqlTiposCentros = "INSERT INTO `mantenimiento.tbltiposcentros` (
-                TipoCentro, IdVisibilidad, IdSolicitud
-            ) VALUES (
-                :tipoCentro, :idVisibilidad, :idSolicitud
-            )";
-        }
-
-        $stmtTiposCentros = $conn->prepare($sqlTiposCentros);
-        $stmtTiposCentros->bindParam(':tipoCentro', $tipoCentro);
-        $stmtTiposCentros->bindParam(':idVisibilidad', $idVisibilidad);
-        $stmtTiposCentros->bindParam(':idSolicitud', $idSolicitud);
-
-        if ($exists > 0) {
-            $stmtTiposCentros->bindParam(':idVisibilidad', $idVisibilidad);
-        }
-
-        if (!$stmtTiposCentros->execute()) {
-            throw new Exception("Error en mantenimiento.tbltiposcentros");
-        }
-
-        // Confirmar la transacción
-        $conn->commit();
-        echo "step2_success";
-    } catch (Exception $e) {
-        $conn->rollBack();
-        echo "Error al guardar datos del paso 2: " . $e->getMessage();
+    } catch (PDOException $e) {
+        echo 'error: ' . $e->getMessage();
     }
+
+    $conn = null;
+} else {
+    echo 'error: invalid step';
 }

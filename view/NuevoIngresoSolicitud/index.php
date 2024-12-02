@@ -156,6 +156,31 @@ if (isset($_SESSION["IdUsuario"])) {
                                         <div class="tab-pane" id="wizard-simple-step2" role="tabpanel">
                                             <div class="form-group">
                                                 <div class="row">
+
+                                                    <div class="col-md-6">
+                                                        <label class="col-12" for="IdTiposolicitud">Tipo de Solicitud</label>
+                                                        <div class="col-12">
+                                                            <select class="form-control" id="IdTiposolicitud" name="IdTiposolicitud" required>
+                                                                <option value="0">Seleccionar Solicitud</option>
+                                                                <?php echo obtenerTipoSolicitud($usuario); ?>
+                                                            </select>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <label class="col-12" for="IdCategoria">Categoría de Solicitud</label>
+                                                        <div class="col-12">
+                                                            <select class="form-control" id="IdCategoria" name="IdCategoria" required>
+                                                                <option value="0">Seleccionar Categoría</option>
+                                                                <?php echo obtenerCategoriaSolicitud($usuario); ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="row">
                                                     <div class="col-md-6">
                                                         <label class="col-12" for="CodigoPago">Código de Pago</label>
                                                         <div class="col-12">
@@ -166,21 +191,6 @@ if (isset($_SESSION["IdUsuario"])) {
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-6">
-                                                        <label class="col-12" for="IdCategoria">Categoría de Solicitud</label>
-                                                        <div class="col-12">
-                                                            <select class="form-control" id="IdCategoria" name="IdCategoria" required></select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-md-3">
-                                                        <label class="col-12" for="IdTiposolicitud">Tipo Solicitud</label>
-                                                        <div class="col-12">
-                                                            <select class="form-control" id="IdTiposolicitud" name="IdTiposolicitud" required></select>
-                                                        </div>
-                                                    </div>
                                                     <div class="col-md-3">
                                                         <label class="col-12" for="NumReferencia">Número de Referencia</label>
                                                         <div class="col-12">
@@ -232,8 +242,8 @@ if (isset($_SESSION["IdUsuario"])) {
                                                     <div class="col-md-6" id="div-departamento1">
                                                         <label class="col-12" for="IdDepartamento">Departamento</label>
                                                         <div class="col-12">
-                                                            <select class="form-control" id="IdDepartamento" name="Departamento[]" required>
-                                                                <option value="0">Seleccione un Departamento</option>
+                                                            <select class="form-control" id="IdDepartamento" name="IdDepartamento" onchange="cargarMunicipios(this.value)" required>
+                                                                <option value="0">Seleccionar Departamento</option>
                                                                 <?php echo obtenerDepartamentos($usuario); ?>
                                                             </select>
                                                         </div>
@@ -242,17 +252,17 @@ if (isset($_SESSION["IdUsuario"])) {
                                                     <div class="col-md-6" id="div-municipio1">
                                                         <label class="col-12" for="IdMunicipio">Municipio</label>
                                                         <div class="col-12">
-                                                            <select class="form-control" id="IdMunicipio" name="Municipio[]" required>
-                                                                <option value="0">Seleccione un Municipio</option>
+                                                            <select class="form-control" id="IdMunicipio" name="IdMunicipio" required>
+                                                                <option value="0">Seleccionar Municipio</option>
                                                             </select>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label class="col-12" for="Descripcion_solicitud">Descripción de la Solicitud</label>
+                                                    <label class="col-12" for="Descripcion">Descripción de la Solicitud</label>
                                                     <div class="col-12">
-                                                        <textarea class="form-control" id="Descripcion_solicitud" name="Descripcion_solicitud" rows="6" placeholder="PRESENTACIÓN DE SOLICITUD DE REFORMA AL PLAN DE ESTUDIOS DE LA CARRERA DE INGENIERIA EN MECATRONICA, EN EL GRADO DE LICENCIATURA DE LA UNIVERSIDAD TECNOLOGICA CENTROAMERICANA, UNITEC." required oninput="validateTextarea(event)"></textarea>
+                                                        <textarea class="form-control" id="Descripcion" name="Descripcion" rows="6" placeholder="PRESENTACIÓN DE SOLICITUD DE REFORMA AL PLAN DE ESTUDIOS DE LA CARRERA DE INGENIERIA EN MECATRONICA, EN EL GRADO DE LICENCIATURA DE LA UNIVERSIDAD TECNOLOGICA CENTROAMERICANA, UNITEC." required oninput="validateTextarea(event)"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -361,6 +371,8 @@ if (isset($_SESSION["IdUsuario"])) {
 <script src="../NuevoIngresoSolicitud/js/obtener_municipio.js"></script>
 <script src="../NuevoIngresoSolicitud/js/Guardar_Adjuntos.js"></script>
 <!-- <script src="../Seguridad//Bitacora/Bitacora.js"></script> -->
-<script src="../NuevoIngresoSolicitud/js/obtener_categoria.js"></script>
+<script src="../NuevoIngresoSolicitud/js/obtener_codarbitrio.js"></script>
+<script src="../NuevoIngresoSolicitud/js/obtener_idUniversidad.js"></script>
 <script src="../NuevoIngresoSolicitud/js/vali.js"></script>
 <script src="../NuevoIngresoSolicitud/js/ValidacionesInputs.js"></script>
+<script src="../NuevoIngresoSolicitud/js/municipios.js"></script>

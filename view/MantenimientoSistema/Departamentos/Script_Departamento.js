@@ -1,8 +1,14 @@
-function validarNombreDepartamento(input) {
-    // Remueve cualquier carácter que no sea una letra (con o sin tilde) o un espacio
+function vvalidarNombreDepartamento(input) {
+    // Remueve caracteres no permitidos (excepto letras con tildes y espacios)
     input.value = input.value.replace(/[^a-zA-ZÁÉÍÓÚáéíóú\s]/g, '');
 
-    // Convierte el texto a mayúsculas
+    // Reemplaza múltiples espacios consecutivos por un solo espacio
+    input.value = input.value.replace(/\s+/g, ' ');
+
+    // Elimina los espacios al principio o al final del texto
+    input.value = input.value.trim();
+
+    // Convierte el texto a mayúsculas automáticamente
     input.value = input.value.toUpperCase();
 }
 

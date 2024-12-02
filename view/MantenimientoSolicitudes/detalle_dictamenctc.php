@@ -61,7 +61,7 @@ if (isset($_SESSION["IdUsuario"])) {
             $estado_id = $_POST['estado_id']; // Estado a actualizar (en este caso, 4)
 
             // Actualiza el estado en la base de datos
-            $query = "UPDATE tbl_solicitudes SET ID_ESTADO = :estado_id WHERE ID_SOLICITUD = :solicitud_id";
+            $query = "UPDATE `proceso.tblsolicitudes` SET IdEstado= :estado_id WHERE IdSolicitud = :solicitud_id";
             $stmt = $conexion->prepare($query);
             $stmt->bindParam(':estado_id', $estado_id, PDO::PARAM_INT);
             $stmt->bindParam(':solicitud_id', $solicitud_id, PDO::PARAM_INT);
@@ -80,7 +80,7 @@ if (isset($_SESSION["IdUsuario"])) {
 
     // Obtener el ID_SESION basado en el ID_SOLICITUD
     $id_solicitud = $_GET['solicitud_id']; // O puedes usar $_SESSION si corresponde
-    $sql = "SELECT ID_SESION FROM tbl_sesionctc WHERE ID_SOLICITUD = :id_solicitud";
+    $sql = "SELECT IdSesionCtc FROM `proceso.tblsesionesctc` WHERE IdSolicitud = :id_solicitud";
     $stmt = $conexion->prepare($sql);
     $stmt->bindParam(':id_solicitud', $id_solicitud);
     $stmt->execute();
@@ -224,13 +224,13 @@ if (isset($_SESSION["IdUsuario"])) {
                                                 <div class="form-group row">
                                                     <label class="col-12" for="example-text-input">Nombre Completo</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="example-text-input" name="example-text-input" placeholder="" required>
+                                                        <input type="text" class="form-control" id="example-text-input" name="example-text-input" value="<?php echo htmlspecialchars($nombre_completo, ENT_QUOTES, 'UTF-8'); ?>" readonly>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-12" for="example-email-input">Correo Electronico</label>
                                                     <div class="col-12">
-                                                        <input type="email" class="form-control" id="example-email-input" name="example-email-input" placeholder="" required>
+                                                        <input type="email" class="form-control" id="example-email-input" name="example-email-input" value="<?php echo htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?>" readonly>
                                                     </div>
                                                 </div>
                                             </form>
@@ -286,11 +286,11 @@ if (isset($_SESSION["IdUsuario"])) {
                                                                     if (!$conn) {
                                                                         die("Conexión fallida: " . $conn->errorInfo()[2]);
                                                                     }
-                                                                    $sql = "SELECT ID_ESTADO_DICTAMEN, ESTADO_CTC FROM tbl_dictamen_estados";
+                                                                    $sql = "SELECT 	IdEstadodictamen, EstadoCTC FROM `mantenimiento.tbldictamenesestados`";
                                                                     $result = $conn->query($sql);
                                                                     if ($result) {
                                                                         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                                                                            echo "<option value='" . htmlspecialchars($row['ID_ESTADO_DICTAMEN'], ENT_QUOTES, 'UTF-8') . "'>" . htmlspecialchars($row['ESTADO_CTC'], ENT_QUOTES, 'UTF-8') . "</option>";
+                                                                            echo "<option value='" . htmlspecialchars($row['IdEstadodictamen'], ENT_QUOTES, 'UTF-8') . "'>" . htmlspecialchars($row['EstadoCTC'], ENT_QUOTES, 'UTF-8') . "</option>";
                                                                         }
                                                                     } else {
                                                                         echo "Error: " . $conn->errorInfo()[2];
@@ -334,7 +334,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                                             <div class="col-12">
                                                                 <select class="form-control" id="example-select" name="centro">
                                                                     <option value="0">Seleccione Una</option>
-                                                                    <option value="14">UNITEC</option>
+                                                                    <option value="14">EAP ZAMORANO</option>
                                                                     <option value="20">UTH</option>
                                                                     <option value="1">UNAH</option>
                                                                 </select>

@@ -83,6 +83,18 @@ var myDropzone = new Dropzone("#Plan-dropzone", {
     }
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    const numeroRegistroInput = document.getElementById('numero_registro');
+
+    numeroRegistroInput.addEventListener('input', function () {
+        // Permitir solo letras, números y un único espacio entre caracteres
+        let value = this.value;
+        this.value = value
+            .replace(/[^a-zA-Z0-9\s]/g, '')  // Eliminar caracteres especiales
+            .replace(/\s{2,}/g, ' ');       // Reemplazar múltiples espacios por uno
+    });
+});
+
 // Envío de datos al hacer clic en el botón
 document.getElementById('btn-enviar-adjunto').addEventListener('click', function () {
     var numeroRegistro = document.getElementById('numero_registro').value;

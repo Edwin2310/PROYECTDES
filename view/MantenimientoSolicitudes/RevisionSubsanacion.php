@@ -163,7 +163,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                             <div class="row">
                                                 <div class="col-md-6 justify-content-center">
                                                     <div class="col-12">
-                                                        <textarea class="form-control" id="example-textarea-input" name="example-textarea-input" rows="16" placeholder="INGRESE LAS OBSERVACIONES DESEADAS O ADJUNTE UN INFORME DE OBSERVACIONES Y CORRECCIONES" required></textarea>
+                                                        <textarea class="form-control" id="example-textarea-input" name="example-textarea-input" style="text-transform:uppercase" rows="16" placeholder="INGRESE LAS OBSERVACIONES DESEADAS O ADJUNTE UN INFORME DE OBSERVACIONES Y CORRECCIONES" required></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">

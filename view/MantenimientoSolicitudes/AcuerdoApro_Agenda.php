@@ -69,46 +69,51 @@ if (isset($_SESSION["IdUsuario"])) {
             .mt-3 {
                 margin-top: 1rem;
             }
+
             .text-right {
-    text-align: right;
-}
+                text-align: right;
+            }
 
-.mt-3 {
-    margin-top: 1rem;
-}
+            .mt-3 {
+                margin-top: 1rem;
+            }
 
-.text-right {
-    text-align: right;
-}
+            .text-right {
+                text-align: right;
+            }
 
-.mt-3 {
-    margin-top: 1rem;
-}
+            .mt-3 {
+                margin-top: 1rem;
+            }
 
-.d-flex {
-    display: flex;
-}
+            .d-flex {
+                display: flex;
+            }
 
-.justify-content-between {
-    justify-content: space-between; /* Espacio entre los botones en los extremos */
-}
+            .justify-content-between {
+                justify-content: space-between;
+                /* Espacio entre los botones en los extremos */
+            }
 
-.align-items-center {
-    align-items: center; /* Centra verticalmente los elementos en el contenedor */
-}
+            .align-items-center {
+                align-items: center;
+                /* Centra verticalmente los elementos en el contenedor */
+            }
 
-.button-group {
-    display: flex;
-    gap: 10px; /* Espacio entre los botones */
-}
+            .button-group {
+                display: flex;
+                gap: 10px;
+                /* Espacio entre los botones */
+            }
 
-.show-more-btn {
-    margin-right: auto; /* Empuja el botón "Mostrar más" hacia la izquierda */
-}
-
-
+            .show-more-btn {
+                margin-right: auto;
+                /* Empuja el botón "Mostrar más" hacia la izquierda */
+            }
         </style>
     </head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
     <body>
         <div id="page-container" class="sidebar-o side-scroll page-header-modern main-content-boxed">
@@ -175,243 +180,307 @@ if (isset($_SESSION["IdUsuario"])) {
                                         <?php
                                         $conexion = new Conectar();
                                         $conn = $conexion->Conexion();
-                                        $sql = "SELECT
-                                                    s.ID_SOLICITUD,
-                                                    c.NOM_CARRERA,
-                                                    cat.NOM_CATEGORIA,
-                                                    uc.NOM_UNIVERSIDAD,
-                                                    g.NOM_GRADO,
-                                                    e.ESTADO_SOLICITUD,
-                                                    tp.NOM_TIPO,
-                                                    s.NUM_REFERENCIA,
-                                                    s.DESCRIPCION,
-                                                    d.NOM_DEPTO,
-                                                    mu.NOM_MUNICIPIO,
-                                                    u.NOMBRE_USUARIO,
-                                                    s.NOMBRE_COMPLETO,
-                                                    s.EMAIL,
-                                                    s.FECHA_INGRESO,
-                                                    s.FECHA_MODIFICACION,
-                                                    cat.COD_ARBITRIOS
-                                                FROM
-                                                    tbl_solicitudes s
-                                                LEFT JOIN tbl_tipo_solicitud tp ON s.ID_TIPO_SOLICITUD = tp.ID_TIPO_SOLICITUD
-                                                LEFT JOIN tbl_categoria cat ON s.ID_CATEGORIA = cat.ID_CATEGORIA
-                                                LEFT JOIN tbl_carrera c ON s.ID_CARRERA = c.ID_CARRERA
-                                                LEFT JOIN tbl_grado_academico g ON s.ID_GRADO = g.ID_GRADO
-                                                LEFT JOIN tbl_universidad_centro uc ON s.ID_UNIVERSIDAD = uc.ID_UNIVERSIDAD
-                                                LEFT JOIN tbl_deptos d ON s.ID_DEPARTAMENTO = d.ID_DEPARTAMENTO
-                                                LEFT JOIN tbl_municipios mu ON s.ID_MUNICIPIO = mu.ID_MUNICIPIO
-                                                LEFT JOIN tbl_ms_usuario u ON s.IdUsuario = u.IdUsuario
-                                                LEFT JOIN tbl_estado_solicitud e ON s.ID_ESTADO = e.ID_ESTADO
-                                                WHERE e.ID_ESTADO IN (24)
-                                                ORDER BY e.ID_ESTADO";
+                                        $sql = "SELECT  s.IdSolicitud,
+                                                        s.NumReferencia,
+                                                        s.Descripcion,
+                                                        s.NombreCompleto,
+                                                        s.FechaIngreso,
+                                                        s.FechaModificacion,
+                                                        ts.NomTipoSolicitud,
+                                                        cat.NomCategoria,
+                                                        c.NomCarrera,
+                                                        g.NomGrado,
+                                                        m.NomModalidad,
+                                                        uc.NomUniversidad,
+                                                        d.NomDepto,
+                                                        mu.NomMunicipio,
+                                                        u.NombreUsuario,
+                                                        s.CorreoElectronico,
+                                                        cat.CodArbitrios,
+                                                        s.NombreCarrera,
+                                                        e.EstadoSolicitud
+                                                    FROM
+                                                        `proceso.tblSolicitudes` s
+                                                    LEFT JOIN `mantenimiento.tblcategorias` cat ON s.IdCategoria = cat.IdCategoria
+                                                    LEFT JOIN `mantenimiento.tblcarreras` c ON s.IdCarrera = c.IdCarrera
+                                                    LEFT JOIN `mantenimiento.tblgradosacademicos` g ON s.IdGrado = g.IdGrado
+                                                    LEFT JOIN `mantenimiento.tblmodalidades` m ON s.IdModalidad = m.IdModalidad
+                                                    LEFT JOIN `mantenimiento.tbluniversidades` uc ON s.IdUniversidad = uc.IdUniversidad
+                                                    LEFT JOIN `mantenimiento.tbldeptos` d ON s.IdDepartamento = d.IdDepartamento
+                                                    LEFT JOIN `mantenimiento.tblmunicipios` mu ON s.IdMunicipio = mu.IdMunicipio
+                                                    LEFT JOIN `seguridad.tbldatospersonales` u ON s.IdUsuario = u.IdUsuario
+                                                    LEFT JOIN `mantenimiento.tblestadossolicitudes` e ON s.IdEstado = e.IdEstado
+                                                    LEFT JOIN `mantenimiento.tbltiposolicitudes` ts ON cat.IdTipoSolicitud = ts.IdTipoSolicitud -- Relación con tipos de solicitud
+                                                    WHERE e.IdEstado IN (24)
+                                                    ORDER BY e.IdEstado;";
 
                                         $result = $conn->query($sql);
                                         if ($result !== false && $result->rowCount() > 0) {
                                             while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                                                 echo "<tr>";
-                                                echo "<td class='text-center'>{$row['ID_SOLICITUD']}</td>";
-                                                echo "<td class='text-center'>{$row['NOM_CARRERA']}</td>";
-                                                echo "<td class='text-center'>{$row['NOM_CATEGORIA']}</td>";
-                                                echo "<td class='text-center'>{$row['NOM_UNIVERSIDAD']}</td>";
-                                                echo "<td class='text-center'>{$row['NOM_GRADO']}</td>";
-                                                echo "<td class='text-center'>{$row['ESTADO_SOLICITUD']}</td>";
-                                                echo "<td class='text-center hidden-column'>{$row['NOM_TIPO']}</td>";
-                                                echo "<td class='text-center hidden-column'>{$row['NUM_REFERENCIA']}</td>";
-                                                echo "<td class='text-center hidden-column'>{$row['DESCRIPCION']}</td>";
-                                                echo "<td class='text-center hidden-column'>{$row['NOM_DEPTO']}</td>";
-                                                echo "<td class='text-center hidden-column'>{$row['NOM_MUNICIPIO']}</td>";
-                                                echo "<td class='text-center hidden-column'>{$row['NOMBRE_USUARIO']}</td>";
-                                                echo "<td class='text-center hidden-column'>{$row['NOMBRE_COMPLETO']}</td>";
-                                                echo "<td class='text-center hidden-column'>{$row['EMAIL']}</td>";
-                                                echo "<td class='text-center hidden-column'>{$row['FECHA_INGRESO']}</td>";
-                                                echo "<td class='text-center hidden-column'>{$row['FECHA_MODIFICACION']}</td>";
-                                                echo "<td class='text-center hidden-column'>{$row['COD_ARBITRIOS']}</td>";
+                                                echo "<td class='text-center'>{$row['IdSolicitud']}</td>";
+                                                echo "<td class='text-center'>{$row['NomCarrera']}</td>";
+                                                echo "<td class='text-center'>{$row['NomCategoria']}</td>";
+                                                echo "<td class='text-center'>{$row['NomUniversidad']}</td>";
+                                                echo "<td class='text-center'>{$row['NomGrado']}</td>";
+                                                echo "<td class='text-center'>{$row['EstadoSolicitud']}</td>";
+                                                echo "<td class='text-center hidden-column'>{$row['NomTipoSolicitud']}</td>";
+                                                echo "<td class='text-center hidden-column'>{$row['NumReferencia']}</td>";
+                                                echo "<td class='text-center hidden-column'>{$row['Descripcion']}</td>";
+                                                echo "<td class='text-center hidden-column'>{$row['NomDepto']}</td>";
+                                                echo "<td class='text-center hidden-column'>{$row['NomMunicipio']}</td>";
+                                                echo "<td class='text-center hidden-column'>{$row['NombreUsuario']}</td>";
+                                                echo "<td class='text-center hidden-column'>{$row['NombreCompleto']}</td>";
+                                                echo "<td class='text-center hidden-column'>{$row['CorreoElectronico']}</td>";
+                                                echo "<td class='text-center hidden-column'>{$row['FechaIngreso']}</td>";
+                                                echo "<td class='text-center hidden-column'>{$row['FechaModificacion']}</td>";
+                                                echo "<td class='text-center hidden-column'>{$row['CodArbitrios']}</td>";
                                                 echo "<td class='text-center'><input type='checkbox' class='select-checkbox'></td>";
                                                 echo "</tr>";
                                             }
                                         } else {
                                             echo "<tr><td colspan='19' class='text-center'>No hay datos disponibles</td></tr>";
                                         }
+
+                                        /*  $sql = "SELECT
+                                                    s.IdSolicitud,
+                                                    c.NomCarrera,
+                                                    cat.NomCategoria,
+                                                    uc.NomUniversidad,
+                                                    g.NomGrado,
+                                                    e.EstadoSolicitud,
+                                                    ts.NomTipoSolicitud,
+                                                    s.NumReferencia,
+                                                    s.Descripcion,
+                                                    d.NomDepto,
+                                                    mu.NomMunicipio,
+                                                    u.NombreUsuario,
+                                                    s.NombreCompleto,
+                                                    s.CorreoElectronico,
+                                                    s.FechaIngreso,
+                                                    s.FechaModificacion,
+                                                    cat.CodArbitrios
+                                                FROM
+                                                    `proceso.tblSolicitudes` s
+                                                LEFT JOIN `mantenimiento.tbltiposolicitudes` ts ON cat.IdTipoSolicitud = ts.IdTipoSolicitud -- Relación con tipos de solicitud
+                                                LEFT JOIN `mantenimiento.tblcategorias` cat ON s.IdCategoria = cat.IdCategoria
+                                                LEFT JOIN `mantenimiento.tblcarreras`  c ON s.IdCarrera = c.IdCarrera
+                                                LEFT JOIN `mantenimiento.tblgradosacademicos`  g ON s.IdGrado = g.IdGrado
+                                                LEFT JOIN `mantenimiento.tbluniversidades`  uc ON s.IdUniversidad = uc.IdUniversidad
+                                                LEFT JOIN `mantenimiento.tbldeptos`  d ON s.IdDepartamento = d.IdDepartamento
+                                                LEFT JOIN `mantenimiento.tblmunicipios`  mu ON s.IdMunicipio = mu.IdMunicipio
+                                                LEFT JOIN `seguridad.tbldatospersonales`  u ON s.IdUsuario = u.IdUsuario
+                                                LEFT JOIN `mantenimiento.tblestadossolicitudes` e ON s.IdEstado = e.IdEstado
+                                                WHERE e.IdEstado IN (24)
+                                                ORDER BY e.IdEstado";
+
+                                        $result = $conn->query($sql);
+                                        if ($result !== false && $result->rowCount() > 0) {
+                                            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                                                echo "<tr>";
+                                                echo "<td class='text-center'>{$row['IdSolicitud']}</td>";
+                                                echo "<td class='text-center'>{$row['NomCarrera']}</td>";
+                                                echo "<td class='text-center'>{$row['NomCategoria']}</td>";
+                                                echo "<td class='text-center'>{$row['NomUniversidad']}</td>";
+                                                echo "<td class='text-center'>{$row['NomGrado']}</td>";
+                                                echo "<td class='text-center'>{$row['EstadoSolicitud']}</td>";
+                                                echo "<td class='text-center hidden-column'>{$row['NomTipoSolicitud']}</td>";
+                                                echo "<td class='text-center hidden-column'>{$row['NumReferencia']}</td>";
+                                                echo "<td class='text-center hidden-column'>{$row['Descripcion']}</td>";
+                                                echo "<td class='text-center hidden-column'>{$row['NomDepto']}</td>";
+                                                echo "<td class='text-center hidden-column'>{$row['NomMunicipio']}</td>";
+                                                echo "<td class='text-center hidden-column'>{$row['NombreUsuario']}</td>";
+                                                echo "<td class='text-center hidden-column'>{$row['NombreCompleto']}</td>";
+                                                echo "<td class='text-center hidden-column'>{$row['CorreoElectronico']}</td>";
+                                                echo "<td class='text-center hidden-column'>{$row['FechaIngreso']}</td>";
+                                                echo "<td class='text-center hidden-column'>{$row['FechaModificacion']}</td>";
+                                                echo "<td class='text-center hidden-column'>{$row['CodArbitrios']}</td>";
+                                                echo "<td class='text-center'><input type='checkbox' class='select-checkbox'></td>";
+                                                echo "</tr>";
+                                            }
+                                        } else {
+                                            echo "<tr><td colspan='19' class='text-center'>No hay datos disponibles</td></tr>";
+                                        } */
                                         ?>
                                     </tbody>
                                 </table>
                             </div>
                             <div class="text-right mt-3">
-    <!-- Contenedor para alinear los botones -->
-    <div class="d-flex justify-content-between align-items-center">
-        <!-- Botón "Mostrar más" a la izquierda -->
-        <button class="btn btn-primary show-more-btn" id="showMoreBtn">Mostrar más</button>
-        
-        <!-- Grupo de botones a la derecha -->
-        <div class="button-group">
-            <button class="btn btn-success" id="selectAllBtn">Seleccionar todas</button>
-            <button class="btn btn-danger" id="deselectAllBtn">Desmarcar todas</button>
-        </div>
-    </div>
-    <!-- Botón "Asignar Sesión" centrado -->
-    <div class="text-center mt-3">
-        <button id="asignarSesion" class="btn btn-primary">Asignar Sesión</button>
-    </div>
-</div>
+                                <!-- Contenedor para alinear los botones -->
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <!-- Botón "Mostrar más" a la izquierda -->
+                                    <button class="btn btn-primary show-more-btn" id="showMoreBtn">Mostrar más</button>
+
+                                    <!-- Grupo de botones a la derecha -->
+                                    <div class="button-group">
+                                        <button class="btn btn-success" id="selectAllBtn">Seleccionar todas</button>
+                                        <button class="btn btn-danger" id="deselectAllBtn">Desmarcar todas</button>
+                                    </div>
+                                </div>
+                                <!-- Botón "Asignar Sesión" centrado -->
+                                <div class="text-center mt-3">
+                                    <button id="asignarSesion" class="btn btn-primary">Asignar Sesión</button>
+                                </div>
+                            </div>
 
 
+                        </div>
                     </div>
-                </div>
             </main>
             <?php require_once("../MainFooter/MainFooter.php"); ?>
         </div>
         <?php require_once("../MainJs/MainJs.php"); ?>
         <!-- Modal -->
-    <div class="modal fade" id="asignarSesionModal" tabindex="-1" role="dialog" aria-labelledby="asignarSesionModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="asignarSesionModalLabel">Asignar Sesión</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="asignarSesionForm">
-                        <div class="form-group">
-                            <label for="numeroSesion">Escriba el número de sesión:</label>
-                            <input type="text" class="form-control" id="numeroSesion" maxlength="3" pattern="\d{1,3}" required>
-                            <div class="invalid-feedback">
-                                Por favor ingrese un número válido de hasta 3 dígitos.
+        <div class="modal fade" id="asignarSesionModal" tabindex="-1" role="dialog" aria-labelledby="asignarSesionModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="asignarSesionModalLabel">Asignar Sesión</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="asignarSesionForm">
+                            <div class="form-group">
+                                <label for="numeroSesion">Escriba el número de sesión:</label>
+                                <input type="text" class="form-control" id="numeroSesion" maxlength="3" pattern="\d{1,3}" required>
+                                <div class="invalid-feedback">
+                                    Por favor ingrese un número válido de hasta 3 dígitos.
+                                </div>
                             </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" form="asignarSesionForm" class="btn btn-primary">Aceptar</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" form="asignarSesionForm" class="btn btn-primary">Aceptar</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const showMoreBtn = document.getElementById("showMoreBtn");
-    const hiddenColumns = document.querySelectorAll(".hidden-column");
-    const selectAllBtn = document.getElementById("selectAllBtn");
-    const deselectAllBtn = document.getElementById("deselectAllBtn");
-    const checkboxes = document.querySelectorAll(".select-checkbox");
-    const asignarSesionBtn = document.getElementById('asignarSesion');
-    const asignarSesionForm = document.getElementById('asignarSesionForm');
-    const numeroSesionInput = document.getElementById('numeroSesion');
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const showMoreBtn = document.getElementById("showMoreBtn");
+                const hiddenColumns = document.querySelectorAll(".hidden-column");
+                const selectAllBtn = document.getElementById("selectAllBtn");
+                const deselectAllBtn = document.getElementById("deselectAllBtn");
+                const checkboxes = document.querySelectorAll(".select-checkbox");
+                const asignarSesionBtn = document.getElementById('asignarSesion');
+                const asignarSesionForm = document.getElementById('asignarSesionForm');
+                const numeroSesionInput = document.getElementById('numeroSesion');
 
-    showMoreBtn.addEventListener("click", function() {
-        const isShowingMore = showMoreBtn.textContent === "Mostrar más";
-        hiddenColumns.forEach(function(column) {
-            column.style.display = isShowingMore ? "table-cell" : "none";
-        });
-        showMoreBtn.textContent = isShowingMore ? "Mostrar menos" : "Mostrar más";
-    });
-
-    selectAllBtn.addEventListener("click", function() {
-        checkboxes.forEach(function(checkbox) {
-            checkbox.checked = true;
-        });
-    });
-
-    deselectAllBtn.addEventListener("click", function() {
-        checkboxes.forEach(function(checkbox) {
-            checkbox.checked = false;
-        });
-    });
-
-    asignarSesionBtn.addEventListener('click', function() {
-        const isAnyCheckboxChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
-
-        if (isAnyCheckboxChecked) {
-            $('#asignarSesionModal').modal('show');
-        } else {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Advertencia',
-                text: 'Debe seleccionar al menos una solicitud para asignar una sesión.',
-                confirmButtonText: 'Aceptar'
-            });
-        }
-    });
-
-    asignarSesionForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        // Validar el número de sesión
-        if (!numeroSesionInput.checkValidity()) {
-            numeroSesionInput.classList.add('is-invalid');
-            Swal.fire({
-                icon: 'warning',
-                title: 'Advertencia',
-                text: 'El número de sesión debe tener exactamente 3 dígitos.',
-                confirmButtonText: 'Aceptar'
-            });
-            return;
-        }
-
-        numeroSesionInput.classList.remove('is-invalid');
-        var numeroSesion = numeroSesionInput.value;
-
-        // Obtener los IDs de las solicitudes seleccionadas
-        var selectedIds = Array.from(checkboxes)
-            .filter(checkbox => checkbox.checked)
-            .map((checkbox) => checkbox.closest('tr').querySelector('td:first-child').textContent.trim());
-
-        // Enviar datos al servidor usando AJAX
-        $.ajax({
-            url: 'guardar_sesionapro.php',
-            type: 'POST',
-            data: {
-                numeroSesion: numeroSesion,
-                ids: selectedIds.join(',')
-            },
-            dataType: 'json',
-            success: function(response) {
-                $('#asignarSesionModal').modal('hide');
-                
-                Swal.fire({
-                    icon: response.success ? 'success' : 'error',
-                    title: response.success ? '¡Éxito!' : 'Error',
-                    text: response.message,
-                    confirmButtonText: 'Aceptar'
-                
-                }).then(() => {
-    if (response.success) {
-        // Eliminar las filas de la tabla para las solicitudes asignadas
-        selectedIds.forEach(id => {
-            const row = document.querySelector(`tr[data-id="${id}"]`);
-            if (row) {
-                row.remove();
-            }
-        });
-        // Recargar la página automáticamente
-        location.reload();
-    }
-});
-
-            },
-            error: function() {
-                $('#asignarSesionModal').modal('hide');
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Hubo un error al asignar la sesión.',
-                    confirmButtonText: 'Aceptar'
+                showMoreBtn.addEventListener("click", function() {
+                    const isShowingMore = showMoreBtn.textContent === "Mostrar más";
+                    hiddenColumns.forEach(function(column) {
+                        column.style.display = isShowingMore ? "table-cell" : "none";
+                    });
+                    showMoreBtn.textContent = isShowingMore ? "Mostrar menos" : "Mostrar más";
                 });
-            }
-        });
-    });
-});
-</script>
+
+                selectAllBtn.addEventListener("click", function() {
+                    checkboxes.forEach(function(checkbox) {
+                        checkbox.checked = true;
+                    });
+                });
+
+                deselectAllBtn.addEventListener("click", function() {
+                    checkboxes.forEach(function(checkbox) {
+                        checkbox.checked = false;
+                    });
+                });
+
+
+                asignarSesionBtn.addEventListener('click', function() {
+                    const isAnyCheckboxChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+
+                    if (isAnyCheckboxChecked) {
+                        $('#asignarSesionModal').modal('show');
+                    } else {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Advertencia',
+                            text: 'Debe seleccionar al menos una solicitud para asignar una sesión.',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    }
+                });
+
+                asignarSesionForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+
+                    // Validar el número de sesión
+                    if (!numeroSesionInput.checkValidity()) {
+                        numeroSesionInput.classList.add('is-invalid');
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Advertencia',
+                            text: 'El número de sesión debe tener exactamente 3 dígitos.',
+                            confirmButtonText: 'Aceptar'
+                        });
+                        return;
+                    }
+
+                    numeroSesionInput.classList.remove('is-invalid');
+                    var numeroSesion = numeroSesionInput.value;
+
+                    // Obtener los IDs de las solicitudes seleccionadas
+                    var selectedIds = Array.from(checkboxes)
+                        .filter(checkbox => checkbox.checked)
+                        .map((checkbox) => checkbox.closest('tr').querySelector('td:first-child').textContent.trim());
+
+                    // Enviar datos al servidor usando AJAX
+                    $.ajax({
+                        url: 'guardar_sesionapro.php',
+                        type: 'POST',
+                        data: {
+                            numeroSesion: numeroSesion,
+                            ids: selectedIds.join(',')
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            $('#asignarSesionModal').modal('hide');
+
+                            Swal.fire({
+                                icon: response.success ? 'success' : 'error',
+                                title: response.success ? '¡Éxito!' : 'Error',
+                                text: response.message,
+                                confirmButtonText: 'Aceptar'
+
+                            }).then(() => {
+                                if (response.success) {
+                                    // Eliminar las filas de la tabla para las solicitudes asignadas
+                                    selectedIds.forEach(id => {
+                                        const row = document.querySelector(`tr[data-id="${id}"]`);
+                                        if (row) {
+                                            row.remove();
+                                        }
+                                    });
+                                    // Recargar la página automáticamente
+                                    location.reload();
+                                }
+                            });
+
+                        },
+                        error: function() {
+                            $('#asignarSesionModal').modal('hide');
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Hubo un error al asignar la sesión.',
+                                confirmButtonText: 'Aceptar'
+                            });
+                        }
+                    });
+                });
+            });
+        </script>
 
 
 
 
     </body>
+
     </html>
 <?php
 } else {

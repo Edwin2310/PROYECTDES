@@ -126,6 +126,21 @@ if (isset($_SESSION["IdUsuario"])) {
                         </div>
 
                         <div class="col-lg-4 mr-auto" data-toggle="appear">
+                            <a href="../ConsultarSolicitudes/index.php" class="block block-link-shadow text-center" href="javascript:void(0)">
+                                <div class="block-content block-content-full">
+                                    <div class="py-30 text-center">
+                                        <div class="item item-2x item-circle bg-default text-white mx-auto">
+                                            <i class="fa fa-pencil-square-o text-warning"></i>
+                                        </div>
+                                    </div>
+                                    <div class="block-content bg-body-light">
+                                        <p class="h5 font-w600">Consultar solicitudes</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- <div class="col-lg-4 mr-auto" data-toggle="appear">
                             <a href="CreacionCarrera1.php" class="block block-link-shadow text-center" href="javascript:void(0)">
                                 <div class="block-content block-content-full">
                                     <div class="py-30 text-center">
@@ -183,7 +198,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                     </div>
                                 </div>
                             </a>
-                        </div>
+                        </div> -->
 
                     </div>
 

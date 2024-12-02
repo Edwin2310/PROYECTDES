@@ -53,15 +53,15 @@ try {
         LEFT JOIN `proceso.tblacuerdoscesadmin` a ON s.IdSolicitud = a.IdSolicitud
         LEFT JOIN `proceso.tblacuerdoscesaprob` ap ON s.IdSolicitud = ap.IdSolicitud
         LEFT JOIN `mantenimiento.tblcarreras` c ON s.IdCarrera = c.IdCarrera
-        LEFT JOIN `mantenimiento.tbluniversidadescentros` u ON s.IdUniversidad = u.IdUniversidad
+        LEFT JOIN `mantenimiento.tbluniversidades` u ON s.IdUniversidad = u.IdUniversidad
         LEFT JOIN `mantenimiento.tbltiposolicitudes` ts ON s.IdTiposolicitud = ts.IdTiposolicitud
         LEFT JOIN `mantenimiento.tblcategorias` ct ON s.IdCategoria = ct.IdCategoria
         LEFT JOIN `mantenimiento.tbldeptos` dt ON s.IdDepartamento = dt.IdDepartamento
         LEFT JOIN `mantenimiento.tblmunicipios` mc ON s.IdMunicipio = mc.IdMunicipio
-        LEFT JOIN `seguridad.tblusuarios_personal` ur ON s.IdUsuario = ur.IdUsuario
+        LEFT JOIN `seguridad.tbldatospersonales` ur ON s.IdUsuario = ur.IdUsuario
         WHERE
-            s.IdUniversidad = : idUniversidad
-        AND c.IdCarrera = : idCarrera";
+            s.IdUniversidad = :idUniversidad
+        AND c.IdCarrera = :idCarrera";
 
     if ($fechaInicio && $fechaFin) {
         $query .= " AND s.FechaIngreso BETWEEN :fechaInicio AND :fechaFin";

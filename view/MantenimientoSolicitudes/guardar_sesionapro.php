@@ -26,13 +26,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             // Insertar un nuevo registro para cada ID_SOLICITUD con el número de sesión
-            $stmt = $conn->prepare("INSERT INTO tbl_acuerdo_ces_aprob (ID_SOLICITUD, ACUERDO_APROBACION) VALUES (:id, :numeroSesion)");
+            $stmt = $conn->prepare("INSERT INTO `proceso.tblacuerdoscesaprob` (IdSolicitud, AcuerdoAprobacion) VALUES (:id, :numeroSesion)");
             $stmt->bindParam(':numeroSesion', $numeroSesion);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
 
             // Actualizar el estado de la solicitud a 14
-            $stmt = $conn->prepare("UPDATE tbl_solicitudes SET ID_ESTADO = 14 WHERE ID_SOLICITUD = :id");
+            $stmt = $conn->prepare("UPDATE `proceso.tblsolicitudes` SET IdEstado = 14 WHERE IdSolicitud = :id");
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
         }

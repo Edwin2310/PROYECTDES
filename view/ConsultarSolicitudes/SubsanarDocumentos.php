@@ -10,18 +10,18 @@ if (isset($_SESSION["IdUsuario"])) {
         $conn = $conexion->Conexion();
 
         // Consulta para obtener los detalles de la solicitud y la ruta del archivo adjunto
-        $sql = "SELECT a.ID_SOLICITUD, a.NOMBRE_COMPLETO, a.EMAIL, b.NOM_CARRERA, c.NOM_CATEGORIA, 
-                       d.NOM_UNIVERSIDAD, e.NOM_GRADO, f.ESTADO_SOLICITUD, g.NOM_MODALIDAD,
-                       adj.PLAN_ESTUDIOS, adj.SOLICITUD, adj.PLANTA_DOCENTE, adj.DIAGNOSTICO
-                FROM tbl_solicitudes a 
-                LEFT JOIN tbl_carrera b ON a.ID_CARRERA = b.ID_CARRERA
-                LEFT JOIN tbl_categoria c ON a.ID_CATEGORIA = c.ID_CATEGORIA
-                LEFT JOIN tbl_universidad_centro d ON a.ID_UNIVERSIDAD = d.ID_UNIVERSIDAD
-                LEFT JOIN tbl_grado_academico e ON a.ID_GRADO = e.ID_GRADO
-                LEFT JOIN tbl_estado_solicitud f ON a.ID_ESTADO = f.ID_ESTADO
-                LEFT JOIN tbl_modalidad g ON a.ID_MODALIDAD = g.ID_MODALIDAD
-                LEFT JOIN tbl_archivos_adjuntos adj ON a.ID_SOLICITUD = adj.ID_SOLICITUD
-                WHERE a.ID_SOLICITUD = :id";
+        $sql = "SELECT a.IdSolicitud, a.NombreCompleto, a.CorreoElectronico, b.NomCarrera, c.NomCategoria, 
+                       d.NomUniversidad, e.NomGrado, f.EstadoSolicitud, g.NomModalidad,
+                       adj.PlanEstudios, adj.Solicitud, adj.PlantaDocente, adj.Diagnostico
+                FROM `proceso.tblsolicitudes` a 
+                LEFT JOIN `mantenimiento.tblcarreras` b ON a.IdCarrera = b.IdCarrera
+                LEFT JOIN `mantenimiento.tblcategorias` c ON a.IdCategoria = c.IdCategoria
+                LEFT JOIN `mantenimiento.tbluniversidades` d ON a.IdUniversidad = d.IdUniversidad
+                LEFT JOIN `mantenimiento.tblgradosacademicos` e ON a.IdGrado = e.IdGrado
+                LEFT JOIN `mantenimiento.tblestadossolicitudes` f ON a.IdEstado = f.IdEstado
+                LEFT JOIN `mantenimiento.tblmodalidades` g ON a.IdModalidad = g.IdModalidad
+                LEFT JOIN `documentos.tblarchivosadjuntos` adj ON a.IdSolicitud = adj.IdSolicitud
+                WHERE a.IdSolicitud = :id";
 
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -29,16 +29,16 @@ if (isset($_SESSION["IdUsuario"])) {
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // Si se encuentra el archivo, almacenar la ruta en variables distintas
-        $filePathPlanEstudios = $row['PLAN_ESTUDIOS'] ?? null;
+        $filePathPlanEstudios = $row['PlanEstudios'] ?? null;
         $filePathSolicitud = $row['SOLICITUD'] ?? null;
-        $filePathPlantaDocente = $row['PLANTA_DOCENTE'] ?? null;
-        $filePathDiagnostico = $row['DIAGNOSTICO'] ?? null;
+        $filePathPlantaDocente = $row['PlantaDocente'] ?? null;
+        $filePathDiagnostico = $row['Diagnostico'] ?? null;
 
         // Consulta para obtener la última observación de la solicitud
-        $obsSql = "SELECT OBSERVACION 
-                   FROM tbl_observaciones
-                   WHERE ID_SOLICITUD = :id 
-                   ORDER BY FECHA_OBSERVACION DESC 
+        $obsSql = "SELECT Observacion
+                   FROM `documentos.tblobservaciones`
+                   WHERE IdSolicitud = :id 
+                   ORDER BY FechaObservacion DESC 
                    LIMIT 1";
 
         $obsStmt = $conn->prepare($obsSql);
@@ -47,7 +47,7 @@ if (isset($_SESSION["IdUsuario"])) {
         $obsRow = $obsStmt->fetch(PDO::FETCH_ASSOC);
 
         // Obtener la última observación
-        $observaciones = $obsRow['OBSERVACION'] ?? '';
+        $observaciones = $obsRow['Observacion'] ?? '';
     }
 ?>
 
@@ -85,7 +85,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                 <a class="img-link mr-5" href="be_pages_generic_profile.html">
                                     <img class="img-avatar img-avatar32" src="../../public/assets/img/avatars/avatar15.jpg" alt="">
                                 </a>
-                                <a class="align-middle link-effect text-primary-dark font-w600" href="be_pages_generic_profile.html"><?php echo $_SESSION["NOMBRE_USUARIO"] ?></a>
+                                <a class="align-middle link-effect text-primary-dark font-w600" href="be_pages_generic_profile.html"><?php echo $_SESSION["NombreUsuario"] ?></a>
                             </div>
 
                         </div>
@@ -146,25 +146,25 @@ if (isset($_SESSION["IdUsuario"])) {
                                                 <div class="form-group row">
                                                     <label class="col-12" for="nombre-carrera">Nombre de la Carrera</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="nombre-carrera" name="nombre_carrera" placeholder="" value="<?php echo htmlspecialchars($row['NOM_CARRERA']); ?>" readonly required>
+                                                        <input type="text" class="form-control" id="nombre-carrera" name="nombre_carrera" placeholder="" value="<?php echo htmlspecialchars($row['NomCarrera']); ?>" readonly required>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-12" for="modalidad">Modalidad</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="modalidad" name="modalidad" placeholder="" value="<?php echo htmlspecialchars($row['NOM_MODALIDAD']); ?>" readonly required>
+                                                        <input type="text" class="form-control" id="modalidad" name="modalidad" placeholder="" value="<?php echo htmlspecialchars($row['NomModalidad']); ?>" readonly required>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-12" for="universidad">Universidad/Centro</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="universidad" name="universidad" placeholder="" value="<?php echo htmlspecialchars($row['NOM_UNIVERSIDAD']); ?>" readonly required>
+                                                        <input type="text" class="form-control" id="universidad" name="universidad" placeholder="" value="<?php echo htmlspecialchars($row['NomUniversidad']); ?>" readonly required>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-12" for="grado">Grado Académico</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="grado" name="grado" placeholder="" value="<?php echo htmlspecialchars($row['NOM_GRADO']); ?>" readonly required>
+                                                        <input type="text" class="form-control" id="grado" name="grado" placeholder="" value="<?php echo htmlspecialchars($row['NomGrado']); ?>" readonly required>
                                                     </div>
                                                 </div>
 
@@ -187,7 +187,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                             <div class="row">
                                                 <div class="col-md-6 justify-content-center">
                                                     <div class="col-12">
-                                                        <textarea class="form-control" id="example-textarea-input" name="example-textarea-input" rows="16" placeholder="" readonly required><?php echo htmlspecialchars($observaciones); ?></textarea>
+                                                        <textarea class="form-control" id="example-textarea-input" name="example-textarea-input" style="text-transform:uppercase" rows="16" placeholder="" readonly required><?php echo htmlspecialchars($observaciones); ?></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
@@ -221,14 +221,14 @@ if (isset($_SESSION["IdUsuario"])) {
                                                 <div class="form-group row">
                                                     <label class="col-12" for="example-text-input">Nombre Completo</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="nombre-completo" name="nombre_completo" placeholder="" value="<?php echo htmlspecialchars($row['NOMBRE_COMPLETO']); ?>" readonly required>
+                                                        <input type="text" class="form-control" id="nombre-completo" name="NombreCompleto" placeholder="" value="<?php echo htmlspecialchars($row['NombreCompleto']); ?>" readonly required>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group row">
-                                                    <label class="col-12" for="example-email-input">Correo Electronico</label>
+                                                    <label class="col-12" for="example-CorreoElectronico-input">Correo Electronico</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="correo_electronico" name="correo_electronico" placeholder="" value="<?php echo htmlspecialchars($row['EMAIL']); ?>" readonly required>
+                                                        <input type="text" class="form-control" id="correo_electronico" name="correo_electronico" placeholder="" value="<?php echo htmlspecialchars($row['CorreoElectronico']); ?>" readonly required>
                                                     </div>
                                                 </div>
                                             </form>

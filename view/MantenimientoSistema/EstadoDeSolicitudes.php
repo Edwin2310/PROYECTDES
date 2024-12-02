@@ -34,7 +34,7 @@ if (isset($_SESSION["IdUsuario"])) {
                                 <img class="img-avatar img-avatar32" src="../../public/assets/img/avatars/avatar15.jpg" alt="">
                             </a>
                             <a class="align-middle link-effect text-primary-dark font-w600" href="be_pages_generic_profile.html">
-                                <span><?php echo $_SESSION["USUARIO"] ?> <?php echo $_SESSION["NOMBRE_USUARIO"] ?></span>
+                                <span><?php echo $_SESSION["Usuario"] ?> <?php echo $_SESSION["NombreUsuario"] ?></span>
                             </a>
                         </div>
                     </div>

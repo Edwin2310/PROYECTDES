@@ -6,7 +6,41 @@ if (isset($_SESSION["IdUsuario"])) {
     if ($id) {
         $conexion = new Conectar();
         $conn = $conexion->Conexion();
-        $sql = "SELECT s.ID_SOLICITUD, tp.NOM_TIPO, cat.NOM_CATEGORIA, s.NUM_REFERENCIA, s.DESCRIPCION, s.NOMBRE_CARRERA, g.NOM_GRADO, m.NOM_MODALIDAD,
+        $sql = "SELECT  s.IdSolicitud,
+                                        s.NumReferencia,
+                                        s.Descripcion,
+                                        s.NombreCompleto,
+                                        s.FechaIngreso,
+                                        s.FechaModificacion,
+                                        ts.NomTipoSolicitud,
+                                        cat.NomCategoria,
+                                        c.NomCarrera,
+                                        g.NomGrado,
+                                        m.NomModalidad,
+                                        uc.NomUniversidad,
+                                        d.NomDepto,
+                                        mu.NomMunicipio,
+                                        u.NombreUsuario,
+                                        s.CorreoElectronico,
+                                        cat.CodArbitrios,
+                                        s.NombreCarrera,
+                                        e.EstadoSolicitud
+                                    FROM
+                                        `proceso.tblSolicitudes` s
+                                    LEFT JOIN `mantenimiento.tblcategorias` cat ON s.IdCategoria = cat.IdCategoria
+                                    LEFT JOIN `mantenimiento.tblcarreras` c ON s.IdCarrera = c.IdCarrera
+                                    LEFT JOIN `mantenimiento.tblgradosacademicos` g ON s.IdGrado = g.IdGrado
+                                    LEFT JOIN `mantenimiento.tblmodalidades` m ON s.IdModalidad = m.IdModalidad
+                                    LEFT JOIN `mantenimiento.tbluniversidades` uc ON s.IdUniversidad = uc.IdUniversidad
+                                    LEFT JOIN `mantenimiento.tbldeptos` d ON s.IdDepartamento = d.IdDepartamento
+                                    LEFT JOIN `mantenimiento.tblmunicipios` mu ON s.IdMunicipio = mu.IdMunicipio
+                                    LEFT JOIN `seguridad.tbldatospersonales` u ON s.IdUsuario = u.IdUsuario
+                                    LEFT JOIN `mantenimiento.tblestadossolicitudes` e ON s.IdEstado = e.IdEstado
+                                    LEFT JOIN `mantenimiento.tbltiposolicitudes` ts ON cat.IdTipoSolicitud = ts.IdTipoSolicitud -- Relación con tipos de solicitud
+                                    WHERE s.IdSolicitud = :solicitud_id;";
+
+
+        /* $sql = "SELECT s.ID_SOLICITUD, tp.NOM_TIPO, cat.NOM_CATEGORIA, s.NUM_REFERENCIA, s.DESCRIPCION, s.NOMBRE_CARRERA, g.NOM_GRADO, m.NOM_MODALIDAD,
                            uc.NOM_UNIVERSIDAD, d.NOM_DEPTO, mu.NOM_MUNICIPIO, u.NOMBRE_USUARIO, s.NOMBRE_COMPLETO, s.EMAIL, s.FECHA_INGRESO, 
                            s.FECHA_MODIFICACION, cat.COD_ARBITRIOS, c.NOM_CARRERA, e.ESTADO_SOLICITUD
                     FROM tbl_solicitudes s
@@ -20,238 +54,237 @@ if (isset($_SESSION["IdUsuario"])) {
                     LEFT JOIN tbl_municipios mu ON s.ID_MUNICIPIO = mu.ID_MUNICIPIO
                     LEFT JOIN tbl_ms_usuario u ON s.IdUsuario = u.IdUsuario
                     LEFT JOIN tbl_estado_solicitud e ON s.ID_ESTADO = e.ID_ESTADO
-                    WHERE s.ID_SOLICITUD = :solicitud_id";
+                    WHERE s.ID_SOLICITUD = :solicitud_id"; */
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':solicitud_id', $id, PDO::PARAM_INT);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    ?>
+?>
 
-<!doctype html>
-<html lang="en">
-<head>
-    <?php require_once("../MainHead/MainHead.php"); ?>
-    <title>Asignar Sesión a Solicitud</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js">
-    </script>
+    <!doctype html>
+    <html lang="en">
 
-<script>
-$(document).ready(function() {
-    $('#asignar-sesion-form').on('submit', function(event) {
-        event.preventDefault(); // Prevenir el envío estándar del formulario
+    <head>
+        <?php require_once("../MainHead/MainHead.php"); ?>
+        <title>Asignar Sesión a Solicitud</title>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
-        if (!validateForm()) {
-            return;
-        }
+    </head>
 
-        var formData = $(this).serialize(); // Obtener los datos del formulario
+    <body>
+        <div id="page-container" class="sidebar-o side-scroll page-header-modern main-content-boxed">
+            <aside id="side-overlay">
+                <div id="side-overlay-scroll">
+                    <div class="content-header content-header-fullrow">
+                        <div class="content-header-section align-parent">
+                            <button type="button" class="btn btn-circle btn-dual-secondary align-v-r" data-toggle="layout" data-action="side_overlay_close">
+                                <i class="fa fa-times text-danger"></i>
+                            </button>
+                            <div class="content-header-item">
+                                <a class="img-link mr-5" href="be_pages_generic_profile.html">
+                                    <img class="img-avatar img-avatar32" src="../../public/assets/img/avatars/avatar15.jpg" alt="">
+                                </a>
+                                <a class="align-middle link-effect text-primary-dark font-w600" href="be_pages_generic_profile.html"><?php echo $_SESSION["NombreUsuario"] ?></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+            <nav id="sidebar" class="text-warning">
+                <div id="sidebar-scroll">
+                    <div class="sidebar-content">
+                        <?php require_once("../MainSidebar/MainSidebar.php"); ?>
+                        <?php require_once("../MainMenu/MainMenu.php"); ?>
+                    </div>
+                </div>
+            </nav>
+            <nav class="text-warning">
+                <?php require_once("../MainHeader/MainHeader.php"); ?>
+            </nav>
+            <main id="main-container">
+                <div class="content">
+                    <div class="block">
+                        <div class="block-header block-header-default">
+                            <h3 class="block-title">Asignar Acuerdo <small>Dirección de Educación Superior</small></h3>
+                        </div>
+                        <div class="block-content">
+                            <div class="row items-push">
+                                <div class="col-md-6">
+                                    <div class="block block-header-default">
+                                        <div class="block-header mb-0 bg-body-dark" style="color: blue;">
+                                            <h3 class="block-title">Detalles de la Solicitud</h3>
+                                        </div>
+                                        <div class="block-content">
+                                            <div class="form-group row">
+                                                <label class="col-12" for="carrera">Nombre de la Carrera</label>
+                                                <div class="col-12">
+                                                    <input type="text" class="form-control" id="carrera" name="carrera" value="<?php echo htmlspecialchars($row['NomCarrera'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                                                </div>
+                                            </div>
 
-        $.ajax({
-            url: 'Guardar_Acuerdoaprob.php',
-            type: 'POST',
-            data: formData,
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    $('#mensaje').html('<p style="color: green;">' + response.message + '</p>');
-                    
-                    // Reemplazar la alerta estándar con SweetAlert
-                    Swal.fire({
-                        icon: 'success',
-                        title: '¡Éxito!',
-                        text: 'Acuerdo guardado y estado actualizado correctamente.',
-                        confirmButtonText: 'Aceptar'
-                    }).then(() => {
-                        // Redirigir después de aceptar
-                        window.location.href = '../ConsultarSolicitudes/index.php';
+                                            <div class="form-group row">
+                                                <label class="col-12" for="modalidad">Modalidad</label>
+                                                <div class="col-12">
+                                                    <input type="text" class="form-control" id="modalidad" name="modalidad" value="<?php echo htmlspecialchars($row['NomModalidad'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-12" for="universidad">Universidad</label>
+                                                <div class="col-12">
+                                                    <input type="text" class="form-control" id="universidad" name="universidad" value="<?php echo htmlspecialchars($row['NomUniversidad'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-12" for="grado">Grado Académico</label>
+                                                <div class="col-12">
+                                                    <input type="text" class="form-control" id="grado" name="grado" value="<?php echo htmlspecialchars($row['NomGrado'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Asignar Acuerdo Form -->
+                                <div class="col-md-6">
+                                    <div class="block block-header-default">
+                                        <div class="block-header mb-0 bg-body-dark" style="color: blue;">
+                                            <h3 class="block-title">Asignar Número de Acuerdo</h3>
+                                        </div>
+                                        <div class="block-content">
+                                            <form id="asignar-sesion-form">
+                                                <div class="form-group row">
+                                                    <label class="col-12" for="acuerdo-admision">Número de Acuerdo de Admisión</label>
+                                                    <div class="col-12">
+                                                        <input type="text" class="form-control" id="acuerdo-aprobacion" name="acuerdo_aprobacion" maxlength="13">
+                                                    </div>
+                                                </div>
+
+                                                <input type="hidden" name="solicitud_id" value="<?php echo htmlspecialchars($row['IdSolicitud'], ENT_QUOTES, 'UTF-8'); ?>">
+
+                                                <button type="submit" class="btn btn-primary">Guardar</button>
+
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Detalles del Remitente -->
+                            <div class="row items-push">
+                                <div class="col-md-6">
+                                    <div class="block block-header-default">
+                                        <div class="block-header mb-0 bg-body-dark" style="color: blue;">
+                                            <h3 class="block-title">Detalles del Remitente</h3>
+                                        </div>
+                                        <div class="block-content">
+                                            <form action="be_forms_elements_bootstrap.html" method="post" enctype="multipart/form-data" onsubmit="return false;">
+                                                <div class="form-group row">
+                                                    <label class="col-12" for="nombre-completo">Nombre Completo</label>
+                                                    <div class="col-12">
+                                                        <input type="text" class="form-control" id="nombre_completo" name="nombre_completo" value="<?php echo htmlspecialchars($row['NombreCompleto'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label class="col-12" for="email">Correo Electrónico</label>
+                                                    <div class="col-12">
+                                                        <input type="text" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($row['CorreoElectronico'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <script>
+            $(document).ready(function() {
+                $('#asignar-sesion-form').on('submit', function(event) {
+                    event.preventDefault(); // Prevenir el envío estándar del formulario
+
+                    if (!validateForm()) {
+                        return;
+                    }
+
+                    var formData = $(this).serialize(); // Obtener los datos del formulario
+
+                    $.ajax({
+                        url: 'Guardar_Acuerdoaprob.php',
+                        type: 'POST',
+                        data: formData,
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.success) {
+                                $('#mensaje').html('<p style="color: green;">' + response.message + '</p>');
+
+                                // Reemplazar la alerta estándar con SweetAlert
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: '¡Éxito!',
+                                    text: 'Acuerdo guardado y estado actualizado correctamente.',
+                                    confirmButtonText: 'Aceptar'
+                                }).then(() => {
+                                    // Redirigir después de aceptar
+                                    window.location.href = '../ConsultarSolicitudes/index.php';
+                                });
+
+                            } else {
+                                $('#mensaje').html('<p style="color: red;">' + response.message + '</p>');
+
+                                // Reemplazar la alerta estándar con SweetAlert
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: response.message,
+                                    confirmButtonText: 'Aceptar'
+                                });
+                            }
+                        },
+                        error: function() {
+                            $('#mensaje').html('<p style="color: red;">Hubo un error al procesar la solicitud.</p>');
+
+                            // Reemplazar la alerta estándar con SweetAlert
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Hubo un error al procesar la solicitud.',
+                                confirmButtonText: 'Aceptar'
+                            });
+                        }
                     });
-
-                } else {
-                    $('#mensaje').html('<p style="color: red;">' + response.message + '</p>');
-                    
-                    // Reemplazar la alerta estándar con SweetAlert
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: response.message,
-                        confirmButtonText: 'Aceptar'
-                    });
-                }
-            },
-            error: function() {
-                $('#mensaje').html('<p style="color: red;">Hubo un error al procesar la solicitud.</p>');
-                
-                // Reemplazar la alerta estándar con SweetAlert
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Hubo un error al procesar la solicitud.',
-                    confirmButtonText: 'Aceptar'
                 });
-            }
-        });
-    });
 
-    function validateForm() {
-        var acuerdo = $('#acuerdo-aprobacion').val();
-        var pattern = /^\d{4}-\d{3}-\d{4}$/;
+                function validateForm() {
+                    var acuerdo = $('#acuerdo-aprobacion').val();
+                    var pattern = /^\d{4}-\d{3}-\d{4}$/;
 
-        if (!pattern.test(acuerdo) || acuerdo.length !== 13) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Advertencia',
-                text: 'El acuerdo de aprobación debe seguir el formato: 1024-388-2024 y tener exactamente 13 caracteres.',
-                confirmButtonText: 'Aceptar'
+                    if (!pattern.test(acuerdo) || acuerdo.length !== 13) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Advertencia',
+                            text: 'El acuerdo de aprobación debe seguir el formato: 1024-388-2024 y tener exactamente 13 caracteres.',
+                            confirmButtonText: 'Aceptar'
+                        });
+                        return false;
+                    }
+                    return true;
+                }
             });
-            return false;
-        }
-        return true;
-    }
-});
-</script>
+        </script>
+    </body>
 
+    </html>
 
-
-</head>
-<body>
-    <div id="page-container" class="sidebar-o side-scroll page-header-modern main-content-boxed">
-        <aside id="side-overlay">
-            <div id="side-overlay-scroll">
-                <div class="content-header content-header-fullrow">
-                    <div class="content-header-section align-parent">
-                        <button type="button" class="btn btn-circle btn-dual-secondary align-v-r" data-toggle="layout" data-action="side_overlay_close">
-                            <i class="fa fa-times text-danger"></i>
-                        </button>
-                        <div class="content-header-item">
-                            <a class="img-link mr-5" href="be_pages_generic_profile.html">
-                                <img class="img-avatar img-avatar32" src="../../public/assets/img/avatars/avatar15.jpg" alt="">
-                            </a>
-                            <a class="align-middle link-effect text-primary-dark font-w600" href="be_pages_generic_profile.html"><?php echo $_SESSION["NOMBRE_USUARIO"] ?></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </aside>
-        <nav id="sidebar" class="text-warning">
-            <div id="sidebar-scroll">
-                <div class="sidebar-content">
-                    <?php require_once("../MainSidebar/MainSidebar.php"); ?>
-                    <?php require_once("../MainMenu/MainMenu.php"); ?>
-                </div>
-            </div>
-        </nav>
-        <nav class="text-warning">
-            <?php require_once("../MainHeader/MainHeader.php"); ?>
-        </nav>
-        <main id="main-container">
-            <div class="content">
-                <div class="block">
-                    <div class="block-header block-header-default">
-                        <h3 class="block-title">Asignar Acuerdo <small>Dirección de Educación Superior</small></h3>
-                    </div>
-                    <div class="block-content">
-                        <div class="row items-push">
-                            <div class="col-md-6">
-                                <div class="block block-header-default">
-                                    <div class="block-header mb-0 bg-body-dark" style="color: blue;">
-                                        <h3 class="block-title">Detalles de la Solicitud</h3>
-                                    </div>
-                                    <div class="block-content">
-                                        <div class="form-group row">
-                                            <label class="col-12" for="carrera">Nombre de la Carrera</label>
-                                            <div class="col-12">
-                                                <input type="text" class="form-control" id="carrera" name="carrera" value="<?php echo htmlspecialchars($row['NOMBRE_CARRERA'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-12" for="modalidad">Modalidad</label>
-                                            <div class="col-12">
-                                                <input type="text" class="form-control" id="modalidad" name="modalidad" value="<?php echo htmlspecialchars($row['NOM_MODALIDAD'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-12" for="universidad">Universidad</label>
-                                            <div class="col-12">
-                                                <input type="text" class="form-control" id="universidad" name="universidad" value="<?php echo htmlspecialchars($row['NOM_UNIVERSIDAD'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-12" for="grado">Grado Académico</label>
-                                            <div class="col-12">
-                                                <input type="text" class="form-control" id="grado" name="grado" value="<?php echo htmlspecialchars($row['NOM_GRADO'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Asignar Acuerdo Form -->
-                            <div class="col-md-6">
-                                <div class="block block-header-default">
-                                    <div class="block-header mb-0 bg-body-dark" style="color: blue;">
-                                        <h3 class="block-title">Asignar Número de Acuerdo</h3>
-                                    </div>
-                                    <div class="block-content">
-                                        <form id="asignar-sesion-form">
-                                            <div class="form-group row">
-                                                <label class="col-12" for="acuerdo-admision">Número de Acuerdo de Admisión</label>
-                                                <div class="col-12">
-                                                    <input type="text" class="form-control" id="acuerdo-aprobacion" name="acuerdo_aprobacion" maxlength="13">
-                                                </div>
-                                            </div>
-
-                                            <input type="hidden" name="solicitud_id" value="<?php echo htmlspecialchars($row['ID_SOLICITUD'], ENT_QUOTES, 'UTF-8'); ?>">
-
-                                            <button type="submit" class="btn btn-primary">Guardar</button>
-                                            
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Detalles del Remitente -->
-                        <div class="row items-push">
-                            <div class="col-md-6">
-                                <div class="block block-header-default">
-                                    <div class="block-header mb-0 bg-body-dark" style="color: blue;">
-                                        <h3 class="block-title">Detalles del Remitente</h3>
-                                    </div>
-                                    <div class="block-content">
-                                        <form action="be_forms_elements_bootstrap.html" method="post" enctype="multipart/form-data" onsubmit="return false;">
-                                            <div class="form-group row">
-                                                <label class="col-12" for="nombre-completo">Nombre Completo</label>
-                                                <div class="col-12">
-                                                    <input type="text" class="form-control" id="nombre_completo" name="nombre_completo" value="<?php echo htmlspecialchars($row['NOMBRE_COMPLETO'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group row">
-                                                <label class="col-12" for="email">Correo Electrónico</label>
-                                                <div class="col-12">
-                                                    <input type="text" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($row['EMAIL'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-</body>
-</html>
-
-    <?php
+<?php
 } else {
     header("Location:" . Conectar::ruta() . "index.php");
 }
 ?>
-
-

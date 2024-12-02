@@ -9,14 +9,14 @@ if ($id) {
         $conn = $conexion->Conexion();
 
         // Determinar el estado de la solicitud
-        $estadoSql = "SELECT IdEstado FROM `proceso.tblsolicitudes WHERE IdSolicitud = :id";
+        $estadoSql = "SELECT IdEstado FROM `proceso.tblsolicitudes` WHERE IdSolicitud = :id";
         $estadoStmt = $conn->prepare($estadoSql);
         $estadoStmt->bindParam(':id', $id, PDO::PARAM_INT);
         $estadoStmt->execute();
         $estadoRow = $estadoStmt->fetch(PDO::FETCH_ASSOC);
 
         if ($estadoRow) {
-            // Obtener la última ID_OBSERVACION para la solicitud
+            // Obtener la última observacion para la solicitud
             $lastObservationSql = "SELECT MAX(IdObservacion) AS last_id FROM `documentos.tblobservaciones` WHERE IdSolicitud = :id";
             $lastObservationStmt = $conn->prepare($lastObservationSql);
             $lastObservationStmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -26,7 +26,7 @@ if ($id) {
             if ($lastObservationRow) {
                 $lastId = $lastObservationRow['last_id'];
 
-                // Determinar qué tabla usar y obtener los archivos de la última ID_OBSERVACION
+                // Determinar qué tabla usar y obtener los archivos de la última observacion
                 if ($estadoRow['IdEstado'] == 3) {
                     // Obtener archivos de tbl_observaciones
                     $sql = "SELECT Solicitud, PlanEstudios, PlantaDocente, Diagnostico FROM `documentos.tblobservaciones` WHERE IdObservacion = :last_id";
@@ -51,7 +51,7 @@ if ($id) {
                 foreach ($rows as $row) {
                     if ($row['Solicitud']) {
                         $files[] = [
-                            'name' => basename($row['SolicitudD']),
+                            'name' => basename($row['Solicitud']),
                             'url' => "../" . $basePath . $row['Solicitud']
                         ];
                     }

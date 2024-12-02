@@ -12,14 +12,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conn->beginTransaction();
 
         foreach ($ids as $id) {
-            // Insertar en la tabla tbl_acuerdo_ces_admin
-            $stmt = $conn->prepare("INSERT INTO tbl_acuerdo_ces_admin (ID_SOLICITUD, NUM_ACTA_ADMIN) VALUES (:id, :numeroSesion)");
+            // Insertar en la tabla `proceso.tblacuerdoscesadmin`
+            $stmt = $conn->prepare("INSERT INTO `proceso.tblacuerdoscesadmin` (IdSolicitud, NumActaAdmin) VALUES (:id, :numeroSesion)");
             $stmt->bindParam(':numeroSesion', $numeroSesion);
             $stmt->bindParam(':id', $id);
             $stmt->execute();
 
-            // Actualizar el estado de la solicitud en tbl_solicitudes
-            $stmt = $conn->prepare("UPDATE tbl_solicitudes SET ID_ESTADO = 5 WHERE ID_SOLICITUD = :id");
+            // Actualizar el estado de la solicitud en `proceso.tblsolicitudes`
+            $stmt = $conn->prepare("UPDATE `proceso.tblsolicitudes` SET IdEstado = 5 WHERE IdSolicitud = :id");
             $stmt->bindParam(':id', $id);
             $stmt->execute();
         }

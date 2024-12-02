@@ -1,12 +1,22 @@
-// Permite solo números
+// Permite solo números y no permite espacios
 function validarNumeros(input) {
-    input.value = input.value.replace(/[^0-9]/g, '');
+    input.value = input.value.replace(/[^0-9]/g, '');  // Solo números
 }
 
-// Permite solo letras y caracteres específicos
 function validarCategoria(input) {
-    input.value = input.value.replace(/[^a-zA-ZÁÉÍÓÚáéíóú\s().-]/g, '');
+    // Remueve caracteres no permitidos (excepto letras con tildes y espacios)
+    input.value = input.value.replace(/[^a-zA-ZÁÉÍÓÚáéíóú\s]/g, '');
+
+    // Reemplaza múltiples espacios consecutivos por un solo espacio
+    input.value = input.value.replace(/\s+/g, ' ');
+
+    // Elimina los espacios al principio o al final del texto
+    input.value = input.value.trim();
+
+    // Convierte el texto a mayúsculas automáticamente
+    input.value = input.value.toUpperCase();
 }
+
 
 // Función para mostrar mensajes de alerta
 function showAlert(message, type) {

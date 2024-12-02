@@ -146,17 +146,17 @@ if (isset($_SESSION["IdUsuario"])) {
 
                                         // Consulta ajustada para usar NOMBRE_CARRERA de tbl_solicitudes
                                         $sql = "SELECT
-                                        s.ID_SOLICITUD,
-                                        tp.NOM_TIPO,
-                                        cat.NOM_CATEGORIA,
-                                        s.NUM_REFERENCIA,
-                                        s.DESCRIPCION,
-                                        c.NOM_CARRERA,
-                                        g.NOM_GRADO,
-                                        m.NOM_MODALIDAD,
-                                        uc.NOM_UNIVERSIDAD,
-                                        d.NOM_DEPTO,
-                                        mu.NOM_MUNICIPIO,
+                                        s.IdSolicitud,
+                                        s.TipoSolicitud,
+                                        cat.NomCategoria,
+                                        s.NumReferencia,
+                                        s.Descripcion,
+                                        c.NomCarrera,
+                                        g.NomGrado,
+                                        m.NomModalidad,
+                                        uc.NomUniversidad,
+                                        d.NomDepto,
+                                        mu.NomMunicipio,
                                         u.NOMBRE_USUARIO,
                                         s.NOMBRE_COMPLETO,
                                         s.EMAIL,
@@ -166,19 +166,19 @@ if (isset($_SESSION["IdUsuario"])) {
                                         s.NOMBRE_CARRERA,
                                         e.ESTADO_SOLICITUD
                                         FROM
-                                        tbl_solicitudes s
-                                        LEFT JOIN tbl_tipo_solicitud tp ON s.ID_TIPO_SOLICITUD = tp.ID_TIPO_SOLICITUD
-                                        LEFT JOIN tbl_categoria cat ON s.ID_CATEGORIA = cat.ID_CATEGORIA
-                                        LEFT JOIN tbl_carrera c ON s.ID_CARRERA = c.ID_CARRERA
-                                        LEFT JOIN tbl_grado_academico g ON s.ID_GRADO = g.ID_GRADO
-                                        LEFT JOIN tbl_modalidad m ON s.ID_MODALIDAD = m.ID_MODALIDAD
-                                        LEFT JOIN tbl_universidad_centro uc ON s.ID_UNIVERSIDAD = uc.ID_UNIVERSIDAD
-                                        LEFT JOIN tbl_deptos d ON s.ID_DEPARTAMENTO = d.ID_DEPARTAMENTO
-                                        LEFT JOIN tbl_municipios mu ON s.ID_MUNICIPIO = mu.ID_MUNICIPIO
-                                        LEFT JOIN tbl_ms_usuario u ON s.IdUsuario = u.IdUsuario
-                                        LEFT JOIN tbl_estado_solicitud e ON s.ID_ESTADO = e.ID_ESTADO
-                                        WHERE e.ID_ESTADO IN (6)
-                                        ORDER BY e.ID_ESTADO";
+                                        `proceso.tblsolicitudes` s
+                                        LEFT JOIN `mantenimiento.tbltiposolicitudes` tp ON s.ID_TIPO_SOLICITUD = tp.ID_TIPO_SOLICITUD
+                                        LEFT JOIN `mantenimiento.tblcategorias` cat ON s.IdCategoria = cat.IdCategoria
+                                        LEFT JOIN `mantenimiento.tblcarreras` c ON s.IdCarrera = c.IdCarrera
+                                        LEFT JOIN `mantenimiento.tblgradosacademicos` g ON s.IdGrado = g.IdGrado
+                                        LEFT JOIN `mantenimiento.tblmodalidades` m ON s.IdModalidad = m.IdModalidad
+                                        LEFT JOIN `proceso.tbldictamenesuniversidades` uc ON s.IdUniversidad = uc.IdUniversidad
+                                        LEFT JOIN `mantenimiento.tbldeptos` d ON s.IdDepartamento = d.IdDepartamento
+                                        LEFT JOIN `mantenimiento.tblmunicipios` mu ON s.IdMunicipio = mu.IdMunicipio
+                                        LEFT JOIN `seguridad.tblusuarios` u ON s.IdUsuario = u.IdUsuario
+                                        LEFT JOIN `mantenimiento.tblestadossolicitudes` e ON s.IdEstado = e.IdEstado
+                                        WHERE e.IdEstado IN (6)
+                                        ORDER BY e.IdEstado";
 
                                         $stmt = $dbh->prepare($sql);
                                         $stmt->execute();
